@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 
 	"golang.org/x/net/context"
 
@@ -10,9 +11,12 @@ import (
 )
 
 func (s *Server) loadFile(ctx context.Context, path string) (string, error) {
-	err := s.replicate(ctx, path)
-	if err != nil {
-		return "", err
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		err := s.replicate(ctx, path)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	data, err := ioutil.ReadFile(path)
