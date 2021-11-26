@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package adventserver;
+
+option go_package = "github.com/brotherlogic/adventserver/proto";
+
+message SolveRequest {
+    int32 year = 1;
+    int32 day = 2;
+}
+
+message SolveResponse {
+    int32 answer = 1;
+}
+
+service AdventServerService {
+    rpc Solve(SolveRequest) returns (SolveResponse) {};
+}
