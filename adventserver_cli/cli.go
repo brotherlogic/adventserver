@@ -45,7 +45,7 @@ func main() {
 				if err != nil {
 					log.Fatalf("Error on Solve: %v", err)
 				}
-				fmt.Printf("Solved: %v and %v", res, err)
+				fmt.Printf("Solved: %v and %v\n", res, err)
 			}
 		}
 

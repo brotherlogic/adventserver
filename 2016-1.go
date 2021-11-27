@@ -44,6 +44,8 @@ func runCoords(str string) int {
 		}
 	}
 
+	log.Printf("CO %v and %v", cx, cy)
+
 	return abs(cx) + abs(cy)
 }
 
