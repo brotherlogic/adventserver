@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
@@ -36,22 +37,22 @@ func computeJump(str string) int32 {
 	return int32(sum)
 }
 
-func (s *Server) solve2017day1part1(ctx context.Context) (int32, error) {
+func (s *Server) Solve2017day1part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-1.txt")
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return computeDigs(trimmed), nil
+	return &pb.SolveResponse{Answer: computeDigs(trimmed)}, nil
 }
 
-func (s *Server) solve2017day1part2(ctx context.Context) (int32, error) {
+func (s *Server) Solve2017day1part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-1.txt")
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return computeJump(trimmed), nil
+	return &pb.SolveResponse{Answer: computeJump(trimmed)}, nil
 }
