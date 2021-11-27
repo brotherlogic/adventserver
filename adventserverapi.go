@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"reflect"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -18,43 +18,6 @@ var (
 )
 
 func (s *Server) Solve(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResponse, error) {
-	if req.GetYear() == 2015 && req.GetDay() == 1 && req.GetPart() == 1 {
-		ans, err := s.solve2015day1part1(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	} else if req.GetYear() == 2015 && req.GetDay() == 1 && req.GetPart() == 2 {
-		ans, err := s.solve2015day1part2(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	} else if req.GetYear() == 2016 && req.GetDay() == 1 && req.GetPart() == 1 {
-		ans, err := s.solve2016day1part1(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	} else if req.GetYear() == 2016 && req.GetDay() == 1 && req.GetPart() == 2 {
-		ans, err := s.solve2016day1part2(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	} else if req.GetYear() == 2017 && req.GetDay() == 1 && req.GetPart() == 1 {
-		ans, err := s.solve2017day1part1(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	} else if req.GetYear() == 2017 && req.GetDay() == 1 && req.GetPart() == 2 {
-		ans, err := s.solve2017day1part2(ctx)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.SolveResponse{Answer: ans}, nil
-	}
-
-	return nil, fmt.Errorf("Not implemented yet")
+	val := reflect.ValueOf(s).MethodByName("Solve2016day1part2").Call([]reflect.Value{reflect.ValueOf(ctx)})
+	return val[0].Interface().(*pb.SolveResponse), val[1].Interface().(error)
 }

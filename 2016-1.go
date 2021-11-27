@@ -154,7 +154,7 @@ func (s *Server) solve2016day1part1(ctx context.Context) (int32, error) {
 	return int32(runCoords(data)), nil
 }
 
-func (s *Server) solve2016day1part2(ctx context.Context) (int32, error) {
+func (s *Server) Solve2016day1part2(ctx context.Context) (int32, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-1.txt")
 	if err != nil {
 		return -1, err
