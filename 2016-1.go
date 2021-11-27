@@ -35,11 +35,11 @@ func runCoords(str string) int {
 		switch heading {
 		case 0:
 			cy += count
-		case 1, -1:
+		case 1, -3:
 			cx += count
 		case 2, -2:
 			cy -= count
-		case 3, -3:
+		case 3, -1:
 			cx -= count
 		default:
 			log.Fatalf("Cannot procecss heading %v", heading)
