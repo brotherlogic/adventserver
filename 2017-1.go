@@ -2,6 +2,7 @@ package main
 
 import (
 	"strconv"
+	"strings"
 
 	"golang.org/x/net/context"
 )
@@ -28,6 +29,7 @@ func (s *Server) solve2017day1part1(ctx context.Context) (int32, error) {
 	if err != nil {
 		return -1, err
 	}
+	trimmed := strings.TrimSpace(data)
 
-	return computeDigs(data), nil
+	return computeDigs(trimmed), nil
 }
