@@ -20,3 +20,22 @@ func Test2017Day1(t *testing.T) {
 		}
 	}
 }
+
+func Test2017Day2(t *testing.T) {
+	cases := []struct {
+		in   string
+		want int
+	}{
+		{"1212", 6},
+		{"1221", 0},
+		{"123123", 12},
+		{"12131415", 4},
+	}
+
+	for _, c := range cases {
+		got := computeJump(c.in)
+		if int(got) != c.want {
+			t.Errorf("Spec(%q) == %d, want %d", c.in, got, c.want)
+		}
+	}
+}
