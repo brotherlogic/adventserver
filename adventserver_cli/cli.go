@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	ctx, cancel := utils.ManualContext("adventserver-cli", time.Second*10)
+	ctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
 	defer cancel()
 
 	conn, err := utils.LFDialServer(ctx, "adventserver")
