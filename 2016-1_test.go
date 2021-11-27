@@ -22,3 +22,19 @@ func Test2016Day1(t *testing.T) {
 		}
 	}
 }
+
+func Test2016Day2(t *testing.T) {
+	cases := []struct {
+		in   string
+		want int
+	}{
+		{"R8, R4, R4, R8", 4},
+	}
+
+	for _, c := range cases {
+		got := repeat(c.in)
+		if got != c.want {
+			t.Errorf("Spec(%q) == %d, want %d", c.in, got, c.want)
+		}
+	}
+}
