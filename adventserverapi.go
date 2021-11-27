@@ -42,6 +42,13 @@ func (s *Server) Solve(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResp
 			return nil, err
 		}
 		return &pb.SolveResponse{Answer: ans}, nil
+	} else if req.GetYear() == 2017 && req.GetDay() == 1 && req.GetPart() == 1 {
+		ans, err := s.solve2017day1part1(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return &pb.SolveResponse{Answer: ans}, nil
 	}
+
 	return nil, fmt.Errorf("Not implemented yet")
 }
