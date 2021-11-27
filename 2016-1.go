@@ -22,6 +22,8 @@ func runCoords(str string) int {
 			heading++
 		case 'R':
 			heading--
+		default:
+			log.Fatalf("UNPROC: %v", cd)
 		}
 
 		count, err := strconv.Atoi(c[1:len(c)])
@@ -43,8 +45,6 @@ func runCoords(str string) int {
 			log.Fatalf("Cannot procecss heading %v", heading)
 		}
 	}
-
-	log.Printf("CO %v and %v", cx, cy)
 
 	return abs(cx) + abs(cy)
 }

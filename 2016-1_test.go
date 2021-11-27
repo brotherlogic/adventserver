@@ -10,6 +10,9 @@ func Test2016Day1(t *testing.T) {
 		{"R2, L3", 5},
 		{"R2, R2, R2", 2},
 		{"R5, L5, R5, R3", 12},
+		{"R2, R2, R2, R2", 0},
+		{"R2, R2, R2, R2, R2, R2, R2, R2, R2, R2, R2, R2", 0},
+		{"L2, L2, L2, L2, L2, L2, L2, L2, L2, L2, L2, L2", 0},
 	}
 
 	for _, c := range cases {
