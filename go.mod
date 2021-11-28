@@ -10,7 +10,10 @@ require (
 	github.com/brotherlogic/goserver v0.0.0-20211124152057-6d9f26d36d7c
 	github.com/brotherlogic/lock v0.0.0-20211125163631-51622d56ce17 // indirect
 	github.com/golang/protobuf v1.5.2
+	github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d // indirect
 	github.com/prometheus/client_golang v1.11.0
+	github.com/yoheimuta/go-protoparser v3.4.0+incompatible // indirect
+	github.com/yoheimuta/protolint v0.35.2 // indirect
 	golang.org/x/net v0.0.0-20211123203042-d83791d6bcd9
 	golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 // indirect
 	google.golang.org/grpc v1.42.0
