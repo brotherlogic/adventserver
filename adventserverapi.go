@@ -20,7 +20,7 @@ var (
 
 func (s *Server) Solve(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResponse, error) {
 	if reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())).IsNil() {
-		return nil, fmt.Errorf("Cannot find %v", reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())))
+		return nil, fmt.Errorf("cannot find %v", reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())))
 
 	}
 	val := reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())).Call([]reflect.Value{reflect.ValueOf(ctx)})
