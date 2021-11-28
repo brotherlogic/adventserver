@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -10,7 +11,6 @@ import (
 
 func procCode(code string, sx, sy int) int32 {
 	res := 0
-	multiplier := 1000
 	keypad := [3][3]int{
 		{7, 4, 1},
 		{8, 5, 2},
@@ -18,6 +18,7 @@ func procCode(code string, sx, sy int) int32 {
 	}
 
 	elems := strings.Split(code, "\n")
+	multiplier := int(math.Pow10(len(elems) - 1))
 	for _, elem := range elems {
 		for _, c := range elem {
 			switch c {
