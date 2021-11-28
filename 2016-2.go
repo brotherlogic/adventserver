@@ -54,7 +54,7 @@ func procCode(code string, sx, sy int) int32 {
 }
 
 func (s *Server) Solve2016day2part1(ctx context.Context) (*pb.SolveResponse, error) {
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-1.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-2.txt")
 	if err != nil {
 		return nil, err
 	}
