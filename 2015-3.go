@@ -104,5 +104,5 @@ func (s *Server) Solve2015day3part2(ctx context.Context) (*pb.SolveResponse, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(ComputeNumberOfHouses(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(ComputeNumberOfRoboHouses(trimmed))}, nil
 }
