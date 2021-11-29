@@ -43,3 +43,36 @@ func (s *Server) Solve2016day3part1(ctx context.Context) (*pb.SolveResponse, err
 
 	return &pb.SolveResponse{Answer: int32(validTriangles(trimmed))}, nil
 }
+
+func (s *Server) Solve2016day3part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-3.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	total := int32(0)
+	c1 := ""
+	c2 := ""
+	c3 := ""
+	count := 0
+	for _, line := range strings.Split(trimmed, "\n") {
+		elems := strings.Fields(line)
+		if count == 0 {
+			c1 = elems[0]
+			c2 = elems[1]
+			c3 = elems[2]
+		} else {
+			c1 += " " + elems[0]
+			c2 += " " + elems[1]
+			c3 += " " + elems[2]
+		}
+		count++
+		if count == 2 {
+			total += validTriangles(c1 + "\n" + c2 + "\n" + c3)
+			count = 0
+		}
+	}
+
+	return &pb.SolveResponse{Answer: total}, nil
+}
