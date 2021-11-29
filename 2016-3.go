@@ -9,15 +9,15 @@ import (
 )
 
 func isTriangle(s1, s2, s3 int) bool {
-	if s1+s2 < s3 ||
-		s2+s3 < s1 ||
-		s1+s3 < s2 {
+	if s1+s2 <= s3 ||
+		s2+s3 <= s1 ||
+		s1+s3 <= s2 {
 		return false
 	}
 	return true
 }
 
-func (s *Server) validTriangles(data string) int32 {
+func validTriangles(data string) int32 {
 	count := int32(0)
 
 	for _, elem := range strings.Split(data, "\n") {
@@ -41,5 +41,5 @@ func (s *Server) Solve2016day3part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(s.validTriangles(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(validTriangles(trimmed))}, nil
 }
