@@ -68,7 +68,7 @@ func (s *Server) Solve2016day3part2(ctx context.Context) (*pb.SolveResponse, err
 			c3 += " " + elems[2]
 		}
 		count++
-		if count == 2 {
+		if count == 3 {
 			total += validTriangles(c1 + "\n" + c2 + "\n" + c3)
 			count = 0
 		}
