@@ -19,7 +19,7 @@ var (
 )
 
 func (s *Server) Solve(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResponse, error) {
-	if reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())).IsNil() {
+	if reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())).IsZero() {
 		return nil, fmt.Errorf("cannot find %v", reflect.ValueOf(s).MethodByName(fmt.Sprintf("Solve%vday%vpart%v", req.GetYear(), req.GetDay(), req.GetPart())))
 
 	}
