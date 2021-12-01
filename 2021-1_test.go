@@ -10,3 +10,12 @@ func Test2021Day1Part1(t *testing.T) {
 		t.Errorf("Bad input: %v vs %v", count, 7)
 	}
 }
+
+func Test2021Day1Part2(t *testing.T) {
+	input := "199\n200\n208\n210\n200\n207\n240\n269\n260\n263"
+	count := countInc3(input)
+
+	if count != int32(5) {
+		t.Errorf("Bad input: %v vs %v", count, 7)
+	}
+}
