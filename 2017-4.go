@@ -91,10 +91,25 @@ func (s *Server) Solve2017day4part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 	trimmed := strings.TrimSpace(data)
 
+	count := 0
+	for _, str := range strings.Split(trimmed, "\n") {
+		count += isRealRoom(str)
+	}
+
+	return &pb.SolveResponse{Answer: int32(count)}, nil
+}
+
+func (s *Server) Solve2017day4part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-4.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
 	ans := ""
 	for _, str := range strings.Split(trimmed, "\n") {
 		if strings.Contains(trans(str), "stor") {
-			ans = trans(str)
+			ans = str
 		}
 	}
 
