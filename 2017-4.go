@@ -15,6 +15,27 @@ func sortString(w string) string {
 	return strings.Join(s, "")
 }
 
+func addRune(c rune, num int) string {
+	val := (int(byte(c)-byte('a'))+num)%int(byte('z')-byte('a')+1) + int(byte('a'))
+	return string(byte(val))
+}
+
+func trans(str string) string {
+	bits := strings.Split(str, "[")
+	parts := strings.Split(bits[0], "-")
+	num, _ := strconv.Atoi(parts[len(parts)-1])
+
+	fstr := ""
+	for _, bit := range parts[:len(parts)-1] {
+		for _, c := range bit {
+			fstr += addRune(c, num)
+		}
+		fstr += " "
+	}
+
+	return strings.TrimSpace(fstr)
+}
+
 func isRealRoom(str string) int {
 	bits := strings.Split(str, "[")
 	lcount := make(map[string]int)
@@ -70,10 +91,12 @@ func (s *Server) Solve2017day4part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	count := 0
+	ans := ""
 	for _, str := range strings.Split(trimmed, "\n") {
-		count += isRealRoom(str)
+		if strings.Contains(trans(str), "stor") {
+			ans = trans(str)
+		}
 	}
 
-	return &pb.SolveResponse{Answer: int32(count)}, nil
+	return &pb.SolveResponse{StringAnswer: ans}, nil
 }

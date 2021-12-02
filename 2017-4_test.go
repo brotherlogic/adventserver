@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test2017Day4Part2(t *testing.T) {
+func Test2017Day4Part1(t *testing.T) {
 	cases := []struct {
 		in   string
 		want int
@@ -18,5 +18,11 @@ func Test2017Day4Part2(t *testing.T) {
 		if got != c.want {
 			t.Errorf("Spec(%q) == %d, want %d", c.in, got, c.want)
 		}
+	}
+}
+
+func Test2017Day4Part2(t *testing.T) {
+	if trans("qzmt-zixmtkozy-ivhz-343") != "very encrypted name" {
+		t.Errorf("Bad trans: %v", trans("qzmt-zixmtkozy-ivhz-343"))
 	}
 }
