@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -109,8 +108,7 @@ func (s *Server) Solve2017day4part2(ctx context.Context) (*pb.SolveResponse, err
 
 	ans := ""
 	for _, str := range strings.Split(trimmed, "\n") {
-		s.Log(fmt.Sprintf("FOUND %v", trans(str)))
-		if strings.Contains(trans(str), "stor") {
+		if strings.Contains(trans(str), "object stor") {
 			ans = str
 		}
 	}
