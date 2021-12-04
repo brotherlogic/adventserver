@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -8,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func runCode(nums []int64) int {
+func runCode(nums []int) int {
 	pointer := 0
 	steps := 0
 
@@ -23,11 +24,13 @@ func runCode(nums []int64) int {
 }
 
 func computeJumps(bits string) int {
-	var nums []int64
+	var nums []int
 	for _, numstr := range strings.Split(bits, "\n") {
 		num, _ := strconv.Atoi(numstr)
-		nums = append(nums, int64(num))
+		nums = append(nums, num)
 	}
+
+	log.Fatalf("%v to %v", nums[0], nums[len(nums-1)])
 
 	return runCode(nums)
 }
