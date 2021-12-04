@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -43,12 +42,10 @@ func computeHashPass2(key string) string {
 			if err == nil && index < 8 && !done[index] {
 				password = password[:index] + string(val[6]) + password[index+1:]
 				done[index] = true
-				//log.Printf("Now %v = %v => %v -> %v", i, val, index, password)
 			}
 		}
 
 		if len(done) == 8 {
-			log.Printf("%v", done)
 			return password
 		}
 	}
