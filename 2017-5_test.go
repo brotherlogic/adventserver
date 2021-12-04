@@ -9,4 +9,9 @@ func Test2017Day5Part1(t *testing.T) {
 	if res != 5 {
 		t.Errorf("Bad jump %v vs 5", res)
 	}
+
+	res2 := computeJumps2(str)
+	if res2 != 10 {
+		t.Errorf("Bad jump %v vs 10", res2)
+	}
 }
