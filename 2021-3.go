@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -53,7 +52,6 @@ func computePower(data string) int {
 }
 
 func computeOGRSub(data []string, pos int) string {
-	log.Printf("%v", len(data))
 	if len(data) == 1 {
 		return data[0]
 	}
