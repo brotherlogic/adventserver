@@ -30,7 +30,7 @@ func computeJumps(bits string) int {
 		nums = append(nums, num)
 	}
 
-	log.Fatalf("%v to %v", nums[0], nums[len(nums-1)])
+	log.Fatalf("%v to %v", nums[0], nums[len(nums)-1])
 
 	return runCode(nums)
 }
