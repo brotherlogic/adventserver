@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func runCode(nums []int) int {
+func runCode(nums []int64) int {
 	pointer := 0
 	steps := 0
 
@@ -16,17 +16,17 @@ func runCode(nums []int) int {
 		steps++
 		jump := nums[pointer]
 		nums[pointer]++
-		pointer += jump
+		pointer += int(jump)
 	}
 
 	return steps
 }
 
 func computeJumps(bits string) int {
-	var nums []int
+	var nums []int64
 	for _, numstr := range strings.Split(bits, "\n") {
 		num, _ := strconv.Atoi(numstr)
-		nums = append(nums, num)
+		nums = append(nums, int64(num))
 	}
 
 	return runCode(nums)
