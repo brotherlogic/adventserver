@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -30,8 +29,6 @@ func computeJumps(bits string) int {
 		nums = append(nums, num)
 	}
 
-	log.Fatalf("NUMS %v", nums)
-
 	return runCode(nums)
 }
 
@@ -40,6 +37,6 @@ func (s *Server) Solve2017day5part1(ctx context.Context) (*pb.SolveResponse, err
 	if err != nil {
 		return nil, err
 	}
-
+	data = strings.TrimSpace(data)
 	return &pb.SolveResponse{Answer: int32(computeJumps(data))}, nil
 }
