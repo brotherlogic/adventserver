@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test2021Day4Part1(t *testing.T) {
+func Test2021Day4(t *testing.T) {
 	data := `7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
 
 	22 13 17 11  0
@@ -26,5 +26,10 @@ func Test2021Day4Part1(t *testing.T) {
 	result := runBingo(data)
 	if result != 4512 {
 		t.Errorf("Bad result: %v vs 4512", result)
+	}
+
+	result2 := runBingoLast(data)
+	if result2 != 1924 {
+		t.Errorf("Bad result: %v vs 1924", result2)
 	}
 }

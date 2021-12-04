@@ -117,6 +117,33 @@ func runBingo(data string) int {
 	return 0
 }
 
+func runBingoLast(data string) int {
+	bits := strings.Split(data, "\n")
+	nums := buildNumArr(bits[0])
+
+	var boards []*board
+	for i := 2; i < len(bits); i += 6 {
+		boards = append(boards, buildBoard(bits[i:i+5]))
+	}
+
+	for _, num := range nums {
+		var nboards []*board
+		for _, board := range boards {
+			board.play(num)
+			if board.won() {
+				if len(boards) == 1 {
+					return board.score() * num
+				}
+			} else {
+				nboards = append(nboards, board)
+			}
+		}
+		boards = nboards
+	}
+
+	return 0
+}
+
 func (s *Server) Solve2021day4part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-4.txt")
 	if err != nil {
@@ -124,4 +151,13 @@ func (s *Server) Solve2021day4part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	return &pb.SolveResponse{Answer: int32(runBingo(data))}, nil
+}
+
+func (s *Server) Solve2021day4part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-4.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runBingoLast(data))}, nil
 }
