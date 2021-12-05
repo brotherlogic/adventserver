@@ -40,7 +40,7 @@ func max(a, b int) int {
 	return b
 }
 
-func computeCrosses(data string) int {
+func computeCrosses(data string, diag bool) int {
 	var smap [][]int
 
 	for i := 0; i < 1000; i++ {
@@ -59,6 +59,14 @@ func computeCrosses(data string) int {
 		if y1 == y2 {
 			for x := min(x1, x2); x <= max(x1, x2); x++ {
 				smap[x][y1]++
+			}
+		}
+
+		if diag && x1 != x2 && y1 != y2 {
+			m := int((float32(y1-y2) / float32(x1-x2)))
+			c := y1 - m*x1
+			for x := min(x1, x2); x <= max(x1, x2); x++ {
+				smap[x][m*x+c]++
 			}
 		}
 	}
@@ -81,5 +89,14 @@ func (s *Server) Solve2021day5part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(computeCrosses(strings.TrimSpace(data)))}, nil
+	return &pb.SolveResponse{Answer: int32(computeCrosses(strings.TrimSpace(data), false))}, nil
+}
+
+func (s *Server) Solve2021day5part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-5.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(computeCrosses(strings.TrimSpace(data), true))}, nil
 }
