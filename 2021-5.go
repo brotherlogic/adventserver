@@ -43,8 +43,8 @@ func max(a, b int) int {
 func computeCrosses(data string) int {
 	var smap [][]int
 
-	for i := 0; i < 10; i++ {
-		smap = append(smap, make([]int, 10))
+	for i := 0; i < 1000; i++ {
+		smap = append(smap, make([]int, 1000))
 	}
 
 	for _, coord := range strings.Split(data, "\n") {
@@ -81,5 +81,5 @@ func (s *Server) Solve2021day5part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(computeCrosses(data))}, nil
+	return &pb.SolveResponse{Answer: int32(computeCrosses(strings.TrimSpace(data)))}, nil
 }
