@@ -117,5 +117,5 @@ func (s *Server) Solve2015day7part2(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	rules2["b"] = strconv.Itoa(WorkRules(rules, "a"))
-	return &pb.SolveResponse{Answer: int32(WorkRules(rules, "a"))}, nil
+	return &pb.SolveResponse{Answer: int32(WorkRules(rules2, "a"))}, nil
 }
