@@ -104,7 +104,7 @@ func (s *Server) Solve2015day6part1(ctx context.Context) (*pb.SolveResponse, err
 	lights := MakeBoard(1000)
 	brights := MakeBrightBoard(1000)
 
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-5.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-6.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -133,7 +133,7 @@ func (s *Server) Solve2015day6part2(ctx context.Context) (*pb.SolveResponse, err
 	lights := MakeBoard(1000)
 	brights := MakeBrightBoard(1000)
 
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-5.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-6.txt")
 
 	if err != nil {
 		log.Fatal(err)
