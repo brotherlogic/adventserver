@@ -12,4 +12,9 @@ func Test2021Day7Part1(t *testing.T) {
 	if days2 != 5934 {
 		t.Errorf("Bad count: %v vs 5934", days2)
 	}
+
+	days3 := computeCycle("3,4,3,1,2", 256)
+	if days3 != 26984457539 {
+		t.Errorf("Bad count: %v vs 26984457539", days2)
+	}
 }
