@@ -13,6 +13,7 @@ message SolveRequest {
 message SolveResponse {
     int32 answer = 1;
     string string_answer = 2;
+    int64 big_answer = 3;
 }
 
 service AdventServerService {
