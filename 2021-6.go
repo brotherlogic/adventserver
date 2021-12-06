@@ -41,7 +41,7 @@ func computeCycle(list string, days int) int64 {
 	return count
 }
 
-func (s *Server) Solve2021day7part1(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2021day6part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-7.txt")
 	if err != nil {
 		return nil, err
@@ -50,7 +50,7 @@ func (s *Server) Solve2021day7part1(ctx context.Context) (*pb.SolveResponse, err
 	return &pb.SolveResponse{Answer: int32(computeCycle(strings.TrimSpace(data), 80))}, nil
 }
 
-func (s *Server) Solve2021day7part2(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2021day6part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-7.txt")
 	if err != nil {
 		return nil, err
