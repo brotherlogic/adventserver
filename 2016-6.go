@@ -42,5 +42,5 @@ func (s *Server) Solve2016day6part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{StringAnswer: getCommon(data)}, nil
+	return &pb.SolveResponse{StringAnswer: getCommon(strings.TrimSpace(data))}, nil
 }
