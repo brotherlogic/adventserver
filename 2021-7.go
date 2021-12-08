@@ -49,7 +49,7 @@ func getCost(str string) int {
 }
 
 func (s *Server) Solve2021day7part1(ctx context.Context) (*pb.SolveResponse, error) {
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-7.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-7a.txt")
 	if err != nil {
 		return nil, err
 	}
