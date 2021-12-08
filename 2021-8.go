@@ -99,5 +99,5 @@ func (s *Server) Solve2021day8part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(buildCount(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(buildCounts(trimmed))}, nil
 }
