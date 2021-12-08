@@ -17,8 +17,21 @@ func TestResolve(t *testing.T) {
 	egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg |gbdfcae bgc cg cgb
 	gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce`
 
-	counts := buildCounts(data)
+	counts, bals := buildCounts(data)
 
 	log.Printf("COUNT = %v", counts)
 
+	if bals != 61229 {
+		t.Errorf("Bad sum: %v vs 61229", bals)
+	}
+}
+
+func TestResolve2(t *testing.T) {
+	data := "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
+	_, counts := buildCounts(data)
+	log.Printf("NCOUNT = %v", counts)
+
+	if counts != 5353 {
+		t.Errorf("Bad sum: %v vs 5353", counts)
+	}
 }
