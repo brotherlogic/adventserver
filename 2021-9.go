@@ -26,7 +26,7 @@ func getRisk(data string) int {
 			lowest := true
 			for x := max(i-1, 0); x <= min(i+1, len(matrix)-1); x++ {
 				for y := max(j-1, 0); y <= min(j+1, len(matrix[i])-1); y++ {
-					if matrix[x][y] < matrix[i][j] && (x == i || y == j) {
+					if matrix[x][y] <= matrix[i][j] && (x == i || y == j) {
 						lowest = false
 					}
 				}
