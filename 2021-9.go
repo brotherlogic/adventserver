@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -26,12 +27,16 @@ func getRisk(data string) int {
 			lowest := true
 			for x := max(i-1, 0); x <= min(i+1, len(matrix)-1); x++ {
 				for y := max(j-1, 0); y <= min(j+1, len(matrix[i])-1); y++ {
-					if matrix[x][y] <= matrix[i][j] && (x == i || y == j) {
-						lowest = false
+					if (x == i || y == j) && !(x == i && y == j) {
+						log.Printf("%v,%v [%v] -> %v,%v [%v]", i, j, matrix[i][j], x, y, matrix[x][y])
+						if matrix[x][y] <= matrix[i][j] {
+							lowest = false
+						}
 					}
 				}
 			}
 
+			//log.Printf("FFOUND")
 			if lowest {
 				height += matrix[i][j] + 1
 			}
