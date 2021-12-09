@@ -22,3 +22,13 @@ func Test2017Part7(t *testing.T) {
 		t.Errorf("Bottom is wrong %v vs tknk", bot)
 	}
 }
+
+func Test2017Check(t *testing.T) {
+	data := `czlmv (78)
+	pupaehu (99) -> eolilw, czlmv, zlrvs, vrppl`
+
+	bot := getBottom(data)
+	if bot != "pupaehu" {
+		t.Errorf("Bah: %v", bot)
+	}
+}

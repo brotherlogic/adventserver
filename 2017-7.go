@@ -41,8 +41,8 @@ func buildTree(data string) *tree {
 
 		if len(bits) > 2 {
 			for _, child := range bits[3:] {
-				if len(child) == 5 {
-					child = child[0:4]
+				if strings.HasSuffix(child, ",") {
+					child = child[0 : len(child)-1]
 				}
 
 				var cn *node
