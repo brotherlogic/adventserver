@@ -9,9 +9,13 @@ func TestDay9of2021(t *testing.T) {
 	8767896789
 	9899965678`
 
-	compute := getRisk(data)
+	compute, basin := getRisk(data)
 
 	if compute != 15 {
 		t.Errorf("Compute is wrong %v vs 15", compute)
+	}
+
+	if basin != 1134 {
+		t.Errorf("Bad basin: %v", basin)
 	}
 }
