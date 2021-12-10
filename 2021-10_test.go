@@ -19,10 +19,11 @@ func Test2021Day10Overall(t *testing.T) {
 		t.Errorf("Bad Sum %v vs 26397", sum)
 	}
 
-	/*sum2 := getSum2(data)
+	s := Init()
+	sum2 := s.getSum2(data)
 	if sum2 != 288957 {
 		t.Errorf("Bad Sum %v vs 288957", sum2)
-	}*/
+	}
 }
 
 func Test2021Day10(t *testing.T) {

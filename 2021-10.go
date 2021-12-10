@@ -80,11 +80,11 @@ func (s *Server) getSum2(data string) int64 {
 			case ")":
 				sum = sum*5 + 1
 			case "]":
-				sum += sum*5 + 2
+				sum = sum*5 + 2
 			case "}":
-				sum += sum*5 + 3
+				sum = sum*5 + 3
 			case ">":
-				sum += sum*5 + 4
+				sum = sum*5 + 4
 			}
 		}
 
