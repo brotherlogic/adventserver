@@ -1,13 +1,14 @@
 package main
 
 import (
+	"sort"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
-func getFirstInvalid(data string) string {
+func getFirstInvalid(data string) (string, string) {
 	var stack []string
 
 	for _, char := range data {
@@ -30,17 +31,31 @@ func getFirstInvalid(data string) string {
 		if match {
 			stack = stack[0 : len(stack)-1]
 		} else {
-			return string(char)
+			return string(char), ""
 		}
 	}
 
-	return ""
+	ret := ""
+	for _, char := range stack {
+		switch char {
+		case "[":
+			ret = "]" + ret
+		case "{":
+			ret = "}" + ret
+		case "<":
+			ret = ">" + ret
+		case "(":
+			ret = ")" + ret
+		}
+	}
+	return "", ret
 }
 
 func getSum(data string) int {
 	sum := 0
 	for _, line := range strings.Split(data, "\n") {
-		switch getFirstInvalid(strings.TrimSpace(line)) {
+		val, _ := getFirstInvalid(strings.TrimSpace(line))
+		switch val {
 		case ")":
 			sum += 3
 		case "]":
@@ -54,6 +69,31 @@ func getSum(data string) int {
 
 	return sum
 }
+func getSum2(data string) int {
+	var sums []int
+	for _, line := range strings.Split(data, "\n") {
+		sum := 0
+		_, val := getFirstInvalid(strings.TrimSpace(line))
+		for _, c := range val {
+			switch string(c) {
+			case ")":
+				sum = sum*5 + 1
+			case "]":
+				sum += sum*5 + 2
+			case "}":
+				sum += sum*5 + 3
+			case ">":
+				sum += sum*5 + 4
+			}
+		}
+
+		sums = append(sums, sum)
+	}
+
+	sort.Ints(sums)
+
+	return sums[len(sums)/2]
+}
 
 func (s *Server) Solve2021day10part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-10.txt")
@@ -63,4 +103,14 @@ func (s *Server) Solve2021day10part1(ctx context.Context) (*pb.SolveResponse, er
 	trimmed := strings.TrimSpace(data)
 
 	return &pb.SolveResponse{Answer: int32(getSum(trimmed))}, nil
+}
+
+func (s *Server) Solve2021day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-10.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: int32(getSum2(trimmed))}, nil
 }

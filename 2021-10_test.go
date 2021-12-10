@@ -18,37 +18,43 @@ func Test2021Day10Overall(t *testing.T) {
 	if sum != 26397 {
 		t.Errorf("Bad Sum %v vs 26397", sum)
 	}
+
+	sum2 := getSum2(data)
+	if sum2 != 288957 {
+		t.Errorf("Bad Sum %v vs 288957", sum2)
+	}
 }
 
 func Test2021Day10(t *testing.T) {
 	cases := []struct {
-		in   string
-		want string
+		in    string
+		want  string
+		want2 string
 	}{
-		{"[({(<(())[]>[[{[]{<()<>>", ""},
-		{"[(()[<>])]({[<{<<[]>>(", ""},
-		{"{([(<{}[<>[]}>{[]{[(<()>", "}"},
-		{"(((({<>}<{<{<>}{[]{[]{}", ""},
-		{"[[<[([]))<([[{}[[()]]]", ")"},
-		{"[{[{({}]{}}([{[{{{}}([]", "]"},
-		{"{<[[]]>}<{[{[{[]{()[[[]", ""},
-		{"[<(<(<(<{}))><([]([]()", ")"},
-		{"<{([([[(<>()){}]>(<<{{", ">"},
-		{"<{([{{}}[<[[[<>{}]]]>[]]", ""},
+		{"[({(<(())[]>[[{[]{<()<>>", "", "}}]])})]"},
+		{"[(()[<>])]({[<{<<[]>>(", "", ")}>]})"},
+		{"{([(<{}[<>[]}>{[]{[(<()>", "}", ""},
+		{"(((({<>}<{<{<>}{[]{[]{}", "", "}}>}>))))"},
+		{"[[<[([]))<([[{}[[()]]]", ")", ""},
+		{"[{[{({}]{}}([{[{{{}}([]", "]", ""},
+		{"{<[[]]>}<{[{[{[]{()[[[]", "", "]]}}]}]}>"},
+		{"[<(<(<(<{}))><([]([]()", ")", ""},
+		{"<{([([[(<>()){}]>(<<{{", ">", ""},
+		{"<{([{{}}[<[[[<>{}]]]>[]]", "", "])}>"},
 	}
 
 	for _, c := range cases {
-		got := getFirstInvalid(c.in)
-		if got != c.want {
-			t.Errorf("Spec(%v) == %v, want %v", c.in, got, c.want)
+		got, got2 := getFirstInvalid(c.in)
+		if got != c.want || got2 != c.want2 {
+			t.Errorf("Spec(%v) == %v, want %v but %v want %v", c.in, got, c.want, got2, c.want2)
 		}
 	}
 }
 
 func Test2021Day10Focus(t *testing.T) {
 	data := "[({(<(())[]>[[{[]{<()<>>"
-	res := getFirstInvalid(data)
-	if res != "" {
+	_, res := getFirstInvalid(data)
+	if res != "}}]])})]" {
 		t.Errorf("Bad Focus: %v", res)
 	}
 }
