@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -70,7 +70,7 @@ func getSum(data string) int {
 
 	return sum
 }
-func getSum2(data string) int {
+func (s *Server) getSum2(data string) int {
 	var sums []int
 	for _, line := range strings.Split(data, "\n") {
 		sum := 0
@@ -91,7 +91,7 @@ func getSum2(data string) int {
 		sums = append(sums, sum)
 	}
 
-	log.Fatalf("SUMS = %v", sums)
+	s.Log(fmt.Sprintf("SUMS = %v", sums))
 	sort.Ints(sums)
 
 	return sums[len(sums)/2]
@@ -114,5 +114,5 @@ func (s *Server) Solve2021day10part2(ctx context.Context) (*pb.SolveResponse, er
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(getSum2(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(s.getSum2(trimmed))}, nil
 }
