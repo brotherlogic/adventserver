@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sort"
 	"strings"
 
@@ -90,6 +91,7 @@ func getSum2(data string) int {
 		sums = append(sums, sum)
 	}
 
+	log.Fatalf("SUMS = %v", sums)
 	sort.Ints(sums)
 
 	return sums[len(sums)/2]
