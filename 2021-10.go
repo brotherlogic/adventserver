@@ -93,10 +93,10 @@ func (s *Server) getSum2(data string) int64 {
 		}
 	}
 
-	s.Log(fmt.Sprintf("SUMS = %v", sums))
 	sort.SliceStable(sums, func(i, j int) bool {
 		return sums[i] < sums[j]
 	})
+	s.Log(fmt.Sprintf("SUMS = %v", sums))
 
 	return sums[len(sums)/2]
 }
