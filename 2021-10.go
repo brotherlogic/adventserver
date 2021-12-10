@@ -88,7 +88,9 @@ func (s *Server) getSum2(data string) int64 {
 			}
 		}
 
-		sums = append(sums, sum)
+		if sum > 0 {
+			sums = append(sums, sum)
+		}
 	}
 
 	s.Log(fmt.Sprintf("SUMS = %v", sums))
