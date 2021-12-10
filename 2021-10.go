@@ -70,10 +70,10 @@ func getSum(data string) int {
 
 	return sum
 }
-func (s *Server) getSum2(data string) int {
-	var sums []int
+func (s *Server) getSum2(data string) int64 {
+	var sums []int64
 	for _, line := range strings.Split(data, "\n") {
-		sum := 0
+		sum := int64(0)
 		_, val := getFirstInvalid(strings.TrimSpace(line))
 		for _, c := range val {
 			switch string(c) {
@@ -92,7 +92,9 @@ func (s *Server) getSum2(data string) int {
 	}
 
 	s.Log(fmt.Sprintf("SUMS = %v", sums))
-	sort.Ints(sums)
+	sort.SliceStable(sums, func(i, j int) bool {
+		return sums[i] < sums[j]
+	})
 
 	return sums[len(sums)/2]
 }
@@ -114,5 +116,5 @@ func (s *Server) Solve2021day10part2(ctx context.Context) (*pb.SolveResponse, er
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(s.getSum2(trimmed))}, nil
+	return &pb.SolveResponse{BigAnswer: s.getSum2(trimmed)}, nil
 }
