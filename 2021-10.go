@@ -74,7 +74,7 @@ func (s *Server) getSum2(data string) int64 {
 	var sums []int64
 	for _, line := range strings.Split(data, "\n") {
 		sum := int64(0)
-		_, val := getFirstInvalid(strings.TrimSpace(line))
+		v1, val := getFirstInvalid(strings.TrimSpace(line))
 		for _, c := range val {
 			switch string(c) {
 			case ")":
@@ -88,7 +88,7 @@ func (s *Server) getSum2(data string) int64 {
 			}
 		}
 
-		if sum > 0 {
+		if v1 == "" {
 			sums = append(sums, sum)
 		}
 	}
