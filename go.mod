@@ -7,7 +7,7 @@ require (
 	github.com/brotherlogic/dstore v0.0.0-20211129160138-88023844d0bb // indirect
 	github.com/brotherlogic/filecopier v0.0.0-20211126153709-17762b3bb105
 	github.com/brotherlogic/gobuildslave v0.0.0-20211126143211-04b65d282911 // indirect
-	github.com/brotherlogic/goserver v0.0.0-20211211171611-e7398061eabd
+	github.com/brotherlogic/goserver v0.0.0-20211211172807-9e3a9685b0b0
 	github.com/brotherlogic/lock v0.0.0-20211209023923-5c75d6047964 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/golang/protobuf v1.5.2
