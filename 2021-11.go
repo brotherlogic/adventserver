@@ -94,7 +94,7 @@ func flash(octoArr [][]*octo) int {
 	return fullCount
 }
 
-func (s *Server) Solve2021day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2021day11part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data := `2566885432
 	3857414357
 	6761543247
