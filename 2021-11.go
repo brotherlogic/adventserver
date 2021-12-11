@@ -133,5 +133,6 @@ func (s *Server) Solve2021day11part2(ctx context.Context) (*pb.SolveResponse, er
 		if flash(arr) == 100 {
 			return &pb.SolveResponse{Answer: count}, nil
 		}
+		count++
 	}
 }
