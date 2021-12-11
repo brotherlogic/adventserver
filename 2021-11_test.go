@@ -67,3 +67,29 @@ func Test2021Day11Part2(t *testing.T) {
 		t.Errorf("Bad flash count: %v vs 1656", count)
 	}
 }
+
+func Test2021Day11ActualPart2(t *testing.T) {
+	data := `5483143223
+	2745854711
+	5264556173
+	6141336146
+	6357385478
+	4167524645
+	2176841721
+	6882881134
+	4846848554
+	5283751526`
+
+	arr := buildArr(data)
+
+	seenAt := -1
+	for i := 1; i <= 1000; i++ {
+		if seenAt < 0 && flash(arr) == 100 {
+			seenAt = i
+		}
+	}
+
+	if seenAt != 195 {
+		t.Errorf("Seen wrong %v vs 195", seenAt)
+	}
+}

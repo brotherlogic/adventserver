@@ -114,3 +114,24 @@ func (s *Server) Solve2021day11part1(ctx context.Context) (*pb.SolveResponse, er
 
 	return &pb.SolveResponse{Answer: count}, nil
 }
+
+func (s *Server) Solve2021day11part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data := `2566885432
+	3857414357
+	6761543247
+	5477332114
+	3731585385
+	1716783173
+	1277321612
+	3371176148
+	1162578285
+	6144726367`
+
+	arr := buildArr(data)
+	count := int32(1)
+	for {
+		if flash(arr) == 100 {
+			return &pb.SolveResponse{Answer: count}, nil
+		}
+	}
+}
