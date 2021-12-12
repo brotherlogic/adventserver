@@ -58,16 +58,17 @@ func buildGraph(data string) *pnode {
 	return nil
 }
 
-func countPaths(node *pnode) int {
+func countPaths(node *pnode, maxSeen int) int {
 	count := 0
 	for _, n := range node.neighbours {
-		count += getPaths(n, make([]string, 0), "")
+		count += getPaths(n, make(map[string]int), maxSeen, "start-")
 	}
 	return count
 }
 
-func getPaths(node *pnode, seenSmall []string, sofar string) int {
+func getPaths(node *pnode, seenSmall map[string]int, maxSeen int, sofar string) int {
 	if node.name == "end" {
+		//log.Printf("Seen %vend with %v", sofar, seenSmall)
 		return 1
 	}
 
@@ -76,21 +77,39 @@ func getPaths(node *pnode, seenSmall []string, sofar string) int {
 	}
 
 	if !node.bigcave {
-		for _, seen := range seenSmall {
-			if seen == node.name {
+		for seen, count := range seenSmall {
+			if seen == node.name && count >= maxSeen {
 				return 0
 			}
 		}
 
-		seenSmall = append(seenSmall, node.name)
+		seenSmall[node.name]++
+
+		countBigs := 0
+		for _, val := range seenSmall {
+			if val > 1 {
+				countBigs++
+			}
+		}
+		if countBigs > 1 {
+			return 0
+		}
 	}
 
 	count := 0
 	for _, child := range node.neighbours {
-		count += getPaths(child, seenSmall, sofar+node.name)
+		count += getPaths(child, copy(seenSmall), maxSeen, sofar+node.name+"-")
 	}
 
 	return count
+}
+
+func copy(m map[string]int) map[string]int {
+	nmap := make(map[string]int)
+	for key, val := range m {
+		nmap[key] = val
+	}
+	return nmap
 }
 
 func (s *Server) Solve2021day12part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -118,7 +137,37 @@ func (s *Server) Solve2021day12part1(ctx context.Context) (*pb.SolveResponse, er
 	yq-YA
 	end-JS`
 
-	paths := countPaths(buildGraph(strings.TrimSpace(data)))
+	paths := countPaths(buildGraph(strings.TrimSpace(data)), 1)
+
+	return &pb.SolveResponse{Answer: int32(paths)}, nil
+}
+
+func (s *Server) Solve2021day12part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data := `start-YA
+	ps-yq
+	zt-mu
+	JS-yi
+	yq-VJ
+	QT-ps
+	start-yq
+	YA-yi
+	start-nf
+	nf-YA
+	nf-JS
+	JS-ez
+	yq-JS
+	ps-JS
+	ps-yi
+	yq-nf
+	QT-yi
+	end-QT
+	nf-yi
+	zt-QT
+	end-ez
+	yq-YA
+	end-JS`
+
+	paths := countPaths(buildGraph(strings.TrimSpace(data)), 2)
 
 	return &pb.SolveResponse{Answer: int32(paths)}, nil
 }
