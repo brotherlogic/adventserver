@@ -41,8 +41,8 @@ func runFolds(data string, numFolds int) int {
 
 func buildGrid(data string) [][]bool {
 	var grid [][]bool
-	for i := 0; i < 15; i++ {
-		grid = append(grid, make([]bool, 15))
+	for i := 0; i < 10000; i++ {
+		grid = append(grid, make([]bool, 10000))
 	}
 
 	for _, line := range strings.Split(data, "\n") {
