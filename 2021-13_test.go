@@ -30,7 +30,7 @@ var (
 )
 
 func Test2021Day13(t *testing.T) {
-	val := runFolds(data, 1)
+	val, _ := runFolds(data, 1)
 	if val != 17 {
 		t.Errorf("Wrong dots %v vs 17", val)
 	}
@@ -44,5 +44,5 @@ func Test2021Day13Specific(t *testing.T) {
 	printGrid(grid)
 	fmt.Printf("---\n")
 	grid = vertFold(grid, 5)
-	printGrid(grid)
+	fmt.Printf(printGrid(grid))
 }

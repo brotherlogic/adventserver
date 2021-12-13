@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func runFolds(data string, numFolds int) int {
+func runFolds(data string, numFolds int) (int, [][]bool) {
 	dotCount := 0
 
 	grid := buildGrid(data)
@@ -36,7 +36,7 @@ func runFolds(data string, numFolds int) int {
 		}
 	}
 
-	return dotCount
+	return dotCount, grid
 }
 
 func buildGrid(data string) [][]bool {
@@ -88,17 +88,40 @@ func vertFold(grid [][]bool, vVal int) [][]bool {
 	return grid
 }
 
-func printGrid(grid [][]bool) {
-	for _, line := range grid {
-		for _, v := range line {
+func printGrid(grid [][]bool) string {
+	maxX := 0
+	maxY := 0
+	for y, line := range grid {
+		for x, v := range line {
 			if v {
-				fmt.Printf("#")
-			} else {
-				fmt.Printf(".")
+				if x > maxX {
+					maxX = x
+				}
+				if y > maxY {
+					maxY = y
+				}
 			}
 		}
-		fmt.Printf("\n")
 	}
+
+	res := ""
+	for y, line := range grid {
+		if y <= maxY {
+			for x, v := range line {
+				if x <= maxX {
+					if v {
+						res += fmt.Sprintf("#")
+					} else {
+						res += fmt.Sprintf(".")
+					}
+				}
+			}
+
+			res += fmt.Sprintf("\n")
+		}
+	}
+
+	return res
 }
 
 func (s *Server) Solve2021day13part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -108,5 +131,17 @@ func (s *Server) Solve2021day13part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(runFolds(trimmed, 1))}, nil
+	val, _ := runFolds(trimmed, 1)
+	return &pb.SolveResponse{Answer: int32(val)}, nil
+}
+
+func (s *Server) Solve2021day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-13.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	_, grid := runFolds(trimmed, 900)
+	return &pb.SolveResponse{StringAnswer: printGrid(grid)}, nil
 }
