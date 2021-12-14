@@ -24,7 +24,7 @@ func buildRules(data string) map[string]string {
 func convertToMap(line string) map[string]int64 {
 	mapper := make(map[string]int64)
 	for i := 0; i < len(line)-1; i++ {
-		mapper[string(line[i])+string(line[i+1])] = 1
+		mapper[string(line[i])+string(line[i+1])]++
 	}
 	return mapper
 }
