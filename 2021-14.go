@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math"
 	"strings"
 
@@ -52,6 +53,7 @@ func runRules(mapper map[string]int64, rules map[string]string) map[string]int64
 }
 
 func getCommons(line map[string]int64) (int64, int64) {
+	log.Printf("LINE = %v", line)
 	counts := make(map[string]int64)
 	for str, co := range line {
 		counts[string(str[0])] += co
