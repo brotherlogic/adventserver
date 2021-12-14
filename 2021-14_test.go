@@ -27,14 +27,14 @@ func Test2021Day14(t *testing.T) {
 
 	newone := runData(data, 10)
 	mc, lc := getCommons(newone)
-	if mc-lc != 1588 {
-		t.Fatalf("Bad day: %v", mc-lc)
+	if mc.Sub(mc, lc).String() != "1588" {
+		t.Fatalf("Bad day: %v", mc.Sub(mc, lc).String())
 	}
 
 	newone = runData(data, 40)
 	mc, lc = getCommons(newone)
-	if mc-lc != 2188189693529 {
-		t.Errorf("Bad 2nd day: %v", mc-lc)
+	if mc.Sub(mc, lc).String() != "2188189693529" {
+		t.Errorf("Bad 2nd day: %v", mc.Sub(mc, lc).String())
 	}
 }
 
