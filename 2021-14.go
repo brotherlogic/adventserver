@@ -72,12 +72,14 @@ func getCommons(line map[string]*big.Int) (*big.Int, *big.Int) {
 		if val, ok := counts[string(str[0])]; ok {
 			val.Add(val, co)
 		} else {
-			counts[string(str[0])] = big.NewInt(co.Int64())
+			counts[string(str[0])] = new(big.Int)
+			counts[string(str[0])].Set(co)
 		}
 		if val, ok := counts[string(str[1])]; ok {
 			val.Add(val, co)
 		} else {
-			counts[string(str[1])] = big.NewInt(co.Int64())
+			counts[string(str[1])] = new(big.Int)
+			counts[string(str[1])].Set(co)
 		}
 	}
 
