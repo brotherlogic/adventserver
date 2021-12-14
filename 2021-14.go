@@ -31,7 +31,7 @@ func convertToMap(line string) map[string]int64 {
 
 func runData(data string, count int) map[string]int64 {
 	first := strings.Split(data, "\n")[0]
-	mapper := convertToMap(first)
+	mapper := convertToMap(strings.TrimSpace(first))
 	rules := buildRules(data)
 
 	for i := 0; i < count; i++ {
@@ -53,7 +53,6 @@ func runRules(mapper map[string]int64, rules map[string]string) map[string]int64
 }
 
 func getCommons(line map[string]int64) (int64, int64) {
-	log.Printf("LINE = %v", line)
 	counts := make(map[string]int64)
 	for str, co := range line {
 		counts[string(str[0])] += co
@@ -63,12 +62,14 @@ func getCommons(line map[string]int64) (int64, int64) {
 	highest := int64(0)
 	lowest := int64(math.MaxInt64)
 
-	for _, v := range counts {
+	for key, v := range counts {
 		if v > highest {
 			highest = v
+			log.Printf("HIGH %v -> %v", key, (v+1)/2)
 		}
 		if v < lowest {
 			lowest = v
+			log.Printf("LOW %v -> %v", key, (v+1)/2)
 		}
 	}
 
