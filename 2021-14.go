@@ -84,3 +84,15 @@ func (s *Server) Solve2021day14part1(ctx context.Context) (*pb.SolveResponse, er
 	mc, lc := getCommons(newone)
 	return &pb.SolveResponse{Answer: int32(mc - lc)}, nil
 }
+
+func (s *Server) Solve2021day14part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-14.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	newone := runData(trimmed, 40)
+	mc, lc := getCommons(newone)
+	return &pb.SolveResponse{Answer: int32(mc - lc)}, nil
+}
