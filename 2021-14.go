@@ -20,38 +20,46 @@ func buildRules(data string) map[string]string {
 	return rules
 }
 
-func runData(data string, count int) string {
+func convertToMap(line string) map[string]int64 {
+	mapper := make(map[string]int64)
+	for i := 0; i < len(line)-1; i++ {
+		mapper[string(line[i])+string(line[i+1])] = 1
+	}
+	return mapper
+}
+
+func runData(data string, count int) map[string]int64 {
 	first := strings.Split(data, "\n")[0]
+	mapper := convertToMap(first)
 	rules := buildRules(data)
 
 	for i := 0; i < count; i++ {
-		first = runRules(first, rules)
+		mapper = runRules(mapper, rules)
 	}
 
-	return first
+	return mapper
 }
 
-func runRules(line string, rules map[string]string) string {
-	nStr := string(line[0])
-
-	for i := 0; i < len(line)-1; i++ {
-		mapper := line[i : i+2]
-		if newChar, ok := rules[mapper]; ok {
-			nStr += newChar + string(line[i+1])
+func runRules(mapper map[string]int64, rules map[string]string) map[string]int64 {
+	nmap := make(map[string]int64)
+	for val, count := range mapper {
+		if new, ok := rules[val]; ok {
+			nmap[string(val[0])+new] += count
+			nmap[new+string(val[1])] += count
 		}
 	}
-
-	return nStr
+	return nmap
 }
 
-func getCommons(line string) (int, int) {
-	counts := make(map[string]int)
-	for _, ch := range line {
-		counts[string(ch)]++
+func getCommons(line map[string]int64) (int64, int64) {
+	counts := make(map[string]int64)
+	for str, co := range line {
+		counts[string(str[0])] += co
+		counts[string(str[1])] += co
 	}
 
-	highest := 0
-	lowest := math.MaxInt32
+	highest := int64(0)
+	lowest := int64(math.MaxInt64)
 
 	for _, v := range counts {
 		if v > highest {
@@ -62,7 +70,7 @@ func getCommons(line string) (int, int) {
 		}
 	}
 
-	return highest, lowest
+	return (highest + 1) / 2, (lowest + 1) / 2
 }
 
 func (s *Server) Solve2021day14part1(ctx context.Context) (*pb.SolveResponse, error) {
