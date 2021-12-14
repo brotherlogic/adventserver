@@ -34,6 +34,7 @@ func main() {
 
 	switch os.Args[1] {
 	case "solve":
+		t := time.Now()
 		addFlags := flag.NewFlagSet("AddRecords", flag.ExitOnError)
 		var year = addFlags.Int("year", -1, "Id of the record to add")
 		var day = addFlags.Int("day", 0, "Cost of the record")
@@ -45,7 +46,13 @@ func main() {
 				if err != nil {
 					log.Fatalf("Error on Solve: %v", err)
 				}
-				fmt.Printf("Solved: %v and %v\n", res, err)
+
+				fmt.Printf("Solved in %v\n", time.Since(t))
+				if res.GetStringAnswer() != "" {
+					fmt.Printf("%v", res.GetStringAnswer())
+				} else {
+					fmt.Printf("Solved: %v\n", res)
+				}
 			}
 		}
 
