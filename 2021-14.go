@@ -1,7 +1,6 @@
 package main
 
 import (
-	"math"
 	"math/big"
 	"strings"
 
@@ -84,7 +83,7 @@ func getCommons(line map[string]*big.Int) (*big.Int, *big.Int) {
 	}
 
 	highest := big.NewInt(0)
-	lowest := big.NewInt(math.MaxInt64)
+	lowest := counts["B"]
 
 	for _, v := range counts {
 		if v.Cmp(highest) > 0 {
