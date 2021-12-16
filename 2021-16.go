@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"strconv"
 	"strings"
 
@@ -49,6 +50,65 @@ func sumVersion(code []packet) int {
 		sv += int(c.version) + sumVersion(c.subcodes)
 	}
 	return sv
+}
+
+func computeCode(code packet) int {
+	log.Printf("RUNNING %v", code.pid)
+	switch code.pid {
+	case 0:
+		sumv := 0
+		for _, sc := range code.subcodes {
+			sumv += computeCode(sc)
+		}
+		return sumv
+	case 1:
+		log.Printf("PROD: %v", computeCode(code.subcodes[0]))
+		prodv := computeCode(code.subcodes[0])
+		for _, sc := range code.subcodes[1:] {
+			log.Printf("PROD %v", computeCode(sc))
+			prodv *= computeCode(sc)
+		}
+		return prodv
+	case 2:
+		maxv := math.MaxInt16
+		for _, sc := range code.subcodes {
+			val := computeCode(sc)
+			if val < maxv {
+				maxv = val
+			}
+		}
+		return maxv
+	case 3:
+		maxv := 0
+		for _, sc := range code.subcodes {
+			val := computeCode(sc)
+			if val > maxv {
+				maxv = val
+			}
+		}
+		return maxv
+	case 4:
+		return int(code.value)
+	case 5:
+		if computeCode(code.subcodes[0]) > computeCode(code.subcodes[1]) {
+			return 1
+		}
+		return 0
+	case 6:
+		if computeCode(code.subcodes[0]) < computeCode(code.subcodes[1]) {
+			return 1
+		}
+		return 0
+	case 7:
+		if computeCode(code.subcodes[0]) == computeCode(code.subcodes[1]) {
+			return 1
+		}
+		return 0
+	default:
+		log.Fatalf("Cannot process: %+v", code.pid)
+	}
+
+	return 0
 }
 
 func parseCode(bin string, maxlen int) ([]packet, int) {
@@ -126,5 +186,17 @@ func (s *Server) Solve2021day16part1(ctx context.Context) (*pb.SolveResponse, er
 
 	pc, _ := parseCode(convertHex(trimmed), -1)
 	count := sumVersion(pc)
+	return &pb.SolveResponse{Answer: int32(count)}, nil
+}
+
+func (s *Server) Solve2021day16part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-16.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	pc, _ := parseCode(convertHex(trimmed), -1)
+	count := computeCode(pc[0])
 	return &pb.SolveResponse{Answer: int32(count)}, nil
 }
