@@ -52,11 +52,11 @@ func sumVersion(code []packet) int {
 	return sv
 }
 
-func computeCode(code packet) int {
+func computeCode(code packet) int64 {
 	log.Printf("RUNNING %v", code.pid)
 	switch code.pid {
 	case 0:
-		sumv := 0
+		sumv := int64(0)
 		for _, sc := range code.subcodes {
 			sumv += computeCode(sc)
 		}
@@ -70,7 +70,7 @@ func computeCode(code packet) int {
 		}
 		return prodv
 	case 2:
-		maxv := math.MaxInt16
+		maxv := int64(math.MaxInt64)
 		for _, sc := range code.subcodes {
 			val := computeCode(sc)
 			if val < maxv {
@@ -79,7 +79,7 @@ func computeCode(code packet) int {
 		}
 		return maxv
 	case 3:
-		maxv := 0
+		maxv := int64(0)
 		for _, sc := range code.subcodes {
 			val := computeCode(sc)
 			if val > maxv {
@@ -88,22 +88,22 @@ func computeCode(code packet) int {
 		}
 		return maxv
 	case 4:
-		return int(code.value)
+		return code.value
 	case 5:
 		if computeCode(code.subcodes[0]) > computeCode(code.subcodes[1]) {
-			return 1
+			return int64(1)
 		}
-		return 0
+		return int64(0)
 	case 6:
 		if computeCode(code.subcodes[0]) < computeCode(code.subcodes[1]) {
-			return 1
+			return int64(1)
 		}
-		return 0
+		return int64(0)
 	case 7:
 		if computeCode(code.subcodes[0]) == computeCode(code.subcodes[1]) {
-			return 1
+			return int64(1)
 		}
-		return 0
+		return int64(0)
 	default:
 		log.Fatalf("Cannot process: %+v", code.pid)
 	}

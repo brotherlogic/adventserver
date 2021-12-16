@@ -68,7 +68,7 @@ func Test2021Day16Close(t *testing.T) {
 
 	cases := []struct {
 		in   string
-		want int
+		want int64
 	}{
 		{"C200B40A82", 3},
 		{"04005AC33890", 54},
