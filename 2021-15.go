@@ -25,6 +25,29 @@ func buildIntArr(data string) [][]int {
 	return arr
 }
 
+func buildSuperIntArr(data string) [][]int {
+	var arr [][]int
+
+	for adder := 0; adder < 5; adder++ {
+		for _, line := range strings.Split(data, "\n") {
+			var aline []int
+			for add := 0; add < 5; add++ {
+				for _, c := range strings.TrimSpace(line) {
+					val, _ := strconv.Atoi(string(c))
+					nval := val + adder + add
+					if nval > 9 {
+						nval = nval - 9
+					}
+					aline = append(aline, nval)
+				}
+			}
+			arr = append(arr, aline)
+		}
+	}
+
+	return arr
+}
+
 type cavern struct {
 	arr [][]int
 }
@@ -126,6 +149,14 @@ func getBestPath(data string) int {
 	return path[0][0] - arr[0][0]
 }
 
+func getBestPath2(data string) int {
+	arr := buildSuperIntArr(data)
+
+	path := computePath(arr)
+
+	return path[0][0] - arr[0][0]
+}
+
 func (s *Server) Solve2021day15part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-15.txt")
 	if err != nil {
@@ -137,5 +168,16 @@ func (s *Server) Solve2021day15part1(ctx context.Context) (*pb.SolveResponse, er
 	s.Log(fmt.Sprintf("%v vs %v", len(arr), len(arr[0])))
 
 	path := getBestPath(trimmed)
+	return &pb.SolveResponse{Answer: int32(path)}, nil
+}
+
+func (s *Server) Solve2021day15part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-15.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	path := getBestPath2(trimmed)
 	return &pb.SolveResponse{Answer: int32(path)}, nil
 }
