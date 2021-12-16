@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -49,33 +48,26 @@ func addScore(lows []*coord, coord *coord) []*coord {
 }
 
 func backTracePath(cav *cavern, score [][]int, lows []*coord) {
-	log.Printf("%p", cav)
 	if len(lows) == 0 {
 		return
 	}
 	lowest := lows[0]
 	lows = lows[1:]
-	log.Printf("Backracing (%v) -> %+v", len(lows), lowest)
 
 	if cav.arr[lowest.x][lowest.y] > lowest.score {
 		cav.arr[lowest.x][lowest.y] = lowest.score
 
 		if lowest.x > 0 {
 			if lowest.score+score[lowest.x-1][lowest.y] < cav.arr[lowest.x-1][lowest.y] {
-				log.Printf("%v: %v, %v -> %v, %v = > %v vs %v", lowest.score, lowest.x, lowest.y, lowest.x-1, lowest.y, lowest.score+score[lowest.x-1][lowest.y], cav.arr[lowest.x-1][lowest.y])
-				log.Printf("START %v", len(lows))
 				lows = addScore(lows, &coord{x: lowest.x - 1, y: lowest.y, score: lowest.score + score[lowest.x-1][lowest.y]})
-				log.Printf("END %v", len(lows))
 			}
 		}
 
 		if lowest.y > 0 {
 			if lowest.score+score[lowest.x][lowest.y-1] < cav.arr[lowest.x][lowest.y-1] {
-				log.Printf("%v: %v, %v -> %v, %v = >%v vs %v", lowest.score, lowest.x, lowest.y, lowest.x, lowest.y-1, lowest.score+score[lowest.x][lowest.y-1], cav.arr[lowest.x][lowest.y-1])
 				lows = addScore(lows, &coord{x: lowest.x, y: lowest.y - 1, score: lowest.score + score[lowest.x][lowest.y-1]})
 			}
 		}
-		log.Printf("Added to %v", len(lows))
 	}
 
 	backTracePath(cav, score, lows)
@@ -99,7 +91,7 @@ func computePath(arr [][]int) [][]int {
 		score: arr[len(arr)-1][len(arr[0])-1],
 	}})
 
-	printCavern(cavern)
+	//printCavern(cavern)
 
 	return narr
 }
