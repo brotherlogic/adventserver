@@ -63,9 +63,21 @@ func backTracePath(cav *cavern, score [][]int, lows []*coord) {
 			}
 		}
 
+		if lowest.x < len(score)-1 {
+			if lowest.score+score[lowest.x+1][lowest.y] < cav.arr[lowest.x+1][lowest.y] {
+				lows = addScore(lows, &coord{x: lowest.x + 1, y: lowest.y, score: lowest.score + score[lowest.x+1][lowest.y]})
+			}
+		}
+
 		if lowest.y > 0 {
 			if lowest.score+score[lowest.x][lowest.y-1] < cav.arr[lowest.x][lowest.y-1] {
 				lows = addScore(lows, &coord{x: lowest.x, y: lowest.y - 1, score: lowest.score + score[lowest.x][lowest.y-1]})
+			}
+		}
+
+		if lowest.y < len(score)-1 {
+			if lowest.score+score[lowest.x][lowest.y+1] < cav.arr[lowest.x][lowest.y+1] {
+				lows = addScore(lows, &coord{x: lowest.x, y: lowest.y + 1, score: lowest.score + score[lowest.x][lowest.y+1]})
 			}
 		}
 	}
