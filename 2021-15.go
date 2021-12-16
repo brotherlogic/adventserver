@@ -129,6 +129,9 @@ func (s *Server) Solve2021day15part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 	trimmed := strings.TrimSpace(data)
 
+	arr := buildIntArr(trimmed)
+	s.Log(fmt.Sprintf("%v vs %v", len(arr), len(arr[0])))
+
 	path := getBestPath(trimmed)
 	return &pb.SolveResponse{Answer: int32(path)}, nil
 }
