@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"testing"
 )
@@ -17,7 +18,7 @@ func Test2021Day16ConvertHex(t *testing.T) {
 	if len(elem) == 0 {
 		t.Fatalf("No code")
 	}
-	if elem[0].pid != 4 || elem[0].version != 6 || elem[0].value != 2021 {
+	if elem[0].pid != 4 || elem[0].version != 6 || elem[0].value.Int64() != 2021 {
 		t.Errorf("Bad code: %+v", elem[0])
 	}
 
@@ -39,7 +40,7 @@ func Test2021Day16ConvertHarder(t *testing.T) {
 		t.Errorf("Bad subcodes: %+v", res[0])
 	}
 
-	if res[0].subcodes[0].value != 10 || res[0].subcodes[1].value != 20 {
+	if res[0].subcodes[0].value.Int64() != 10 || res[0].subcodes[1].value.Int64() != 20 {
 		log.Printf("Bad subcode")
 	}
 
@@ -88,7 +89,7 @@ func Test2021Day16Close(t *testing.T) {
 		log.Printf("Running  %v", scase.in)
 		pc, _ := parseCode(convertHex(scase.in), -1)
 		count := computeCode(pc[0])
-		if count != scase.want {
+		if count.String() != fmt.Sprintf("%v", scase.want) {
 			t.Errorf("Bad comp: %v vs %v (%v)", count, scase.want, scase.in)
 		}
 	}

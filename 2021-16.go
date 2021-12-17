@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"math"
+	"math/big"
 	"strconv"
 	"strings"
 
@@ -35,12 +35,13 @@ func convertHex(hex string) string {
 type packet struct {
 	version  int
 	pid      int
-	value    int64
+	value    *big.Int
 	subcodes []packet
 }
 
-func convert(bin string) int64 {
-	val, _ := strconv.ParseInt(bin, 2, 32)
+func convert(bin string) *big.Int {
+	val := new(big.Int)
+	val.SetString(bin, 2)
 	return val
 }
 
@@ -52,63 +53,65 @@ func sumVersion(code []packet) int {
 	return sv
 }
 
-func computeCode(code packet) int64 {
+func computeCode(code packet) *big.Int {
 	log.Printf("RUNNING %v", code.pid)
 	switch code.pid {
 	case 0:
-		sumv := int64(0)
+		sumv := big.NewInt(0)
 		for _, sc := range code.subcodes {
-			sumv += computeCode(sc)
+			sumv.Add(sumv, computeCode(sc))
 		}
 		return sumv
 	case 1:
 		log.Printf("PROD: %v", computeCode(code.subcodes[0]))
-		prodv := computeCode(code.subcodes[0])
-		for _, sc := range code.subcodes[1:] {
+		prodv := big.NewInt(1)
+		for _, sc := range code.subcodes {
 			log.Printf("PROD %v", computeCode(sc))
-			prodv *= computeCode(sc)
+			prodv.Mul(prodv, computeCode(sc))
 		}
 		return prodv
 	case 2:
-		maxv := int64(math.MaxInt64)
+		maxv := computeCode(code.subcodes[0])
 		for _, sc := range code.subcodes {
 			val := computeCode(sc)
-			if val < maxv {
+			if maxv.Cmp(val) > 0 {
 				maxv = val
 			}
 		}
 		return maxv
 	case 3:
-		maxv := int64(0)
+		maxv := big.NewInt(0)
 		for _, sc := range code.subcodes {
 			val := computeCode(sc)
-			if val > maxv {
+			log.Printf("MAX: %v", val)
+			if maxv.Cmp(val) < 0 {
 				maxv = val
 			}
 		}
+		log.Printf("RET %v", maxv)
 		return maxv
 	case 4:
 		return code.value
 	case 5:
-		if computeCode(code.subcodes[0]) > computeCode(code.subcodes[1]) {
-			return int64(1)
+		if computeCode(code.subcodes[0]).Cmp(computeCode(code.subcodes[1])) > 0 {
+			return big.NewInt(1)
 		}
-		return int64(0)
+		return big.NewInt(0)
 	case 6:
-		if computeCode(code.subcodes[0]) < computeCode(code.subcodes[1]) {
-			return int64(1)
+		if computeCode(code.subcodes[0]).Cmp(computeCode(code.subcodes[1])) < 0 {
+			return big.NewInt(1)
 		}
-		return int64(0)
+		return big.NewInt(0)
 	case 7:
-		if computeCode(code.subcodes[0]) == computeCode(code.subcodes[1]) {
-			return int64(1)
+		if computeCode(code.subcodes[0]).Cmp(computeCode(code.subcodes[1])) == 0 {
+			return big.NewInt(1)
 		}
-		return int64(0)
+		return big.NewInt(0)
 	default:
 		log.Fatalf("Cannot process: %+v", code.pid)
 	}
 
-	return 0
+	return big.NewInt(0)
 }
 
 func parseCode(bin string, maxlen int) ([]packet, int) {
@@ -130,8 +133,8 @@ func parseCode(bin string, maxlen int) ([]packet, int) {
 		}
 
 		code := packet{}
-		code.version = int(convert(bin[pointer : pointer+3]))
-		code.pid = int(convert(bin[pointer+3 : pointer+6]))
+		code.version = int(convert(bin[pointer : pointer+3]).Int64())
+		code.pid = int(convert(bin[pointer+3 : pointer+6]).Int64())
 		log.Printf("READ: %+v", code)
 
 		switch code.pid {
@@ -145,8 +148,8 @@ func parseCode(bin string, maxlen int) ([]packet, int) {
 				sstr += fnum[1:]
 				count++
 			}
-			conv, _ := strconv.ParseInt(sstr, 2, 64)
-			code.value = conv
+			code.value = new(big.Int)
+			code.value.SetString(sstr, 2)
 			pointer = pointer + 6 + count*5
 		default:
 			typeid := string(bin[pointer+6])
@@ -207,5 +210,5 @@ func (s *Server) Solve2021day16part2(ctx context.Context) (*pb.SolveResponse, er
 
 	s.print(pc[0])
 	count := computeCode(pc[0])
-	return &pb.SolveResponse{Answer: int32(count)}, nil
+	return &pb.SolveResponse{StringAnswer: count.String()}, nil
 }
