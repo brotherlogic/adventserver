@@ -8,6 +8,11 @@ func Test2021Day17(t *testing.T) {
 	if height != 45 {
 		t.Errorf("Bad result %v, %v, %v", bestx, besty, height)
 	}
+
+	count := findAll(20, 30, -10, -5)
+	if count != 112 {
+		t.Errorf("Bad count: %v vs 112", count)
+	}
 }
 
 func Test2021Day17Part1Focus(t *testing.T) {
@@ -19,7 +24,7 @@ func Test2021Day17Part1Focus(t *testing.T) {
 		{7, 2, 3},
 		{6, 3, 6},
 		{9, 0, 0},
-		{17, -4, 0},
+		{17, -4, -1},
 		{6, 9, 45},
 	}
 

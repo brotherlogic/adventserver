@@ -60,7 +60,7 @@ func throwIn(x, y int, lowx, lowy, highx, highy int) int {
 		yvel--
 	}
 
-	return 0
+	return -1
 }
 
 func findBest(lowx, highx, lowy, highy int) (int, int, int) {
@@ -81,7 +81,26 @@ func findBest(lowx, highx, lowy, highy int) (int, int, int) {
 	return bestx, besty, bestheight
 }
 
+func findAll(lowx, highx, lowy, highy int) int {
+	count := 0
+	for x := 1; x < 1000; x++ {
+		for y := -1000; y < 1000; y++ {
+			height := throwIn(x, y, lowx, lowy, highx, highy)
+			if height >= 0 {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
 func (s *Server) Solve2021day17part1(ctx context.Context) (*pb.SolveResponse, error) {
 	_, _, b := findBest(111, 161, -154, -101)
+	return &pb.SolveResponse{Answer: int32(b)}, nil
+}
+
+func (s *Server) Solve2021day17part2(ctx context.Context) (*pb.SolveResponse, error) {
+	b := findAll(111, 161, -154, -101)
 	return &pb.SolveResponse{Answer: int32(b)}, nil
 }
