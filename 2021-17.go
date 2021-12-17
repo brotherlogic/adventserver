@@ -67,7 +67,7 @@ func findBest(lowx, highx, lowy, highy int) (int, int, int) {
 	bestx := 0
 	besty := 0
 	bestheight := 0
-	for x := 0; x < 100; x++ {
+	for x := -100; x < 100; x++ {
 		for y := 0; y < 100; y++ {
 			height := throwIn(x, y, lowx, lowy, highx, highy)
 			if height > bestheight {
