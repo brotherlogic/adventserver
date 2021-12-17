@@ -192,7 +192,7 @@ func (s *Server) Solve2021day16part1(ctx context.Context) (*pb.SolveResponse, er
 func (s *Server) print(code packet) {
 	s.Log(fmt.Sprintf("VALUE %v", code.value))
 	for _, sc := range code.subcodes {
-		print(sc)
+		s.print(sc)
 	}
 }
 
