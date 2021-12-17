@@ -189,6 +189,13 @@ func (s *Server) Solve2021day16part1(ctx context.Context) (*pb.SolveResponse, er
 	return &pb.SolveResponse{Answer: int32(count)}, nil
 }
 
+func (s *Server) print(code packet) {
+	s.Log(fmt.Sprintf("VALUE %v", code.value))
+	for _, sc := range code.subcodes {
+		print(sc)
+	}
+}
+
 func (s *Server) Solve2021day16part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-16.txt")
 	if err != nil {
@@ -197,6 +204,8 @@ func (s *Server) Solve2021day16part2(ctx context.Context) (*pb.SolveResponse, er
 	trimmed := strings.TrimSpace(data)
 
 	pc, _ := parseCode(convertHex(trimmed), -1)
+
+	s.print(pc[0])
 	count := computeCode(pc[0])
 	return &pb.SolveResponse{Answer: int32(count)}, nil
 }

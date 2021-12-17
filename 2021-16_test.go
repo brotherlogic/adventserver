@@ -39,6 +39,10 @@ func Test2021Day16ConvertHarder(t *testing.T) {
 		t.Errorf("Bad subcodes: %+v", res[0])
 	}
 
+	if res[0].subcodes[0].value != 10 || res[0].subcodes[1].value != 20 {
+		log.Printf("Bad subcode")
+	}
+
 	res, _ = parseCode(convertHex("EE00D40C823060"), -1)
 }
 
