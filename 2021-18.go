@@ -241,6 +241,25 @@ func parseNum(str string) *snnum {
 	return val
 }
 
+func bestSum(data string) int {
+	elems := strings.Split(strings.TrimSpace(data), "\n")
+	best := 0
+	for i := 0; i < len(elems); i++ {
+		for j := i + 1; j < len(elems); j++ {
+			b1 := magnitude(reduceNum(add(parseNum(strings.TrimSpace(elems[i])), parseNum(strings.TrimSpace(elems[j])))))
+			if b1 > best {
+				best = b1
+			}
+			b1 = magnitude(reduceNum(add(parseNum(strings.TrimSpace(elems[j])), parseNum(strings.TrimSpace(elems[i])))))
+			if b1 > best {
+				best = b1
+			}
+		}
+	}
+
+	return best
+}
+
 func parseNumInt(str string, curr *snnum) (*snnum, string) {
 	ret := &snnum{parent: curr, val: -1}
 
@@ -267,4 +286,14 @@ func (s *Server) Solve2021day18part1(ctx context.Context) (*pb.SolveResponse, er
 	trimmed := strings.TrimSpace(data)
 
 	return &pb.SolveResponse{Answer: int32(magnitude(runSum(trimmed)))}, nil
+}
+
+func (s *Server) Solve2021day18part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-18.txt")
+	if err != nil {
+		return nil, err
+	}
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: int32(bestSum(trimmed))}, nil
 }
