@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -101,7 +100,6 @@ func doEnhance(str string, ieh string) bool {
 
 func enhance(image [][]bool, ieh string) [][]bool {
 	iea := buildImageEnhance(ieh)
-	log.Printf("IEA: %v", iea)
 
 	var nimage [][]bool
 	for i := range image {
@@ -109,12 +107,10 @@ func enhance(image [][]bool, ieh string) [][]bool {
 	}
 
 	xl, xr, yl, yr := findBounds(image)
-	log.Printf("BOUNDS: %v,%v,%v,%v", xl, xr, yl, yr)
 
 	for i := xl - 1; i <= xr+1; i++ {
 		for j := yl - 1; j <= yr+1; j++ {
 			str := ""
-			log.Printf("TR: %v,%v", i, j)
 			for x := i - 1; x <= i+1; x++ {
 				for y := j - 1; y <= j+1; y++ {
 					if image[x][y] {
@@ -162,11 +158,7 @@ func countLit(image [][]bool) int {
 	return count
 }
 
-func (s *Server) Solve2021day20part1(ctx context.Context) (*pb.SolveResponse, error) {
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-20.txt")
-	if err != nil {
-		return nil, err
-	}
+func runCount(data string) int {
 	trimmed := strings.TrimSpace(data)
 
 	elems := strings.Split(trimmed, "\n")
@@ -180,5 +172,14 @@ func (s *Server) Solve2021day20part1(ctx context.Context) (*pb.SolveResponse, er
 	resolve2 := enhance(resolve1, ieh)
 
 	count := countLit(resolve2)
-	return &pb.SolveResponse{Answer: int32(count)}, nil
+	return count
+}
+
+func (s *Server) Solve2021day20part1(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-20.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runCount(data))}, nil
 }
