@@ -162,7 +162,7 @@ func countLit(image [][]bool) int {
 	return count
 }
 
-func (s *Server) Solve2021day29part1(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2021day20part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-20.txt")
 	if err != nil {
 		return nil, err
