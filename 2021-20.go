@@ -12,7 +12,7 @@ import (
 
 func buildLarge(str string) [][]bool {
 	var large [][]bool
-	size := 400
+	size := 500
 
 	for i := 0; i < size; i++ {
 		large = append(large, make([]bool, size))
