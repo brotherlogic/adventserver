@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -11,7 +12,7 @@ import (
 
 func buildLarge(str string) [][]bool {
 	var large [][]bool
-	size := 10000
+	size := 1000
 
 	for i := 0; i < size; i++ {
 		large = append(large, make([]bool, size))
@@ -84,6 +85,14 @@ func findRight(image [][]bool) int {
 }
 
 func doEnhance(str string, ieh string) bool {
+	if len(str) != 9 {
+		if string(str[0]) == "." {
+			str = "........."
+		} else {
+			str = "#########"
+		}
+
+	}
 	bval := ""
 	for _, ch := range str {
 		switch string(ch) {
@@ -106,13 +115,11 @@ func enhance(image [][]bool, ieh string) [][]bool {
 		nimage = append(nimage, make([]bool, len(image[i])))
 	}
 
-	xl, xr, yl, yr := findBounds(image)
-
-	for i := xl - 1; i <= xr+1; i++ {
-		for j := yl - 1; j <= yr+1; j++ {
+	for i := 0; i < len(image); i++ {
+		for j := 0; j < len(image[i]); j++ {
 			str := ""
-			for x := i - 1; x <= i+1; x++ {
-				for y := j - 1; y <= j+1; y++ {
+			for x := max(0, i-1); x <= min(i+1, len(image)-1); x++ {
+				for y := max(0, j-1); y <= min(j+1, len(image)-1); y++ {
 					if image[x][y] {
 						str = str + "#"
 					} else {
@@ -168,8 +175,12 @@ func runCount(data string) int {
 		image += "\n" + elems[i]
 	}
 
+	a, b, c, d := findBounds(buildLarge(image))
+	log.Printf("%v, %v, %v, %v ->%v ", a, b, c, d, len(buildLarge(image)))
 	resolve1 := enhance(buildLarge(image), ieh)
+
 	resolve2 := enhance(resolve1, ieh)
+	printImage(resolve2)
 
 	count := countLit(resolve2)
 
