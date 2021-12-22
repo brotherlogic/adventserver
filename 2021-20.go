@@ -203,5 +203,5 @@ func (s *Server) Solve2021day20part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runCount(data, 2))}, nil
+	return &pb.SolveResponse{Answer: int32(runCount(data, 50))}, nil
 }
