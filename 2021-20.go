@@ -11,7 +11,7 @@ import (
 
 func buildLarge(str string) [][]bool {
 	var large [][]bool
-	size := 1000
+	size := 10000
 
 	for i := 0; i < size; i++ {
 		large = append(large, make([]bool, size))
@@ -172,6 +172,7 @@ func runCount(data string) int {
 	resolve2 := enhance(resolve1, ieh)
 
 	count := countLit(resolve2)
+
 	return count
 }
 
