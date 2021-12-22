@@ -12,7 +12,7 @@ import (
 
 func buildLarge(str string) [][]bool {
 	var large [][]bool
-	size := 1000
+	size := 200
 
 	for i := 0; i < size; i++ {
 		large = append(large, make([]bool, size))
@@ -165,7 +165,7 @@ func countLit(image [][]bool) int {
 	return count
 }
 
-func runCount(data string) int {
+func runCount(data string, cv int) int {
 	trimmed := strings.TrimSpace(data)
 
 	elems := strings.Split(trimmed, "\n")
@@ -177,12 +177,13 @@ func runCount(data string) int {
 
 	a, b, c, d := findBounds(buildLarge(image))
 	log.Printf("%v, %v, %v, %v ->%v ", a, b, c, d, len(buildLarge(image)))
-	resolve1 := enhance(buildLarge(image), ieh)
+	img := buildLarge(image)
 
-	resolve2 := enhance(resolve1, ieh)
-	printImage(resolve2)
+	for i := 0; i < cv; i++ {
+		img = enhance(img, ieh)
+	}
 
-	count := countLit(resolve2)
+	count := countLit(img)
 
 	return count
 }
@@ -193,5 +194,14 @@ func (s *Server) Solve2021day20part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runCount(data))}, nil
+	return &pb.SolveResponse{Answer: int32(runCount(data, 2))}, nil
+}
+
+func (s *Server) Solve2021day20part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2021-20.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runCount(data, 2))}, nil
 }
