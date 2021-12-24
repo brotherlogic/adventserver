@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -43,9 +44,10 @@ func applyLine(line string, in [][][]bool) [][][]bool {
 
 	nelems := strings.Split(elems[1], ",")
 	lowx, highx := doSplit(nelems[0])
-	if lowx+50 > 100 || highx+50 < 0 {
+	if lowx+50 > 100 || highx+50 < 0 || lowx+50 < 0 {
 		return in
 	}
+	log.Printf("LINE %v", line)
 	for x := lowx; x <= highx; x++ {
 		lowy, highy := doSplit(nelems[1])
 		for y := lowy; y <= highy; y++ {
