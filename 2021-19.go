@@ -234,7 +234,7 @@ func buildOverlaps(name1, name2 string, c1, c2 []*pcoord) map[int]int {
 		}
 	}
 
-	log.Printf("SMAP: (%v,%v) %v", name1, name2, supermap)
+	log.Printf("SMAP: (%v,%v) %v -> %v", name1, name2, supermap, len(supermap))
 	return supermap
 }
 
