@@ -52,10 +52,10 @@ func (s *Server) GetState() []*gspb.State {
 
 func main() {
 	server := Init()
-	server.PrepServer()
+	server.PrepServer("adventserver")
 	server.Register = server
 
-	err := server.RegisterServerV2("adventserver", false, true)
+	err := server.RegisterServerV2(false)
 	if err != nil {
 		return
 	}
