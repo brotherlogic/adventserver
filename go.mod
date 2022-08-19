@@ -3,6 +3,8 @@ module github.com/brotherlogic/adventserver
 go 1.16
 
 require (
+	github.com/brotherlogic/buildserver v0.0.0-20220819190748-b6ea41420545 // indirect
+	github.com/brotherlogic/dstore v0.0.0-20220819190753-3b58e92c7504 // indirect
 	github.com/brotherlogic/filecopier v0.0.0-20220819190645-27b2fcb9e3f1
 	github.com/brotherlogic/goserver v0.0.0-20220819181159-c728a3f047e7
 	github.com/golang/protobuf v1.5.2
