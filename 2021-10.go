@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sort"
 	"strings"
 
@@ -96,7 +95,6 @@ func (s *Server) getSum2(data string) int64 {
 	sort.SliceStable(sums, func(i, j int) bool {
 		return sums[i] > sums[j]
 	})
-	s.Log(fmt.Sprintf("SUMS = %v", sums))
 
 	return sums[len(sums)/2]
 }
