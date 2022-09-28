@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -9,7 +10,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func WorkRules(rules map[string]string, key string) int {
+func WorkRules(rules map[string]string, key string) uint16 {
 
 	response := rules[key]
 
@@ -22,8 +23,8 @@ func WorkRules(rules map[string]string, key string) int {
 		val1 := WorkRules(rules, parts[0])
 		val2 := WorkRules(rules, parts[1])
 
-		rules[parts[0]] = strconv.Itoa(val1)
-		rules[parts[1]] = strconv.Itoa(val2)
+		rules[parts[0]] = fmt.Sprintf("%v", val1)
+		rules[parts[1]] = fmt.Sprintf("%v", val2)
 
 		return val1 & val2
 	}
@@ -33,8 +34,8 @@ func WorkRules(rules map[string]string, key string) int {
 		val1 := WorkRules(rules, parts[0])
 		val2 := WorkRules(rules, parts[1])
 
-		rules[parts[0]] = strconv.Itoa(val1)
-		rules[parts[1]] = strconv.Itoa(val2)
+		rules[parts[0]] = fmt.Sprintf("%v", val1)
+		rules[parts[1]] = fmt.Sprintf("%v", val2)
 
 		return val1 | val2
 	}
@@ -42,9 +43,9 @@ func WorkRules(rules map[string]string, key string) int {
 	if strings.Contains(response, "LSHIFT") {
 		parts := strings.Split(response, " LSHIFT ")
 		val1 := WorkRules(rules, parts[0])
-		val2, _ := strconv.Atoi(parts[1])
+		val2, _ := strconv.ParseUint(parts[1], 10, 8)
 
-		rules[parts[0]] = strconv.Itoa(val1)
+		rules[parts[0]] = fmt.Sprintf("%v", val1)
 
 		return val1 << uint8(val2)
 	}
@@ -52,9 +53,9 @@ func WorkRules(rules map[string]string, key string) int {
 	if strings.Contains(response, "RSHIFT") {
 		parts := strings.Split(response, " RSHIFT ")
 		val1 := WorkRules(rules, parts[0])
-		val2, _ := strconv.Atoi(parts[1])
+		val2, _ := strconv.ParseUint(parts[1], 10, 8)
 
-		rules[parts[0]] = strconv.Itoa(val1)
+		rules[parts[0]] = fmt.Sprintf("%v", val1)
 
 		return val1 >> uint8(val2)
 	}
@@ -65,13 +66,13 @@ func WorkRules(rules map[string]string, key string) int {
 
 		rules[parts[0]] = strconv.Itoa(int(val1))
 
-		return int(^val1)
+		return uint16(^val1)
 	}
 
 	m, err := regexp.MatchString(`\d+`, response)
 	if err == nil && m {
-		conv, _ := strconv.Atoi(response)
-		return conv
+		conv, _ := strconv.ParseUint(response, 10, 16)
+		return uint16(conv)
 	}
 
 	return WorkRules(rules, response)
@@ -116,6 +117,6 @@ func (s *Server) Solve2015day7part2(ctx context.Context) (*pb.SolveResponse, err
 		rules2[result[0][2]] = result[0][1]
 	}
 
-	rules2["b"] = strconv.Itoa(WorkRules(rules, "a"))
+	rules2["b"] = fmt.Sprintf("%v", WorkRules(rules, "a"))
 	return &pb.SolveResponse{Answer: int32(WorkRules(rules2, "a"))}, nil
 }

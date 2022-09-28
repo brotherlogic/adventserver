@@ -119,8 +119,8 @@ func resolve(theory map[string]int, words string) int {
 		val += fmt.Sprintf("%v", num)
 	}
 
-	ans, _ := strconv.Atoi(val)
-	return ans
+	ans, _ := strconv.ParseInt(val, 10, 32)
+	return int(ans)
 }
 
 func buildCounts(data string) (int, int) {
