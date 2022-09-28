@@ -71,7 +71,7 @@ func WorkRules(rules map[string]string, key string) uint16 {
 
 	m, err := regexp.MatchString(`\d+`, response)
 	if err == nil && m {
-		conv, _ := strconv.ParseInt(response, 10, 32)
+		conv, _ := strconv.ParseUint(response, 10, 16)
 		return uint16(conv)
 	}
 
