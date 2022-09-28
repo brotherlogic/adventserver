@@ -285,7 +285,7 @@ func (s *Server) Solve2021day18part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(magnitude(runSum(trimmed)))}, nil
+	return &pb.SolveResponse{BigAnswer: int64(magnitude(runSum(trimmed)))}, nil
 }
 
 func (s *Server) Solve2021day18part2(ctx context.Context) (*pb.SolveResponse, error) {

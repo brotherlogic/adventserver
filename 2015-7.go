@@ -10,7 +10,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func WorkRules(rules map[string]string, key string) uint {
+func WorkRules(rules map[string]string, key string) uint16 {
 
 	response := rules[key]
 
@@ -66,13 +66,13 @@ func WorkRules(rules map[string]string, key string) uint {
 
 		rules[parts[0]] = strconv.Itoa(int(val1))
 
-		return uint(^val1)
+		return uint16(^val1)
 	}
 
 	m, err := regexp.MatchString(`\d+`, response)
 	if err == nil && m {
 		conv, _ := strconv.ParseInt(response, 10, 32)
-		return uint(conv)
+		return uint16(conv)
 	}
 
 	return WorkRules(rules, response)
