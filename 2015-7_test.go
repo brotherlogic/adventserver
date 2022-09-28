@@ -6,7 +6,7 @@ func TestDay7P1(t *testing.T) {
 
 	cases := []struct {
 		in   string
-		want int
+		want uint
 	}{
 		{"d", 72},
 		{"e", 507},
