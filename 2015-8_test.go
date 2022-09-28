@@ -12,6 +12,8 @@ func TestDay20158P1(t *testing.T) {
 		{`"abc"`, 5, 3},
 		{`"aaa\"aaa"`, 10, 7},
 		{`"\x27"`, 6, 1},
+		{`"aaa\"aaa\x27"`, 14, 8},
+		{`"\\\"`, 6, 2},
 	}
 
 	for _, c := range cases {
