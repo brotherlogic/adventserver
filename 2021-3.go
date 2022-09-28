@@ -33,7 +33,7 @@ func leastCommon(lines []string, pos int) string {
 }
 
 func convBinary(bstr string) int {
-	val, _ := strconv.ParseInt(bstr, 2, 64)
+	val, _ := strconv.ParseInt(bstr, 2, 32)
 	return int(val)
 }
 

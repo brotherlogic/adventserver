@@ -42,7 +42,7 @@ func WorkRules(rules map[string]string, key string) int {
 	if strings.Contains(response, "LSHIFT") {
 		parts := strings.Split(response, " LSHIFT ")
 		val1 := WorkRules(rules, parts[0])
-		val2, _ := strconv.Atoi(parts[1])
+		val2, _ := strconv.ParseInt(parts[1], 10, 32)
 
 		rules[parts[0]] = strconv.Itoa(val1)
 
@@ -52,7 +52,7 @@ func WorkRules(rules map[string]string, key string) int {
 	if strings.Contains(response, "RSHIFT") {
 		parts := strings.Split(response, " RSHIFT ")
 		val1 := WorkRules(rules, parts[0])
-		val2, _ := strconv.Atoi(parts[1])
+		val2, _ := strconv.ParseInt(parts[1], 10, 32)
 
 		rules[parts[0]] = strconv.Itoa(val1)
 
@@ -70,8 +70,8 @@ func WorkRules(rules map[string]string, key string) int {
 
 	m, err := regexp.MatchString(`\d+`, response)
 	if err == nil && m {
-		conv, _ := strconv.Atoi(response)
-		return conv
+		conv, _ := strconv.ParseInt(response, 10, 32)
+		return int(conv)
 	}
 
 	return WorkRules(rules, response)
