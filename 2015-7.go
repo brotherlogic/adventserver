@@ -72,7 +72,7 @@ func WorkRules(rules map[string]string, key string) uint {
 	m, err := regexp.MatchString(`\d+`, response)
 	if err == nil && m {
 		conv, _ := strconv.ParseInt(response, 10, 32)
-		return int(conv)
+		return uint(conv)
 	}
 
 	return WorkRules(rules, response)
@@ -117,6 +117,6 @@ func (s *Server) Solve2015day7part2(ctx context.Context) (*pb.SolveResponse, err
 		rules2[result[0][2]] = result[0][1]
 	}
 
-	rules2["b"] = strconv.Itoa(WorkRules(rules, "a"))
+	rules2["b"] = fmt.Sprintf("%v", WorkRules(rules, "a"))
 	return &pb.SolveResponse{Answer: int32(WorkRules(rules2, "a"))}, nil
 }
