@@ -9,10 +9,19 @@ import (
 )
 
 func computeStringLength(str string) (int, int) {
-	unicodes := strings.Count(str, `\x`)
-	backslash := strings.Count(str, `\`)
+	count := 0
+	for r := 0; r < len(str); r++ {
+		if str[r] == '\\' {
+			if str[r+1] == 'x' {
+				r += 3
+			} else {
+				r += 1
+			}
+		}
+		count++
+	}
 
-	return len(str), len(str) - (unicodes * 3) - (backslash - unicodes) - 2
+	return len(str), count - 2
 }
 
 func (s *Server) Solve2015day8part1(ctx context.Context) (*pb.SolveResponse, error) {
