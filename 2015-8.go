@@ -21,7 +21,7 @@ func computeStringLength(str string) (int, int) {
 		count++
 	}
 
-	return len(str), len(str) + 4
+	return len(str), count - 2
 }
 
 func computeStringAddition(str string) (int, int) {
