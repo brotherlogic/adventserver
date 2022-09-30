@@ -2,13 +2,21 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	computes = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "adventserver_computes",
+		Help: "The number of server requests",
+	})
 )
 
 func (s *Server) computeBestDistance(ctx context.Context, details string) int64 {
@@ -20,7 +28,7 @@ func (s *Server) computeBestDistance(ctx context.Context, details string) int64 
 }
 
 func (s *Server) runCompute(ctx context.Context, sofar, places []string, distance map[string]int64) int64 {
-	log.Printf("%v -> %v", sofar, places)
+	computes.Inc()
 
 	if len(places) == 0 {
 		dist := int64(0)
