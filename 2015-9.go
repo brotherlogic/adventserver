@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -19,6 +20,8 @@ func (s *Server) computeBestDistance(ctx context.Context, details string) int64 
 }
 
 func (s *Server) runCompute(ctx context.Context, sofar, places []string, distance map[string]int64) int64 {
+	log.Printf("%v -> %v", sofar, places)
+
 	if len(places) == 0 {
 		dist := int64(0)
 		for i := 0; i < len(sofar)-1; i++ {
@@ -29,13 +32,12 @@ func (s *Server) runCompute(ctx context.Context, sofar, places []string, distanc
 
 	best := int64(math.MaxInt64)
 	for _, place := range places {
-		var nsofar []string
-		copy(nsofar, sofar)
-		sofar = append(sofar, place)
+		nsofar := sofar
+		nsofar = append(nsofar, place)
 		var nplace []string
 		for _, p := range places {
 			found := false
-			for _, seen := range sofar {
+			for _, seen := range nsofar {
 				if seen == p {
 					found = true
 				}
@@ -45,9 +47,9 @@ func (s *Server) runCompute(ctx context.Context, sofar, places []string, distanc
 			}
 		}
 
-		nbest := s.runCompute(ctx, sofar, nplace, distance)
+		nbest := s.runCompute(ctx, nsofar, nplace, distance)
 		if nbest < best {
-			s.CtxLog(ctx, fmt.Sprintf("Found %v -> %v", nbest, sofar))
+			s.CtxLog(ctx, fmt.Sprintf("Found %v -> %v", nbest, nsofar))
 			best = nbest
 		}
 	}
