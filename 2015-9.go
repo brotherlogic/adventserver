@@ -10,15 +10,15 @@ import (
 	"golang.org/x/net/context"
 )
 
-func computeBestDistance(details string) int64 {
+func (s *Server) computeBestDistance(ctx context.Context, details string) int64 {
 	places, distance := buildDistanceMap(details)
 
-	best := runCompute(make([]string, 0), places, distance)
+	best := s.runCompute(ctx, make([]string, 0), places, distance)
 
 	return best
 }
 
-func runCompute(sofar, places []string, distance map[string]int64) int64 {
+func (s *Server) runCompute(ctx context.Context, sofar, places []string, distance map[string]int64) int64 {
 	if len(places) == 0 {
 		dist := int64(0)
 		for i := 0; i < len(sofar)-1; i++ {
@@ -39,8 +39,9 @@ func runCompute(sofar, places []string, distance map[string]int64) int64 {
 			}
 		}
 
-		nbest := runCompute(sofar, nplace, distance)
+		nbest := s.runCompute(ctx, sofar, nplace, distance)
 		if nbest < best {
+			s.CtxLog(ctx, fmt.Sprintf("Found %v -> %v", nbest, sofar))
 			best = nbest
 		}
 	}
@@ -82,5 +83,5 @@ func (s *Server) Solve2015day9part1(ctx context.Context) (*pb.SolveResponse, err
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{BigAnswer: computeBestDistance(trimmed)}, nil
+	return &pb.SolveResponse{BigAnswer: s.computeBestDistance(ctx, trimmed)}, nil
 }
