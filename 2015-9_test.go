@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test2018Day9Part1(t *testing.T) {
+func Test2015Day9Part1(t *testing.T) {
 	details := `London to Dublin = 464
 	London to Belfast = 518
 	Dublin to Belfast = 141`
