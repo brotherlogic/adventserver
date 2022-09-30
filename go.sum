@@ -547,8 +547,9 @@ github.com/brotherlogic/goserver v0.0.0-20220819191451-f33d62230933/go.mod h1:D/
 github.com/brotherlogic/goserver v0.0.0-20220820213253-533bb760889f/go.mod h1:D/jrMC+ZVETckIiG2GcisXTc9xAYAqVV0hOhpCTHuSQ=
 github.com/brotherlogic/goserver v0.0.0-20220820232608-2a137fa1863a/go.mod h1:D/jrMC+ZVETckIiG2GcisXTc9xAYAqVV0hOhpCTHuSQ=
 github.com/brotherlogic/goserver v0.0.0-20220821031349-d47a1932e1b3/go.mod h1:D/jrMC+ZVETckIiG2GcisXTc9xAYAqVV0hOhpCTHuSQ=
-github.com/brotherlogic/goserver v0.0.0-20220920173556-ecc7853fd77c h1:JFjkHe4aCVyyYQ6ahrF+K5zc4lc8riFgGy9nKKXwzAk=
 github.com/brotherlogic/goserver v0.0.0-20220920173556-ecc7853fd77c/go.mod h1:D/jrMC+ZVETckIiG2GcisXTc9xAYAqVV0hOhpCTHuSQ=
+github.com/brotherlogic/goserver v0.0.0-20220930143508-9c9ff6258bec h1:ARsBqD5ZBi+fPCCoR8x2AaPtqb8NBcMRvIrh7n/Kt7o=
+github.com/brotherlogic/goserver v0.0.0-20220930143508-9c9ff6258bec/go.mod h1:D/jrMC+ZVETckIiG2GcisXTc9xAYAqVV0hOhpCTHuSQ=
 github.com/brotherlogic/keymapper v0.0.0-20201116203852-f939ef86e1a2/go.mod h1:bZEHwfvamDSiweU+qiuNXmK5hUteKykayCtBVEOcq1U=
 github.com/brotherlogic/keymapper v0.0.0-20210311144023-8fb7e9401321/go.mod h1:cUAjkXcFmwSRCtsgbM/vmBu+rRexe1YOw5/PmGDwFw8=
 github.com/brotherlogic/keymapper v0.0.0-20210820140329-0a4c6cea65e8/go.mod h1:h1g13dewznZrv1+SHrh360wy+dK6iXS5042TiC8b4bY=
@@ -2082,8 +2083,8 @@ google.golang.org/genproto v0.0.0-20220916172020-2692e8806bfa/go.mod h1:0Nb8Qy+S
 google.golang.org/genproto v0.0.0-20220919141832-68c03719ef51/go.mod h1:0Nb8Qy+Sk5eDzHnzlStwW3itdNaWoZA5XeSG+R3JHSo=
 google.golang.org/genproto v0.0.0-20220920164045-a2a065f3c118/go.mod h1:LYt2tIhSVG5f6zQtdHGQukpnJ9zG6jdfbcsaO6QoG8M=
 google.golang.org/genproto v0.0.0-20220920201722-2b89144ce006/go.mod h1:ht8XFiar2npT/g4vkk7O0WYS1sHOHbdujxbEp7CJWbw=
-google.golang.org/genproto v0.0.0-20220927151529-dcaddaf36704 h1:H1AcWFV69NFCMeBJ8nVLtv8uHZZ5Ozcgoq012hHEFuU=
-google.golang.org/genproto v0.0.0-20220927151529-dcaddaf36704/go.mod h1:woMGP53BroOrRY3xTxlbr8Y3eB/nzAvvFM83q7kG2OI=
+google.golang.org/genproto v0.0.0-20220929141241-1ce7b20da813 h1:buul04Ikd79A5tP8nGhKEyMfr+/HplsO6nqSUapWZ/M=
+google.golang.org/genproto v0.0.0-20220929141241-1ce7b20da813/go.mod h1:woMGP53BroOrRY3xTxlbr8Y3eB/nzAvvFM83q7kG2OI=
 google.golang.org/grpc v1.17.0/go.mod h1:6QZJwpn2B+Zp71q/5VxRsJ6NXXVCE5NRUHRo+f3cWCs=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.0/go.mod h1:chYK+tFQF0nDUGJgXMSgLCQk3phJEuONr2DCgLDdAQM=
