@@ -49,7 +49,6 @@ func (s *Server) runCompute(ctx context.Context, sofar, places []string, distanc
 
 		nbest := s.runCompute(ctx, nsofar, nplace, distance)
 		if nbest < best {
-			s.CtxLog(ctx, fmt.Sprintf("Found %v -> %v", nbest, nsofar))
 			best = nbest
 		}
 	}
