@@ -34,7 +34,13 @@ func (s *Server) runCompute(ctx context.Context, sofar, places []string, distanc
 		sofar = append(sofar, place)
 		var nplace []string
 		for _, p := range places {
-			if p != place {
+			found := false
+			for _, seen := range sofar {
+				if seen == p {
+					found = true
+				}
+			}
+			if !found {
 				nplace = append(nplace, p)
 			}
 		}
