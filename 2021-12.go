@@ -98,13 +98,13 @@ func getPaths(node *pnode, seenSmall map[string]int, maxSeen int, sofar string) 
 
 	count := 0
 	for _, child := range node.neighbours {
-		count += getPaths(child, copy(seenSmall), maxSeen, sofar+node.name+"-")
+		count += getPaths(child, copyMap(seenSmall), maxSeen, sofar+node.name+"-")
 	}
 
 	return count
 }
 
-func copy(m map[string]int) map[string]int {
+func copyMap(m map[string]int) map[string]int {
 	nmap := make(map[string]int)
 	for key, val := range m {
 		nmap[key] = val
