@@ -47,3 +47,13 @@ func (s *Server) Solve2015day10part1(ctx context.Context) (*pb.SolveResponse, er
 
 	return &pb.SolveResponse{BigAnswer: int64(len(start))}, nil
 }
+
+func (s *Server) Solve2015day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+	start := "3113322113"
+	for i := 0; i < 50; i++ {
+		lengths.Set(float64(len(start)))
+		start = lookAndSay(start)
+	}
+
+	return &pb.SolveResponse{BigAnswer: int64(len(start))}, nil
+}
