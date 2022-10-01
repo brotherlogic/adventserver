@@ -17,6 +17,8 @@ func countJson(s interface{}) int {
 		return countArr(v)
 	case map[string]interface{}:
 		return countObj(v)
+	case string:
+		return 0
 	default:
 		log.Fatalf("Don't know what to do with %T", v)
 	}
