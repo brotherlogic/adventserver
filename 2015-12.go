@@ -9,66 +9,71 @@ import (
 	"golang.org/x/net/context"
 )
 
-func countJson(s interface{}) int {
+func countJson(s interface{}, skip string) (int, bool) {
 	switch v := s.(type) {
 	case float64:
-		return int(v)
+		return int(v), false
 	case []interface{}:
-		return countArr(v)
+		return countArr(v, skip), false
 	case map[string]interface{}:
-		return countObj(v)
+		return countObj(v, skip), false
 	case string:
-		return 0
+		return 0, v == skip
 	default:
 		log.Fatalf("Don't know what to do with %T", v)
 	}
 
-	return 0
+	return 0, false
 }
 
-func countArrStr(s string) (int, error) {
+func countArrStr(s string, skip string) (int, error) {
 	var result []interface{}
 	err := json.Unmarshal([]byte(s), &result)
 	if err != nil {
 		return 0, err
 	}
-	return countArr(result), nil
+	return countArr(result, skip), nil
 }
 
-func countArr(result []interface{}) int {
+func countArr(result []interface{}, skip string) int {
 	sumv := 0
 	for _, value := range result {
-		sumv += countJson(value)
+		sum, _ := countJson(value, skip)
+		sumv += sum
 	}
 
 	return sumv
 }
 
-func countObjStr(s string) (int, error) {
+func countObjStr(s string, skip string) (int, error) {
 	var result map[string]interface{}
 	err := json.Unmarshal([]byte(s), &result)
 	if err != nil {
 		return 0, err
 	}
-	return countObj(result), nil
+	return countObj(result, skip), nil
 }
 
-func countObj(result map[string]interface{}) int {
+func countObj(result map[string]interface{}, skip string) int {
 	sumv := 0
 	for _, value := range result {
-		sumv += countJson(value)
+		sum, skip := countJson(value, skip)
+		if skip {
+			return 0
+		}
+		sumv += sum
 	}
 
 	return sumv
 }
 
-func countNumbers(s string) int {
-	sv, err := countArrStr(s)
+func countNumbers(s string, skip string) int {
+	sv, err := countArrStr(s, skip)
 	if err == nil {
 		return sv
 	}
 
-	sc, err := countObjStr(s)
+	sc, err := countObjStr(s, skip)
 	if err == nil {
 		return sc
 	}
@@ -86,7 +91,23 @@ func (s *Server) Solve2015day12part1(ctx context.Context) (*pb.SolveResponse, er
 
 	ans := int32(0)
 	for _, str := range strings.Split(trimmed, "\n") {
-		ans += int32(countNumbers(str))
+		ans += int32(countNumbers(str, "NOTHING"))
+	}
+
+	return &pb.SolveResponse{Answer: ans}, nil
+}
+
+func (s *Server) Solve2015day12part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-12.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	ans := int32(0)
+	for _, str := range strings.Split(trimmed, "\n") {
+		ans += int32(countNumbers(str, "red"))
 	}
 
 	return &pb.SolveResponse{Answer: ans}, nil
