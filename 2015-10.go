@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -20,22 +21,24 @@ func lookAndSay(s string) string {
 	currRune := ' '
 	currCount := 0
 
-	retStr := ""
+	var retStr strings.Builder
 	for _, r := range s {
 		if r == currRune {
 			currCount++
 		} else {
 			if currCount > 0 {
-				retStr += fmt.Sprintf("%v%v", currCount, string(currRune))
+				retStr.WriteString(fmt.Sprintf("%v", currCount))
+				retStr.WriteRune(currRune)
 			}
 			currRune = r
 			currCount = 1
 		}
 	}
 
-	retStr += fmt.Sprintf("%v%v", currCount, string(currRune))
+	retStr.WriteString(fmt.Sprintf("%v", currCount))
+	retStr.WriteRune(currRune)
 
-	return retStr
+	return retStr.String()
 }
 
 func (s *Server) Solve2015day10part1(ctx context.Context) (*pb.SolveResponse, error) {
