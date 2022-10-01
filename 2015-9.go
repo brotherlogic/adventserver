@@ -27,6 +27,52 @@ func (s *Server) computeBestDistance(ctx context.Context, details string) int64 
 	return best
 }
 
+func (s *Server) computeWorstDistance(ctx context.Context, details string) int64 {
+	places, distance := buildDistanceMap(details)
+
+	best := s.runComputeWorst(ctx, make([]string, 0), places, distance)
+
+	return best
+}
+
+func (s *Server) runComputeWorst(ctx context.Context, sofar, places []string, distance map[string]int64) int64 {
+	computes.Inc()
+
+	if len(places) == 0 {
+		dist := int64(0)
+		for i := 0; i < len(sofar)-1; i++ {
+			dist += distance[fmt.Sprintf("%v|%v", sofar[i], sofar[i+1])]
+		}
+
+		return dist
+	}
+
+	best := int64(0)
+	for _, place := range places {
+		nsofar := sofar
+		nsofar = append(nsofar, place)
+		var nplace []string
+		for _, p := range places {
+			found := false
+			for _, seen := range nsofar {
+				if seen == p {
+					found = true
+				}
+			}
+			if !found {
+				nplace = append(nplace, p)
+			}
+		}
+
+		nbest := s.runComputeWorst(ctx, nsofar, nplace, distance)
+		if nbest > best {
+			best = nbest
+		}
+	}
+
+	return best
+}
+
 func (s *Server) runCompute(ctx context.Context, sofar, places []string, distance map[string]int64) int64 {
 	computes.Inc()
 
@@ -99,4 +145,15 @@ func (s *Server) Solve2015day9part1(ctx context.Context) (*pb.SolveResponse, err
 	trimmed := strings.TrimSpace(data)
 
 	return &pb.SolveResponse{BigAnswer: s.computeBestDistance(ctx, trimmed)}, nil
+}
+
+func (s *Server) Solve2015day9part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-9.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{BigAnswer: s.computeWorstDistance(ctx, trimmed)}, nil
 }
