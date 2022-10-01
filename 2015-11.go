@@ -73,3 +73,9 @@ func (s *Server) Solve2015day11part1(ctx context.Context) (*pb.SolveResponse, er
 
 	return &pb.SolveResponse{StringAnswer: findNextPassword(start)}, nil
 }
+
+func (s *Server) Solve2015day11part2(ctx context.Context) (*pb.SolveResponse, error) {
+	start := "hepxcrrq"
+
+	return &pb.SolveResponse{StringAnswer: findNextPassword(findNextPassword(start))}, nil
+}f
