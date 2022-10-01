@@ -30,14 +30,31 @@ func TestBadPass(t *testing.T) {
 		{"hijklmmn", false},
 		{"abbceffg", false},
 		{"abbcegjk", false},
-		{"abcdefgh", true},
+		{"abcdefgh", false},
 		{"abcdffaa", true},
-		{"ghijklmn", true},
+		{"ghijklmn", false},
 		{"ghjaabcc", true},
 	}
 
 	for _, c := range cases {
 		out := isValidSantaPassword(c.in)
+		if out != c.out {
+			t.Fatalf("Bad trans %v => %v (should have been %v)", c.in, out, c.out)
+		}
+	}
+}
+
+func TestFindNext(t *testing.T) {
+	cases := []struct {
+		in  string
+		out string
+	}{
+		{"abcdefgh", "abcdffaa"},
+		{"ghijklmn", "ghjaabcc"},
+	}
+
+	for _, c := range cases {
+		out := findNextPassword(c.in)
 		if out != c.out {
 			t.Fatalf("Bad trans %v => %v (should have been %v)", c.in, out, c.out)
 		}
