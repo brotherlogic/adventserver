@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func findOptimal(s string) int {
+func findOptimal(s string, me bool) int {
 
 	mapping := make(map[string]int)
 	var names []string
@@ -38,6 +38,14 @@ func findOptimal(s string) int {
 		if !found2 {
 			names = append(names, n2)
 		}
+	}
+
+	if me {
+		for _, n := range names {
+			mapping[fmt.Sprintf("%v|%v", "ME", n)] = 0
+			mapping[fmt.Sprintf("%v|%v", n, "ME")] = 0
+		}
+		names = append(names, "ME")
 	}
 
 	return findSeating(mapping, names)
@@ -108,5 +116,15 @@ func (s *Server) Solve2015day13part1(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(findOptimal(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(findOptimal(trimmed, false))}, nil
+}
+func (s *Server) Solve2015day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-13.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: int32(findOptimal(trimmed, true))}, nil
 }

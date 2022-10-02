@@ -15,7 +15,7 @@ func Test2015_13_1(t *testing.T) {
 	David would gain 46 happiness units by sitting next to Alice.
 	David would lose 7 happiness units by sitting next to Bob.
 	David would gain 41 happiness units by sitting next to Carol.`
-	optimal := findOptimal(data)
+	optimal := findOptimal(data, false)
 
 	if optimal != 330 {
 		t.Errorf("Wrong answer: %v should be 330", optimal)
