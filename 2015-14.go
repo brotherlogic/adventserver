@@ -21,7 +21,7 @@ func getRein(line string) *reindeer {
 	blst, _ := strconv.ParseInt(elems[6], 10, 32)
 	wait, _ := strconv.ParseInt(elems[13], 10, 32)
 
-	return &reindeer{speed: int(spd), blastTime: int(blst), waitTime: int(wait)}
+	return &reindeer{speed: int(spd), blastTime: int(blst), waitTime: int(wait), name: elems[0]}
 }
 
 func computeDistance(r *reindeer, time int) int {
@@ -50,25 +50,30 @@ func getDistance(data string, time int) int32 {
 	return int32(bd)
 }
 
-func getPoints(data string, time int) string {
-	var wrein *reindeer
+func getPoints(data string, time int) []string {
+	var winners []string
+
 	best := 0
 	for _, line := range strings.Split(data, "\n") {
 		rein := getRein(line)
 		b := computeDistance(rein, time)
 		if b > best {
 			best = b
-			wrein = rein
+			winners = []string{rein.name}
+		} else if b == best {
+			winners = append(winners, rein.name)
 		}
 	}
 
-	return wrein.name
+	return winners
 }
 
 func runPoints(data string, mtime int) int32 {
 	winners := make(map[string]int)
 	for t := 1; t <= mtime; t++ {
-		winners[getPoints(data, t)]++
+		for _, w := range getPoints(data, t) {
+			winners[w]++
+		}
 	}
 
 	bp := 0

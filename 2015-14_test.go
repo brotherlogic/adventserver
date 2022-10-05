@@ -16,6 +16,11 @@ func TestFullP2(t *testing.T) {
 	data := `Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
 	Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.`
 
+	w1 := runPoints(data, 140)
+	if w1 != 139 {
+		t.Errorf("Bad points: %v should have been 139", w1)
+	}
+
 	winner := runPoints(data, 1000)
 	if winner != 689 {
 		t.Errorf("Bad Distance: %v should have been 689", winner)
