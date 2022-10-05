@@ -12,6 +12,16 @@ func TestFullP1(t *testing.T) {
 	}
 }
 
+func TestFullP2(t *testing.T) {
+	data := `Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.
+	Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.`
+
+	winner := runPoints(data, 1000)
+	if winner != 689 {
+		t.Errorf("Bad Distance: %v should have been 689", winner)
+	}
+}
+
 func TestPartialDay14(t *testing.T) {
 	cases := []struct {
 		spd      int

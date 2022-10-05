@@ -12,6 +12,7 @@ type reindeer struct {
 	speed     int
 	blastTime int
 	waitTime  int
+	name      string
 }
 
 func getRein(line string) *reindeer {
@@ -49,6 +50,36 @@ func getDistance(data string, time int) int32 {
 	return int32(bd)
 }
 
+func getPoints(data string, time int) string {
+	var wrein *reindeer
+	best := 0
+	for _, line := range strings.Split(data, "\n") {
+		rein := getRein(line)
+		b := computeDistance(rein, time)
+		if b > best {
+			best = b
+			wrein = rein
+		}
+	}
+
+	return wrein.name
+}
+
+func runPoints(data string, mtime int) int32 {
+	winners := make(map[string]int)
+	for t := 1; t <= mtime; t++ {
+		winners[getPoints(data, t)]++
+	}
+
+	bp := 0
+	for _, points := range winners {
+		if points > bp {
+			bp = points
+		}
+	}
+	return int32(bp)
+}
+
 func (s *Server) Solve2015day14part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-14.txt")
 	if err != nil {
@@ -58,4 +89,15 @@ func (s *Server) Solve2015day14part1(ctx context.Context) (*pb.SolveResponse, er
 	trimmed := strings.TrimSpace(data)
 
 	return &pb.SolveResponse{Answer: getDistance(trimmed, 2503)}, nil
+}
+
+func (s *Server) Solve2015day14part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-14.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: runPoints(trimmed, 2503)}, nil
 }
