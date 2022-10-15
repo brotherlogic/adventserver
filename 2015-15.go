@@ -46,22 +46,24 @@ func buildProps(data string) []props {
 	return ps
 }
 
-func findBestIng(ap []props, maxv int) int {
-	return findBestWith(make([]int, 0), ap, maxv)
+func findBestIng(ap []props, maxv int, calories int) int {
+	return findBestWith(make([]int, 0), ap, maxv, calories)
 }
 
-func findBestWith(sofar []int, ap []props, maxv int) int {
+func findBestWith(sofar []int, ap []props, maxv int, caloriesGoal int) int {
 	if len(sofar) == len(ap) {
 		capacity := 0
 		durability := 0
 		flavor := 0
 		texture := 0
+		calories := 0
 
 		for i := range ap {
 			capacity += sofar[i] * ap[i].capacity
 			durability += sofar[i] * ap[i].durability
 			flavor += sofar[i] * ap[i].flavor
 			texture += sofar[i] * ap[i].texture
+			calories += sofar[i] * ap[i].calories
 		}
 
 		if sofar[0] == 44 {
@@ -71,6 +73,11 @@ func findBestWith(sofar []int, ap []props, maxv int) int {
 		if capacity < 0 || durability < 0 || flavor < 0 || texture < 0 {
 			return 0
 		}
+
+		if calories != caloriesGoal && caloriesGoal >= 0 {
+			return 0
+		}
+
 		return capacity * durability * flavor * texture
 	}
 
@@ -85,14 +92,14 @@ func findBestWith(sofar []int, ap []props, maxv int) int {
 		}
 
 		sofar = append(sofar, nv)
-		return findBestWith(sofar, ap, maxv)
+		return findBestWith(sofar, ap, maxv, caloriesGoal)
 	}
 
 	best := 0
 	sofar = append(sofar, 0)
 	for i := 1; i < 100; i++ {
 		sofar[len(sofar)-1] = i
-		b := findBestWith(sofar, ap, maxv)
+		b := findBestWith(sofar, ap, maxv, caloriesGoal)
 		if b > best {
 			best = b
 		}
@@ -101,11 +108,11 @@ func findBestWith(sofar []int, ap []props, maxv int) int {
 	return best
 }
 
-func computeBestScore(data string) int {
+func computeBestScore(data string, calories int) int {
 
 	allProps := buildProps(data)
 
-	best := findBestIng(allProps, 100)
+	best := findBestIng(allProps, 100, calories)
 
 	return best
 }
@@ -118,5 +125,16 @@ func (s *Server) Solve2015day15part1(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(computeBestScore(trimmed))}, nil
+	return &pb.SolveResponse{Answer: int32(computeBestScore(trimmed, -1))}, nil
+}
+
+func (s *Server) Solve2015day15part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-15.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: int32(computeBestScore(trimmed, 500))}, nil
 }
