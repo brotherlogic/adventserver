@@ -115,7 +115,9 @@ func findBestWith(sofar []int, ap []props, maxv int, caloriesGoal int) int {
 	return best
 }
 
-func computeBestScore(data string, calories int) int {
+func computeBestScore(tp *tracesdk.TracerProvider, ctx context.Context, data string, calories int) int {
+	_, span := tp.Tracer("2015-15-2").Start(ctx, "Run")
+	defer span.End()
 
 	allProps := buildProps(data)
 
@@ -125,6 +127,12 @@ func computeBestScore(data string, calories int) int {
 }
 
 func (s *Server) Solve2015day15part1(ctx context.Context) (*pb.SolveResponse, error) {
+	tp, err := tracerProvider("http://toru:14268/api/traces")
+	if err != nil {
+		log.Fatal(err)
+	}
+	otel.SetTracerProvider(tp)
+
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-15.txt")
 	if err != nil {
 		return nil, err
@@ -132,7 +140,7 @@ func (s *Server) Solve2015day15part1(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(computeBestScore(trimmed, -1))}, nil
+	return &pb.SolveResponse{Answer: int32(computeBestScore(tp, ctx, trimmed, -1))}, nil
 }
 
 func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
@@ -172,5 +180,5 @@ func (s *Server) Solve2015day15part2(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(computeBestScore(trimmed, 500))}, nil
+	return &pb.SolveResponse{Answer: int32(computeBestScore(tp, ctx, trimmed, 500))}, nil
 }
