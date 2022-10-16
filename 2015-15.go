@@ -116,7 +116,7 @@ func findBestWith(sofar []int, ap []props, maxv int, caloriesGoal int) int {
 }
 
 func computeBestScore(tp *tracesdk.TracerProvider, ctx context.Context, data string, calories int) int {
-	_, span := tp.Tracer("2015-15-2").Start(ctx, "Run")
+	_, span := tp.Tracer("2015-15-2").Start(ctx, "computeBestScore")
 	defer span.End()
 
 	allProps := buildProps(data)
