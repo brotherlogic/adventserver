@@ -5,12 +5,16 @@ import (
 	"io/ioutil"
 	"os"
 
+	"go.opentelemetry.io/otel"
 	"golang.org/x/net/context"
 
 	fcpb "github.com/brotherlogic/filecopier/proto"
 )
 
-func (s *Server) loadFile(ctx context.Context, path string) (string, error) {
+func (s *Server) loadFile(nctx context.Context, path string) (string, error) {
+	ctx, span := otel.Tracer(name).Start(nctx, "loadFile")
+	defer span.End()
+
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		err := s.replicate(ctx, path)
@@ -27,7 +31,10 @@ func (s *Server) loadFile(ctx context.Context, path string) (string, error) {
 	return string(data), nil
 }
 
-func (s *Server) replicate(ctx context.Context, path string) error {
+func (s *Server) replicate(nctx context.Context, path string) error {
+	ctx, span := otel.Tracer(name).Start(nctx, "loadFile")
+	defer span.End()
+
 	servers, err := s.FFind(ctx, "filecopier")
 	if err != nil {
 		return err
@@ -51,5 +58,5 @@ func (s *Server) replicate(ctx context.Context, path string) error {
 		}
 	}
 
-	return fmt.Errorf("Cannot locate %v", path)
+	return fmt.Errorf("cannot locate %v", path)
 }

@@ -38,7 +38,7 @@ func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
 		// Record information about this application in a Resource.
 		tracesdk.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("adventserver-cli"),
+			semconv.ServiceNameKey.String("newservice"),
 			attribute.String("environment", "prod"),
 			attribute.Int64("ID", 1),
 		)),
@@ -51,7 +51,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("Got tracer: %+v", tp)
 	otel.SetTracerProvider(tp)
+
 	nctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
 	defer cancel()
 
@@ -92,6 +94,7 @@ func main() {
 
 	}
 
-	fmt.Printf("Shutdown: %v\n", err)
+	err = tp.ForceFlush(ctx)
+	fmt.Printf("Shutdown: %v -> %v\n", nctx, err)
 
 }
