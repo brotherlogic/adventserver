@@ -32,7 +32,7 @@ func (s *Server) loadFile(nctx context.Context, path string) (string, error) {
 }
 
 func (s *Server) replicate(nctx context.Context, path string) error {
-	ctx, span := otel.Tracer(name).Start(nctx, "loadFile")
+	ctx, span := otel.Tracer(name).Start(nctx, "replicate")
 	defer span.End()
 
 	servers, err := s.FFind(ctx, "filecopier")
