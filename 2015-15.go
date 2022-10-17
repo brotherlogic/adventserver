@@ -16,6 +16,8 @@ import (
 	"golang.org/x/net/context"
 )
 
+const name = "2015-15"
+
 type props struct {
 	capacity   int
 	durability int
@@ -116,7 +118,7 @@ func findBestWith(sofar []int, ap []props, maxv int, caloriesGoal int) int {
 }
 
 func computeBestScore(tp *tracesdk.TracerProvider, ctx context.Context, data string, calories int) int {
-	_, span := otel.Tracer("newone").Start(ctx, "computeBestScore")
+	_, span := otel.Tracer(name).Start(ctx, "computeBestScore")
 	defer span.End()
 
 	allProps := buildProps(data)
@@ -170,7 +172,7 @@ func (s *Server) Solve2015day15part2(ctx context.Context) (*pb.SolveResponse, er
 	}
 	otel.SetTracerProvider(tp)
 
-	newCtx, span := tp.Tracer("2015-15-2").Start(ctx, "Run")
+	newCtx, span := otel.Tracer(name).Start(ctx, "Run")
 	defer span.End()
 
 	data, err := s.loadFile(newCtx, "/media/scratch/advent/2015-15.txt")
@@ -180,5 +182,5 @@ func (s *Server) Solve2015day15part2(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(computeBestScore(tp, ctx, trimmed, 500))}, nil
+	return &pb.SolveResponse{Answer: int32(computeBestScore(tp, newCtx, trimmed, 500))}, nil
 }
