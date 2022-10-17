@@ -8,6 +8,11 @@ import (
 	"time"
 
 	"github.com/brotherlogic/goserver/utils"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 
@@ -20,9 +25,38 @@ func init() {
 	resolver.Register(&utils.DiscoveryClientResolverBuilder{})
 }
 
+func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
+	// Create the Jaeger exporter
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
+	if err != nil {
+		return nil, err
+	}
+	tp := tracesdk.NewTracerProvider(
+		// Always be sure to batch in production.
+		tracesdk.WithBatcher(exp),
+		// Record information about this application in a Resource.
+		tracesdk.WithResource(resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("adventserver"),
+			attribute.String("environment", "prod"),
+			attribute.Int64("ID", 1),
+		)),
+	)
+	return tp, nil
+}
+
 func main() {
-	ctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
+	tp, err := tracerProvider("http://toru:14268/api/traces")
+	if err != nil {
+		log.Fatal(err)
+	}
+	otel.SetTracerProvider(tp)
+
+	nctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
 	defer cancel()
+
+	ctx, span := otel.Tracer("adventserver-cli").Start(nctx, "CLI")
+	defer span.End()
 
 	conn, err := utils.LFDialServer(ctx, "adventserver")
 	if err != nil {
