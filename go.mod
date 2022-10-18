@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/brotherlogic/filecopier v0.0.0-20221017173543-407200951fef
-	github.com/brotherlogic/goserver v0.0.0-20221018223313-48d6a3e9e91b
+	github.com/brotherlogic/goserver v0.0.0-20221018225429-fddf69ef8b90
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.13.0
 	go.opentelemetry.io/otel v1.11.0
