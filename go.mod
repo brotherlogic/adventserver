@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/brotherlogic/filecopier v0.0.0-20221017173543-407200951fef
-	github.com/brotherlogic/goserver v0.0.0-20221018183446-f96076b8cd2e
+	github.com/brotherlogic/goserver v0.0.0-20221018223313-48d6a3e9e91b
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.13.0
 	go.opentelemetry.io/otel v1.11.0
@@ -19,7 +19,7 @@ require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/buildserver v0.0.0-20221011154458-d44ea5b648d4 // indirect
 	github.com/brotherlogic/datastore v0.0.0-20221018003720-9e7955d8f286 // indirect
-	github.com/brotherlogic/discovery v0.0.0-20221017170645-5faeb7493c8b // indirect
+	github.com/brotherlogic/discovery v0.0.0-20221018184229-677603e3fbca // indirect
 	github.com/brotherlogic/dstore v0.0.0-20220920131721-8bffcde17e97 // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20221010180453-f2899b2cecbd // indirect
 	github.com/brotherlogic/gobuildslave v0.0.0-20221013043639-a2ec1f306ba6 // indirect
