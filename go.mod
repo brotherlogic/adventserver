@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/brotherlogic/filecopier v0.0.0-20221017173543-407200951fef
-	github.com/brotherlogic/goserver v0.0.0-20221017231215-60d5c7b94bb5
+	github.com/brotherlogic/goserver v0.0.0-20221018183446-f96076b8cd2e
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.13.0
 	go.opentelemetry.io/otel v1.11.0
@@ -18,7 +18,7 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/brotherlogic/buildserver v0.0.0-20221011154458-d44ea5b648d4 // indirect
-	github.com/brotherlogic/datastore v0.0.0-20220917234504-760402acd0e5 // indirect
+	github.com/brotherlogic/datastore v0.0.0-20221018003720-9e7955d8f286 // indirect
 	github.com/brotherlogic/discovery v0.0.0-20221017170645-5faeb7493c8b // indirect
 	github.com/brotherlogic/dstore v0.0.0-20220920131721-8bffcde17e97 // indirect
 	github.com/brotherlogic/githubcard v0.0.0-20221010180453-f2899b2cecbd // indirect
@@ -33,13 +33,13 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.2 // indirect
 	github.com/mitchellh/go-ps v1.0.0 // indirect
-	github.com/prometheus/client_model v0.2.0 // indirect
+	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/struCoder/pidusage v0.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.3 // indirect
 	go.opentelemetry.io/otel/trace v1.11.0 // indirect
-	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43 // indirect
-	golang.org/x/text v0.3.8 // indirect
-	google.golang.org/genproto v0.0.0-20221014213838-99cd37c6964a // indirect
+	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/text v0.4.0 // indirect
+	google.golang.org/genproto v0.0.0-20221018160656-63c7b68cfc55 // indirect
 )
