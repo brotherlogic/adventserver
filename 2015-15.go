@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -131,6 +132,7 @@ func (s *Server) Solve2015day15part1(ctx context.Context) (*pb.SolveResponse, er
 }
 
 func (s *Server) Solve2015day15part2(ctx context.Context) (*pb.SolveResponse, error) {
+	s.CtxLog(ctx, fmt.Sprintf(" Got here -> %v", ctx))
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-15.txt")
 	if err != nil {
 		return nil, err

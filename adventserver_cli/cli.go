@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/brotherlogic/goserver/utils"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
@@ -18,6 +19,7 @@ import (
 	pb "github.com/brotherlogic/adventserver/proto"
 
 	//Needed to pull in gzip encoding init
+	"google.golang.org/grpc"
 	_ "google.golang.org/grpc/encoding/gzip"
 	"google.golang.org/grpc/resolver"
 )
@@ -60,7 +62,7 @@ func main() {
 	ctx, span := otel.Tracer("adventserver-cli").Start(nctx, "CLI")
 	defer span.End()
 
-	conn, err := utils.LFDialServer(ctx, "adventserver")
+	conn, err := grpc.Dial("newrunner:53120", grpc.WithInsecure(), grpc.WithChainUnaryInterceptor(otelgrpc.UnaryClientInterceptor()))
 	if err != nil {
 		log.Fatalf("Unable to dial: %v", err)
 	}
@@ -95,6 +97,7 @@ func main() {
 	}
 
 	err = tp.ForceFlush(ctx)
+	fmt.Printf("Shutdown: %v -> %v\n", ctx, err)
 	fmt.Printf("Shutdown: %v -> %v\n", nctx, err)
 
 }
