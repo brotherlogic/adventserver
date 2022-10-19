@@ -3,14 +3,15 @@ module github.com/brotherlogic/adventserver
 go 1.17
 
 require (
-	github.com/brotherlogic/filecopier v0.0.0-20221017173543-407200951fef
-	github.com/brotherlogic/goserver v0.0.0-20221018225429-fddf69ef8b90
+	github.com/brotherlogic/filecopier v0.0.0-20221019000341-12626c95a2c9
+	github.com/brotherlogic/goserver v0.0.0-20221019083919-b258358aaf5a
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.13.0
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.3
 	go.opentelemetry.io/otel v1.11.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.11.0
 	go.opentelemetry.io/otel/sdk v1.11.0
-	golang.org/x/net v0.0.0-20221017152216-f25eb7ecb193
+	golang.org/x/net v0.0.0-20221019024206-cb67ada4b0ad
 	google.golang.org/grpc v1.50.1
 	google.golang.org/protobuf v1.28.1
 )
@@ -37,7 +38,6 @@ require (
 	github.com/prometheus/common v0.37.0 // indirect
 	github.com/prometheus/procfs v0.8.0 // indirect
 	github.com/struCoder/pidusage v0.2.1 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.36.3 // indirect
 	go.opentelemetry.io/otel/trace v1.11.0 // indirect
 	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
