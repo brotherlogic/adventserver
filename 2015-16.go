@@ -31,7 +31,7 @@ func findAunt(details string, known properties) int {
 			nline = line[7:]
 		}
 
-		found := false
+		found := true
 
 		elems := strings.Fields(nline)
 		for i := 0; i < len(elems); i += 2 {

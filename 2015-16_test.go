@@ -21,4 +21,10 @@ func Test2015_16_1(t *testing.T) {
 	if aunt != 0 {
 		t.Errorf("Found aunt?")
 	}
+
+	aunt = findAunt("Sue 1: cars: 2, akitas: 0, goldfish: 5", known)
+
+	if aunt != 1 {
+		t.Errorf("Found aunt: %v", aunt)
+	}
 }
