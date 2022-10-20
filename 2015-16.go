@@ -94,7 +94,7 @@ func findAunt(details string, known properties) int {
 }
 
 func (s *Server) Solve2015day16part1(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResponse, error) {
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-15.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-16.txt")
 	if err != nil {
 		return nil, err
 	}
