@@ -432,8 +432,8 @@ github.com/brotherlogic/filecopier v0.0.0-20220819190645-27b2fcb9e3f1/go.mod h1:
 github.com/brotherlogic/filecopier v0.0.0-20220819191141-7f988c1e77f9/go.mod h1:DRCs/3+MeNWvjfFcbemAVeZvTE6nKUFX5xGU8HmL2ac=
 github.com/brotherlogic/filecopier v0.0.0-20220819205839-30ef3d4bd1ff/go.mod h1:DRCs/3+MeNWvjfFcbemAVeZvTE6nKUFX5xGU8HmL2ac=
 github.com/brotherlogic/filecopier v0.0.0-20220915001916-0677ef170c0b/go.mod h1:09drcxJHnaQEYh24nsd2OnVBOKTafqIk1oyOZyU/OX0=
-github.com/brotherlogic/filecopier v0.0.0-20221019084033-3f3e9c7e1271 h1:ufPsitlXsoGx0UtNXTr8E+toAF76n/kKTBWkeJ0VAKc=
-github.com/brotherlogic/filecopier v0.0.0-20221019084033-3f3e9c7e1271/go.mod h1:NONFbsOy8iVKclyF7VOpoh1Vjjhf8u9zlTFkezajcQE=
+github.com/brotherlogic/filecopier v0.0.0-20221020033051-e91ae5447e8f h1:qvbsyjSfRYezQQWWZlr9jYtGqRNe7eFYtbRUHhE2SnA=
+github.com/brotherlogic/filecopier v0.0.0-20221020033051-e91ae5447e8f/go.mod h1:NONFbsOy8iVKclyF7VOpoh1Vjjhf8u9zlTFkezajcQE=
 github.com/brotherlogic/frametracker v0.0.0-20210108214332-61d86ee8f701/go.mod h1:21Eaa47nKHk1Ab77YyOhBdQ6cxKMvKf+9x96UL0wnhs=
 github.com/brotherlogic/frametracker v0.0.0-20220308202045-6632250e217e/go.mod h1:l52l94odEuoKaFmZxFUQ6A+p/AMD0KRY+J4E2V8mwyY=
 github.com/brotherlogic/frametracker v0.0.0-20220514055242-c87e03b44946/go.mod h1:9wXLjwHIBgssdHeWSzgcejaqu08Vmo1i2/Rk4fJ/Kxg=

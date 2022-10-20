@@ -3,7 +3,7 @@ module github.com/brotherlogic/adventserver
 go 1.19
 
 require (
-	github.com/brotherlogic/filecopier v0.0.0-20221019084033-3f3e9c7e1271
+	github.com/brotherlogic/filecopier v0.0.0-20221020033051-e91ae5447e8f
 	github.com/brotherlogic/goserver v0.0.0-20221019083919-b258358aaf5a
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.13.0
