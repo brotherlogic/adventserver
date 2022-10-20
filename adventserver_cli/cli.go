@@ -12,6 +12,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.12.0"
@@ -28,11 +29,11 @@ func init() {
 	resolver.Register(&utils.DiscoveryClientResolverBuilder{})
 }
 
-func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
+func tracerProvider(url string) {
 	// Create the Jaeger exporter
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {
-		return nil, err
+		log.Fatalf("Unable to reach: %v", err)
 	}
 	tp := tracesdk.NewTracerProvider(
 		// Always be sure to batch in production.
@@ -40,21 +41,17 @@ func tracerProvider(url string) (*tracesdk.TracerProvider, error) {
 		// Record information about this application in a Resource.
 		tracesdk.WithResource(resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("newservice"),
+			semconv.ServiceNameKey.String("adventserver-cli"),
 			attribute.String("environment", "prod"),
 			attribute.Int64("ID", 1),
 		)),
 	)
-	return tp, nil
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 }
 
 func main() {
-	tp, err := tracerProvider("http://toru:14268/api/traces")
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Printf("Got tracer: %+v", tp)
-	otel.SetTracerProvider(tp)
+	tracerProvider("http://toru:14268/api/traces")
 
 	nctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
 	defer cancel()
@@ -80,9 +77,10 @@ func main() {
 
 		if err := addFlags.Parse(os.Args[2:]); err == nil {
 			if *year > 0 && *day > 0 && *part > 0 {
-				res, err := client.Solve(ctx, &pb.SolveRequest{Day: int32(*day), Part: int32(*part), Year: int32(*year)})
+				req := &pb.SolveRequest{Day: int32(*day), Part: int32(*part), Year: int32(*year)}
+				res, err := client.Solve(ctx, req)
 				if err != nil {
-					log.Fatalf("Error on Solve: %v", err)
+					log.Fatalf("Error on Solve:(from %v) %v", err, req)
 				}
 
 				fmt.Printf("Solved in %v\n", time.Since(t))
@@ -95,9 +93,4 @@ func main() {
 		}
 
 	}
-
-	err = tp.Shutdown(ctx)
-	fmt.Printf("Shutdown: %v -> %v\n", ctx, err)
-	fmt.Printf("Shutdown: %v -> %v\n", nctx, err)
-
 }
