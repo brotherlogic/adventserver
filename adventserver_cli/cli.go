@@ -96,7 +96,7 @@ func main() {
 
 	}
 
-	err = tp.ForceFlush(ctx)
+	err = tp.Shutdown(ctx)
 	fmt.Printf("Shutdown: %v -> %v\n", ctx, err)
 	fmt.Printf("Shutdown: %v -> %v\n", nctx, err)
 
