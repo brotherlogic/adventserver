@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -29,7 +30,7 @@ func init() {
 	resolver.Register(&utils.DiscoveryClientResolverBuilder{})
 }
 
-func tracerProvider(url string) {
+func tracerProvider(url string) *tracesdk.TracerProvider {
 	// Create the Jaeger exporter
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
 	if err != nil {
@@ -48,10 +49,12 @@ func tracerProvider(url string) {
 	)
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
+
+	return tp
 }
 
 func main() {
-	tracerProvider("http://toru:14268/api/traces")
+	tp := tracerProvider("http://toru:14268/api/traces")
 
 	nctx, cancel := utils.ManualContext("adventserver-cli", time.Minute*5)
 	defer cancel()
@@ -91,6 +94,7 @@ func main() {
 				}
 			}
 		}
-
 	}
+
+	tp.Shutdown(context.Background())
 }
