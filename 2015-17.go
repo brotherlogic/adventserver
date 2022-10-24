@@ -11,7 +11,7 @@ import (
 func buildArrInt(data string) []int {
 	var res []int
 	for _, line := range strings.Split(data, "\n") {
-		nv, _ := strconv.ParseInt(line, 10, 64)
+		nv, _ := strconv.ParseInt(line, 10, 32)
 		res = append(res, int(nv))
 	}
 	return res
