@@ -20,29 +20,53 @@ func buildArrInt(data string) []int {
 func computeContainers(data string, total int) int {
 	arr := buildArrInt(data)
 
-	result := doContainers(arr, total, 0)
-	return result
+	result := doContainers(arr, total, 0, 0)
+	sumv := 0
+	for _, v := range result {
+		sumv += v
+	}
+
+	return sumv
 }
 
-func doContainers(arr []int, total, sofar int) int {
+func computeMinContainers(data string, total int) int {
+	arr := buildArrInt(data)
+
+	result := doContainers(arr, total, 0, 0)
+	sumv := 0
+	minv := 2000
+	for k, v := range result {
+		if k < minv {
+			minv = k
+			sumv = v
+		}
+	}
+
+	return sumv
+}
+
+func doContainers(arr []int, total, sofar, c int) map[int]int {
 	if sofar == total {
-		return 1
+		return map[int]int{c: 1}
 	}
 
 	if sofar > total {
-		return 0
+		return make(map[int]int)
 	}
 
-	count := 0
+	mmap := make(map[int]int)
 	for i, p := range arr {
 		var narr []int
 		for _, val := range arr[i+1:] {
 			narr = append(narr, val)
 		}
-		count += doContainers(narr, total, sofar+p)
+		mapper := doContainers(narr, total, sofar+p, c+1)
+		for k, v := range mapper {
+			mmap[k] += v
+		}
 	}
 
-	return count
+	return mmap
 }
 
 func (s *Server) Solve2015day17part1(ctx context.Context) (*pb.SolveResponse, error) {
