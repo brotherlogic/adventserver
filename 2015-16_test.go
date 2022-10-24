@@ -16,13 +16,13 @@ func Test2015_16_1(t *testing.T) {
 		perfumes:    1,
 	}
 
-	aunt := findAunt("Sue 1: cars: 9, akitas: 3, goldfish: 0", known)
+	aunt := findAunt("Sue 1: cars: 9, akitas: 3, goldfish: 0", known, false)
 
-	if aunt != 0 {
-		t.Errorf("Found aunt?")
+	if aunt != -1 {
+		t.Errorf("Found aunt")
 	}
 
-	aunt = findAunt("Sue 1: cars: 2, akitas: 0, goldfish: 5", known)
+	aunt = findAunt("Sue 1: cars: 2, akitas: 0, goldfish: 5", known, false)
 
 	if aunt != 1 {
 		t.Errorf("Found aunt: %v", aunt)
