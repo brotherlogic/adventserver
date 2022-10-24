@@ -100,15 +100,11 @@ func findAunt(details string, known properties, fuzzy bool) int {
 		}
 
 		if found {
-			if !fuzzy {
-				return i + 1
-			}
-			fullaunt.Inc()
-			count++
+			return i + 1
 		}
 	}
 
-	return count
+	return -1
 }
 
 func (s *Server) Solve2015day16part1(ctx context.Context) (*pb.SolveResponse, error) {
