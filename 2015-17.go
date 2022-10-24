@@ -25,7 +25,24 @@ func computeContainers(data string, total int) int {
 }
 
 func doContainers(arr []int, total, sofar int) int {
-	return 0
+	if sofar == total {
+		return 1
+	}
+
+	if sofar > total {
+		return 0
+	}
+
+	count := 0
+	for i, p := range arr {
+		var narr []int
+		for _, val := range arr[i+1:] {
+			narr = append(narr, val)
+		}
+		count += doContainers(narr, total, sofar+p)
+	}
+
+	return count
 }
 
 func (s *Server) Solve2015day17part1(ctx context.Context) (*pb.SolveResponse, error) {
