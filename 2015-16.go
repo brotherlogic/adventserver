@@ -21,8 +21,9 @@ type properties struct {
 	perfumes    int
 }
 
-func findAunt(details string, known properties) int {
+func findAunt(details string, known properties, fuzzy bool) int {
 	lines := strings.Split(details, "\n")
+	count := 0
 
 	for i, line := range lines {
 		nline := line[8:]
@@ -47,7 +48,8 @@ func findAunt(details string, known properties) int {
 					found = false
 				}
 			case "cats":
-				if value != int64(known.cats) {
+				if value != int64(known.cats) ||
+					(fuzzy && value < int64(known.cats)) {
 					found = false
 				}
 			case "samoyeds":
@@ -55,7 +57,8 @@ func findAunt(details string, known properties) int {
 					found = false
 				}
 			case "pomeranians":
-				if value != int64(known.pomeranians) {
+				if value != int64(known.pomeranians) ||
+					(fuzzy && value > int64(known.pomeranians)) {
 					found = false
 				}
 			case "akitas":
@@ -67,11 +70,13 @@ func findAunt(details string, known properties) int {
 					found = false
 				}
 			case "goldfish":
-				if value != int64(known.goldfish) {
+				if value != int64(known.goldfish) ||
+					(fuzzy && value > int64(known.goldfish)) {
 					found = false
 				}
 			case "trees":
-				if value != int64(known.trees) {
+				if value != int64(known.trees) ||
+					(fuzzy && value < int64(known.trees)) {
 					found = false
 				}
 			case "cars":
@@ -86,11 +91,14 @@ func findAunt(details string, known properties) int {
 		}
 
 		if found {
-			return i + 1
+			if !fuzzy {
+				return i + 1
+			}
+			count++
 		}
 	}
 
-	return 0
+	return count
 }
 
 func (s *Server) Solve2015day16part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -114,5 +122,29 @@ func (s *Server) Solve2015day16part1(ctx context.Context) (*pb.SolveResponse, er
 		perfumes:    1,
 	}
 
-	return &pb.SolveResponse{Answer: int32(findAunt(trimmed, known))}, nil
+	return &pb.SolveResponse{Answer: int32(findAunt(trimmed, known, false))}, nil
+}
+
+func (s *Server) Solve2015day16part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-16.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	known := properties{
+		children:    3,
+		cats:        7,
+		samoyeds:    2,
+		pomeranians: 3,
+		akitas:      0,
+		vizslas:     0,
+		goldfish:    5,
+		trees:       3,
+		cars:        2,
+		perfumes:    1,
+	}
+
+	return &pb.SolveResponse{Answer: int32(findAunt(trimmed, known, true))}, nil
 }
