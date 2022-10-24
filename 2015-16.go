@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	fullaunt = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "adventserver_fullaunt",
+		Help: "The number of server requests",
+	})
 )
 
 type properties struct {
@@ -94,6 +103,7 @@ func findAunt(details string, known properties, fuzzy bool) int {
 			if !fuzzy {
 				return i + 1
 			}
+			fullaunt.Inc()
 			count++
 		}
 	}
