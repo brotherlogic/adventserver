@@ -57,7 +57,7 @@ func findAunt(details string, known properties, fuzzy bool) int {
 				}
 			case "cats":
 				if (!fuzzy && value != int64(known.cats)) ||
-					(fuzzy && value < int64(known.cats)) {
+					(fuzzy && value <= int64(known.cats)) {
 					found = false
 				}
 			case "samoyeds":
@@ -66,7 +66,7 @@ func findAunt(details string, known properties, fuzzy bool) int {
 				}
 			case "pomeranians":
 				if (!fuzzy && value != int64(known.pomeranians)) ||
-					(fuzzy && value > int64(known.pomeranians)) {
+					(fuzzy && value >= int64(known.pomeranians)) {
 					found = false
 				}
 			case "akitas":
@@ -79,12 +79,12 @@ func findAunt(details string, known properties, fuzzy bool) int {
 				}
 			case "goldfish":
 				if (!fuzzy && value != int64(known.goldfish)) ||
-					(fuzzy && value > int64(known.goldfish)) {
+					(fuzzy && value >= int64(known.goldfish)) {
 					found = false
 				}
 			case "trees":
 				if (!fuzzy && value != int64(known.trees)) ||
-					(fuzzy && value < int64(known.trees)) {
+					(fuzzy && value <= int64(known.trees)) {
 					found = false
 				}
 			case "cars":
