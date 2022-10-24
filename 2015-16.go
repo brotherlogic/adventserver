@@ -32,7 +32,6 @@ type properties struct {
 
 func findAunt(details string, known properties, fuzzy bool) int {
 	lines := strings.Split(details, "\n")
-	count := 0
 
 	for i, line := range lines {
 		nline := line[8:]
