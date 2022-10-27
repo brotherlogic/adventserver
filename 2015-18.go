@@ -21,7 +21,7 @@ func countOn(array [][]bool) int {
 	return count
 }
 
-func buildArray(data string) [][]bool {
+func buildArray(data string, stuck bool) [][]bool {
 	len1 := len(strings.Split(data, "\n")[0])
 
 	var arr [][]bool
@@ -43,12 +43,26 @@ func buildArray(data string) [][]bool {
 		}
 	}
 
+	if stuck {
+		arr[1][1] = true
+		arr[1][len1] = true
+		arr[len1][1] = true
+		arr[len1][len1] = true
+	}
+
 	return arr
 }
 
-func getValue(arr [][]bool, i, j int) bool {
+func getValue(arr [][]bool, i, j int, stuck bool) bool {
 	if i == 0 || j == 0 || i == len(arr)-1 || j == len(arr)-1 {
 		return false
+	}
+
+	if (i == 1 && j == 1) ||
+		(i == 1 && j == len(arr)-2) ||
+		(i == len(arr)-2 && j == 1) ||
+		(i == len(arr)-2 && j == len(arr)-2) {
+		return true
 	}
 
 	count := 0
@@ -73,12 +87,12 @@ func getValue(arr [][]bool, i, j int) bool {
 	return false
 }
 
-func rotateArray(arr [][]bool) [][]bool {
+func rotateArray(arr [][]bool, stuck bool) [][]bool {
 	var nar [][]bool
 	for i := 0; i < len(arr); i++ {
 		var narr []bool
 		for j := 0; j < len(arr); j++ {
-			narr = append(narr, getValue(arr, i, j))
+			narr = append(narr, getValue(arr, i, j, stuck))
 		}
 		nar = append(nar, narr)
 	}
@@ -101,11 +115,10 @@ func printArr(arr [][]bool) {
 
 func rotate(data string, times int, stuck bool) int {
 
-	array := buildArray(data)
+	array := buildArray(data, stuck)
 
 	for i := 0; i < times; i++ {
-		array = rotateArray(array)
-		printArr(array)
+		array = rotateArray(array, stuck)
 	}
 
 	return countOn(array)

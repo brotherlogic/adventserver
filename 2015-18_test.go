@@ -24,7 +24,7 @@ func Test2015_day18_part2(t *testing.T) {
 	#.#..#
 	####..`
 
-	now := rotate(start, 4, true)
+	now := rotate(start, 5, true)
 	if now != 17 {
 		t.Errorf("Bad rotation: %v", now)
 	}
