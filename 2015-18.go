@@ -58,11 +58,13 @@ func getValue(arr [][]bool, i, j int, stuck bool) bool {
 		return false
 	}
 
-	if (i == 1 && j == 1) ||
-		(i == 1 && j == len(arr)-2) ||
-		(i == len(arr)-2 && j == 1) ||
-		(i == len(arr)-2 && j == len(arr)-2) {
-		return true
+	if stuck {
+		if (i == 1 && j == 1) ||
+			(i == 1 && j == len(arr)-2) ||
+			(i == len(arr)-2 && j == 1) ||
+			(i == len(arr)-2 && j == len(arr)-2) {
+			return true
+		}
 	}
 
 	count := 0
