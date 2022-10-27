@@ -99,7 +99,7 @@ func printArr(arr [][]bool) {
 	}
 }
 
-func rotate(data string, times int) int {
+func rotate(data string, times int, stuck bool) int {
 
 	array := buildArray(data)
 
@@ -119,5 +119,16 @@ func (s *Server) Solve2015day18part1(ctx context.Context) (*pb.SolveResponse, er
 
 	trimmed := strings.TrimSpace(data)
 
-	return &pb.SolveResponse{Answer: int32(rotate(trimmed, 100))}, nil
+	return &pb.SolveResponse{Answer: int32(rotate(trimmed, 100, false))}, nil
+}
+
+func (s *Server) Solve2015day18part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-18.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	trimmed := strings.TrimSpace(data)
+
+	return &pb.SolveResponse{Answer: int32(rotate(trimmed, 100, true))}, nil
 }
