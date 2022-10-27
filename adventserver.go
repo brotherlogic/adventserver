@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/brotherlogic/goserver"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -11,7 +9,7 @@ import (
 	gspb "github.com/brotherlogic/goserver/proto"
 )
 
-//Server main server type
+// Server main server type
 type Server struct {
 	*goserver.GoServer
 }
@@ -60,5 +58,5 @@ func main() {
 		return
 	}
 
-	fmt.Printf("%v", server.Serve())
+	server.Serve()
 }
