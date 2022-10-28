@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -34,7 +33,6 @@ func fillMatrix(matrix [][]int, x, y int, repl int) int {
 			}
 		}
 	}
-	log.Printf("SPIDER[%v:%v,%v]: %v -> %v", repl, x, y, matrix, count)
 
 	return count
 }
@@ -79,7 +77,6 @@ func getRisk(data string) (int, int) {
 	}
 
 	sort.Ints(basins)
-	log.Printf("BASINS %v", basins)
 
 	return height, basins[len(basins)-1] * basins[len(basins)-2] * basins[len(basins)-3]
 }

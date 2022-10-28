@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -22,10 +21,7 @@ func Test2021Day15(t *testing.T) {
 		t.Errorf("Bad Path %v vs 40", path)
 	}
 
-	sint := buildSuperIntArr(data)
-	for _, line := range sint {
-		fmt.Printf("%v\n", line)
-	}
+	buildSuperIntArr(data)
 
 	p2 := getBestPath2(data)
 	if p2 != 315 {

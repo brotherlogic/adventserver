@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -39,10 +38,7 @@ func Test2021Day13(t *testing.T) {
 func Test2021Day13Specific(t *testing.T) {
 	grid := buildGrid(data)
 	printGrid(grid)
-	fmt.Printf("---\n")
 	grid = horizFold(grid, 7)
 	printGrid(grid)
-	fmt.Printf("---\n")
 	grid = vertFold(grid, 5)
-	fmt.Printf(printGrid(grid))
 }

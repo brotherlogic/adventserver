@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -19,7 +18,6 @@ func Test2021Day18Parse(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		log.Printf("START_PARSE: %v", tc.num)
 		if tc.num != printNum(parseNum(tc.num)) {
 			t.Fatalf("Cannot process: %v -> %v", tc.num, printNum(parseNum(tc.num)))
 		}
@@ -27,8 +25,7 @@ func Test2021Day18Parse(t *testing.T) {
 }
 
 func Test2021Day18Focus(t *testing.T) {
-	rep := parseNum("[[1,9],[8,5]]")
-	log.Printf("%v", rep)
+	parseNum("[[1,9],[8,5]]")
 }
 
 func Test2021Day18Split(t *testing.T) {
@@ -42,7 +39,6 @@ func Test2021Day18Split(t *testing.T) {
 		{9, "9"},
 	}
 	for _, tc := range cases {
-		log.Printf("Splitting %v", tc.start)
 		val := printNum(split(&snnum{val: tc.start}))
 		if tc.end != val {
 			t.Fatalf("Cannot process: %v -> %v vs %v", tc.start, val, tc.end)
@@ -64,7 +60,6 @@ func Test2021Day18Explode(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		log.Printf("Exploding %v", tc.start)
 		val := printNum(explode(parseNum(tc.start)))
 		if tc.end != val {
 			t.Fatalf("Cannot process: %v -> %v vs %v", tc.start, val, tc.end)
@@ -122,7 +117,6 @@ func Test2021Day18Magnitude(t *testing.T) {
 	}
 
 	for _, tc := range cases {
-		log.Printf("Magnituding %v", tc.start)
 		val := magnitude(parseNum(tc.start))
 		if tc.end != val {
 			t.Fatalf("Cannot process: %v -> %v vs %v", tc.start, val, tc.end)
@@ -186,17 +180,12 @@ func Test2021Day18RunAddition(t *testing.T) {
 
 func Test2021Day18SingleExplode(t *testing.T) {
 	num := parseNum("[[[[[1,1],[2,2]],[3,3]],[4,4]],[5,5]]")
-	log.Printf("WHAT %v", printNum(num))
 	res := runExplode(num, nil, 0)
 	if !res {
 		t.Errorf("Bad explode: %v", printNum(num))
 	}
 
-	log.Printf("AHA: %v", printNum(num))
+	runExplode(num, nil, 0)
 
-	v2 := runExplode(num, nil, 0)
-	log.Printf("NOW: %v, %v", v2, printNum(num))
-
-	v3 := runExplode(num, nil, 0)
-	log.Printf("NOW: %v, %v", v3, printNum(num))
+	runExplode(num, nil, 0)
 }

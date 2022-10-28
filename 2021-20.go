@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -137,21 +135,6 @@ func enhance(image [][]bool, ieh string) [][]bool {
 
 }
 
-func printImage(image [][]bool) {
-	xmin, xmax, ymin, ymax := findBounds(image)
-
-	for x := xmin; x <= xmax; x++ {
-		for y := ymin; y <= ymax; y++ {
-			if image[x][y] {
-				fmt.Print("#")
-			} else {
-				fmt.Print(".")
-			}
-		}
-		fmt.Println()
-	}
-}
-
 func countLit(image [][]bool) int {
 	count := 0
 	for _, val := range image {
@@ -175,8 +158,7 @@ func runCount(data string, cv int) int {
 		image += "\n" + elems[i]
 	}
 
-	a, b, c, d := findBounds(buildLarge(image))
-	log.Printf("%v, %v, %v, %v ->%v ", a, b, c, d, len(buildLarge(image)))
+	findBounds(buildLarge(image))
 	img := buildLarge(image)
 
 	for i := 0; i < cv; i++ {

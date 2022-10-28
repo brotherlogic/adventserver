@@ -62,7 +62,6 @@ func horizFold(grid [][]bool, hVal int) [][]bool {
 	for i, line := range grid {
 		if i > hVal {
 			for j, v := range line {
-				//log.Printf("%v,%v -> %v but %v", j, i, v, grid[j][hVal-(i-hVal)])
 				if v && !grid[hVal-(i-hVal)][j] {
 					grid[hVal-(i-hVal)][j] = true
 				}

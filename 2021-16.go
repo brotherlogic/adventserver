@@ -54,7 +54,6 @@ func sumVersion(code []packet) int {
 }
 
 func computeCode(code packet) *big.Int {
-	log.Printf("RUNNING %v", code.pid)
 	switch code.pid {
 	case 0:
 		sumv := big.NewInt(0)
@@ -63,10 +62,8 @@ func computeCode(code packet) *big.Int {
 		}
 		return sumv
 	case 1:
-		log.Printf("PROD: %v", computeCode(code.subcodes[0]))
 		prodv := big.NewInt(1)
 		for _, sc := range code.subcodes {
-			log.Printf("PROD %v", computeCode(sc))
 			prodv.Mul(prodv, computeCode(sc))
 		}
 		return prodv
@@ -83,12 +80,10 @@ func computeCode(code packet) *big.Int {
 		maxv := big.NewInt(0)
 		for _, sc := range code.subcodes {
 			val := computeCode(sc)
-			log.Printf("MAX: %v", val)
 			if maxv.Cmp(val) < 0 {
 				maxv = val
 			}
 		}
-		log.Printf("RET %v", maxv)
 		return maxv
 	case 4:
 		return code.value
@@ -115,12 +110,10 @@ func computeCode(code packet) *big.Int {
 }
 
 func parseCode(bin string, maxlen int) ([]packet, int) {
-	log.Printf("PARSE %v", bin)
 	var codes []packet
 
 	pointer := 0
 	for pointer < len(bin) {
-		log.Printf("WORK  %v", bin[pointer:])
 		check := false
 		for _, c := range bin[pointer:] {
 			if string(c) == "1" {
@@ -135,7 +128,6 @@ func parseCode(bin string, maxlen int) ([]packet, int) {
 		code := packet{}
 		code.version = int(convert(bin[pointer : pointer+3]).Int64())
 		code.pid = int(convert(bin[pointer+3 : pointer+6]).Int64())
-		log.Printf("READ: %+v", code)
 
 		switch code.pid {
 		case 4:
@@ -153,16 +145,13 @@ func parseCode(bin string, maxlen int) ([]packet, int) {
 			pointer = pointer + 6 + count*5
 		default:
 			typeid := string(bin[pointer+6])
-			log.Printf("READ TYPE: %v", typeid)
 			switch typeid {
 			case "0":
 				plen, _ := (strconv.ParseInt(bin[pointer+6+1:pointer+6+16], 2, 32))
-				log.Printf("PLEN: %v -> %v", plen, bin[pointer+6+1:pointer+6+16])
 				code.subcodes, _ = parseCode(bin[pointer+6+16:pointer+6+16+int(plen)], -1)
 				pointer += 6 + 16 + int(plen)
 			case "1":
 				maxnum, _ := strconv.ParseInt(bin[pointer+6+1:pointer+6+12], 2, 32)
-				log.Printf("SUBS: %v", maxnum)
 				sc, len := parseCode(bin[pointer+6+12:], int(maxnum))
 				code.subcodes = sc
 				pointer += 6 + 12 + len

@@ -38,7 +38,6 @@ func throwIn(x, y int, lowx, lowy, highx, highy int) int {
 	tbh := 0
 
 	for step := 0; step < math.MaxInt16; step++ {
-		//log.Printf("%v, %v @ %v,%v", currx, curry, xvel, yvel)
 		if shotIn(currx, curry, lowx, highx, lowy, highy, xvel > 0, yvel < 0) == 0 {
 			return tbh
 		} else if shotIn(currx, curry, lowx, highx, lowy, highy, xvel > 0, yvel < 0) > 0 {

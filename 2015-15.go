@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -67,10 +66,6 @@ func findBestWith(sofar []int, ap []props, maxv int, caloriesGoal int) int {
 			flavor += sofar[i] * ap[i].flavor
 			texture += sofar[i] * ap[i].texture
 			calories += sofar[i] * ap[i].calories
-		}
-
-		if sofar[0] == 44 {
-			log.Printf("%v %v %v %v %+v %+v", capacity, durability, flavor, texture, ap[0], ap[1])
 		}
 
 		if capacity < 0 || durability < 0 || flavor < 0 || texture < 0 {

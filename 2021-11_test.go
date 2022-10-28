@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -34,7 +33,6 @@ func Test2021Specific(t *testing.T) {
 
 	arr2 := buildArr(data2)
 	flash(arr2)
-	log.Printf("\n%v", restoreString(arr2))
 }
 
 func Test2021Day11Part2(t *testing.T) {

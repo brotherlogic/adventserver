@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -56,6 +55,5 @@ func Test2021Day14Focus(t *testing.T) {
 	CC -> N
 	CN -> C`
 
-	res := runRules(convertToMap("NNCB"), buildRules(rules))
-	log.Printf("%v", res)
+	runRules(convertToMap("NNCB"), buildRules(rules))
 }

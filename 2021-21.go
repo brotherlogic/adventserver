@@ -6,7 +6,6 @@ import (
 )
 
 func runDiracGame(p1, p2 int64, p1sc, p2sc int64, play bool) (int64, int64) {
-	//log.Printf("Running %v, %v, %v, %v, %v", p1, p2, p1sc, p2sc, play)
 	if p1sc >= 21 {
 		return 1, 0
 	}

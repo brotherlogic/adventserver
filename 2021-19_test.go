@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -37,7 +36,6 @@ func Test2021Day19FindAlign(t *testing.T) {
 	if val.x != 68 {
 		t.Errorf("Bad location: %+v", val)
 	}
-	log.Printf("LOC = %+v", val)
 }
 
 func Test2021Day19Trying(t *testing.T) {
@@ -100,18 +98,14 @@ func Test2021Day19Trying(t *testing.T) {
 
 	for i := 0; i < len(coords1); i++ {
 		for j := i + 1; j < len(coords1); j++ {
-			log.Printf("%v, %v, %v ; %v, %v, %v -> %v", coords1[i].x, coords1[i].y, coords1[i].z, coords1[j].x, coords1[j].y, coords1[j].z, computeDist(coords1[i], coords1[j]))
 			counts[computeDist(coords1[i], coords1[j])]++
 		}
 	}
-	log.Printf("--------")
 	for i := 0; i < len(coords2); i++ {
 		for j := i + 1; j < len(coords2); j++ {
-			log.Printf("%v", computeDist(coords2[i], coords2[j]))
 			counts[computeDist(coords2[i], coords2[j])]++
 		}
 	}
-	log.Printf("%v", counts)
 }
 
 func Test2021Day19Part1(t *testing.T) {
@@ -252,9 +246,6 @@ func Test2021Day19Part1(t *testing.T) {
 	-652,-548,-490
 	30,-46,-14`
 
-	res := countOverlap(data)
-	/*if res != 79 {
-		t.Errorf("Not enough overlap: %v vs 79", res)
-	}*/
-	log.Printf("Found overlap: %v", res)
+	countOverlap(data)
+
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strings"
 	"unicode"
 
@@ -54,7 +53,6 @@ func buildGraph(data string) *pnode {
 		}
 	}
 
-	log.Printf("START NOT FOUND")
 	return nil
 }
 
@@ -68,7 +66,6 @@ func countPaths(node *pnode, maxSeen int) int {
 
 func getPaths(node *pnode, seenSmall map[string]int, maxSeen int, sofar string) int {
 	if node.name == "end" {
-		//log.Printf("Seen %vend with %v", sofar, seenSmall)
 		return 1
 	}
 

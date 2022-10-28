@@ -88,7 +88,6 @@ func getCommons(line map[string]*big.Int) (*big.Int, *big.Int) {
 	for _, v := range counts {
 		if v.Cmp(highest) > 0 {
 			highest = v
-			//log.Printf("HIGH %v -> %v", key, (v+1)/2)
 		}
 		if v.Cmp(lowest) < 0 {
 			lowest = v

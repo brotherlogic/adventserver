@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 	"strings"
 )
@@ -49,11 +48,6 @@ func computeDist(c1, c2 *pcoord) int64 {
 func findLocation(c1, c2 []*pcoord) *pcoord {
 	ret := &pcoord{}
 
-	log.Printf("%v %v %v", c1[0].x-c2[0].x, c1[0].x-c2[0].y, c1[0].x-c2[0].z)
-	log.Printf("%v %v %v", c1[1].x-c2[1].x, c1[1].x-c2[1].y, c1[1].x-c2[1].z)
-	log.Printf("%v %v %v", c1[0].x+c2[0].x, c1[0].x+c2[0].y, c1[0].x+c2[0].z)
-	log.Printf("%v %v %v", c1[1].x+c2[1].x, c1[1].x+c2[1].y, c1[1].x+c2[1].z)
-
 	if c1[0].x-c2[0].x == c1[1].x-c2[1].x {
 		ret.x = c1[0].x - c2[0].x
 		ret.xloc = 0
@@ -90,12 +84,6 @@ func findLocation(c1, c2 []*pcoord) *pcoord {
 		ret.xt = true
 	}
 
-	log.Printf("====")
-	log.Printf("%v %v %v", c1[0].y-c2[0].x, c1[0].y-c2[0].y, c1[0].y-c2[0].z)
-	log.Printf("%v %v %v", c1[1].y-c2[1].x, c1[1].y-c2[1].y, c1[1].y-c2[1].z)
-	log.Printf("%v %v %v", c1[0].y+c2[0].x, c1[0].y+c2[0].y, c1[0].y+c2[0].z)
-	log.Printf("%v %v %v", c1[1].y+c2[1].x, c1[1].y+c2[1].y, c1[1].y+c2[1].z)
-
 	if c1[0].y-c2[0].y == c1[1].y-c2[1].y {
 		ret.y = c1[0].y - c2[0].y
 		ret.yloc = 1
@@ -131,12 +119,6 @@ func findLocation(c1, c2 []*pcoord) *pcoord {
 		ret.yloc = 2
 		ret.yt = true
 	}
-
-	log.Printf("====")
-	log.Printf("%v %v %v", c1[0].z-c2[0].x, c1[0].z-c2[0].y, c1[0].z-c2[0].z)
-	log.Printf("%v %v %v", c1[1].z-c2[1].x, c1[1].z-c2[1].y, c1[1].z-c2[1].z)
-	log.Printf("%v %v %v", c1[0].z+c2[0].x, c1[0].z+c2[0].y, c1[0].z+c2[0].z)
-	log.Printf("%v %v %v", c1[1].z+c2[1].x, c1[1].z+c2[1].y, c1[1].z+c2[1].z)
 
 	if c1[0].z-c2[0].z == c1[1].z-c2[1].z {
 		ret.z = c1[0].z - c2[0].z
@@ -177,12 +159,10 @@ func findLocation(c1, c2 []*pcoord) *pcoord {
 }
 
 func buildOverlaps(name1, name2 string, c1, c2 []*pcoord) map[int]int {
-	log.Printf("Computing overlap between %v and %v", name1, name2)
 	var overlaps []*overlap
 	for i := 0; i < len(c1); i++ {
 		for j := i + 1; j < len(c1); j++ {
 			dist := computeDist(c1[i], c1[j])
-			log.Printf("DIST1: %v, %v; %v, %v -> %v", name1, name2, i, j, dist)
 
 			found := false
 			for _, overlap := range overlaps {
@@ -200,9 +180,6 @@ func buildOverlaps(name1, name2 string, c1, c2 []*pcoord) map[int]int {
 	for i := 0; i < len(c2); i++ {
 		for j := i + 1; j < len(c2); j++ {
 			dist := computeDist(c2[i], c2[j])
-			if j == 25 && name2 == "--- scanner 4 ---" {
-				log.Printf("DIST2: %v, %v; %v, %v -> %v", name1, name2, i, j, dist)
-			}
 
 			for _, overlap := range overlaps {
 				if overlap.dist == dist {
@@ -215,7 +192,6 @@ func buildOverlaps(name1, name2 string, c1, c2 []*pcoord) map[int]int {
 	overmap := make(map[int][]int)
 	supermap := make(map[int]int)
 	for _, overlap := range overlaps {
-		log.Printf("OVERLAP %v and %v -> %v", name1, name2, overlap)
 		if len(overlap.i1) > 0 && len(overlap.i2) > 0 {
 
 			for _, elem1 := range overlap.i1 {
@@ -234,25 +210,8 @@ func buildOverlaps(name1, name2 string, c1, c2 []*pcoord) map[int]int {
 		}
 	}
 
-	log.Printf("SMAP: (%v,%v) %v -> %v", name1, name2, supermap, len(supermap))
 	return supermap
 }
-
-/*	var d1 []*pcoord
-	var d2 []*pcoord
-	for key, val := range supermap {
-		d1 = append(d1, c1[key])
-		d2 = append(d2, c2[val])
-	}
-
-	if len(d1) > 0 {
-		relative := findLocation(d1, d2)
-		log.Printf("MATCH %v -> %v = %+v", name1, name2, relative)
-
-		return &match{n1: name1, n2: name2, rel: relative}
-	}
-	return nil
-}*/
 
 func resolveCoord(pc *pcoord, name string, matches []*match) *pcoord {
 	if name == "--- scanner 0 ---" {
@@ -260,7 +219,6 @@ func resolveCoord(pc *pcoord, name string, matches []*match) *pcoord {
 	}
 	for _, m := range matches {
 		if m.n1 == "--- scanner 0 ---" && m.n2 == name {
-			log.Printf("CONV %v %+v -> %+v", pc, name, m.rel)
 			var x, y, z int64
 			if m.rel.xloc == 0 {
 				if m.rel.xt {
@@ -328,7 +286,6 @@ func resolveCoord(pc *pcoord, name string, matches []*match) *pcoord {
 				}
 			}
 
-			log.Printf("CONV TO %+v %+v", &pcoord{x: x, y: y, z: z}, m.rel)
 			return &pcoord{x: x, y: y, z: z}
 		}
 	}
@@ -401,34 +358,6 @@ func countOverlap(data string) int {
 
 	return len(uniques)
 
-	/*	matches = buildMatches(keys, matches)
-
-		for _, m := range matches {
-			log.Printf("FINAL %+v -> %+v", m, m.rel)
-		}
-
-		var superlist []*pcoord
-		for name, coords := range smap {
-			for _, coord := range coords {
-				rcoord := resolveCoord(coord, name, matches)
-				log.Printf("RESOLVE %v -> %v", coord, rcoord)
-				found := false
-				for _, c := range superlist {
-					if c.x == rcoord.x && c.y == rcoord.y && c.z == rcoord.z {
-						found = true
-					}
-				}
-				if !found {
-					superlist = append(superlist, rcoord)
-				}
-			}
-		}
-
-		for _, elem := range superlist {
-			log.Printf("SUPERLIST %+v", elem)
-		}
-
-		return len(superlist)*/
 }
 
 func buildMatches(names []string, matches []*match) []*match {
@@ -442,7 +371,6 @@ func buildMatches(names []string, matches []*match) []*match {
 		}
 
 		if !found {
-			log.Printf("MISSING %v -> %v", name1, name2)
 			for _, interim := range names {
 				var foundLeft *match
 				var foundRight *match
@@ -468,8 +396,6 @@ func buildMatches(names []string, matches []*match) []*match {
 }
 
 func resolveMatch(m1 *match, m2 *match) *match {
-	log.Printf("AHA %+v -> %+v", m1.rel, m2.rel)
-
 	match := &match{n1: m1.n1, n2: m2.n2, rel: &pcoord{}}
 
 	if m2.rel.xloc == 0 {
@@ -568,6 +494,5 @@ func resolveMatch(m1 *match, m2 *match) *match {
 
 	match.rel.zt = true
 
-	log.Printf("AHA2 %+v -> %+v", match, match.rel)
 	return match
 }

@@ -131,16 +131,6 @@ func computePath(arr [][]int) [][]int {
 	return narr
 }
 
-func printCavern(c *cavern) {
-	fmt.Printf("\n")
-	for _, val := range c.arr {
-		for _, nval := range val {
-			fmt.Printf("%v, ", nval)
-		}
-		fmt.Printf("\n")
-	}
-}
-
 func getBestPath(data string) int {
 	arr := buildIntArr(data)
 

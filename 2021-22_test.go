@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"testing"
 )
 
@@ -482,10 +481,5 @@ on x=23465..37441,y=-37240..-20297,z=-68128..-49025
 on x=-5136..18927,y=17373..30697,z=66878..78408
 on x=-29189..-6136,y=-76807..-52880,z=26943..52440`
 
-	count := buildCubeAndCount(data)
-
-	/*if count != 590784 {
-		t.Errorf("Bad count: %v vs 590784", count)
-	}*/
-	log.Printf("Check: %v", count)
+	buildCubeAndCount(data)
 }

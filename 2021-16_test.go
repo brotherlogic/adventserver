@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"testing"
 )
 
@@ -40,11 +39,7 @@ func Test2021Day16ConvertHarder(t *testing.T) {
 		t.Errorf("Bad subcodes: %+v", res[0])
 	}
 
-	if res[0].subcodes[0].value.Int64() != 10 || res[0].subcodes[1].value.Int64() != 20 {
-		log.Printf("Bad subcode")
-	}
-
-	res, _ = parseCode(convertHex("EE00D40C823060"), -1)
+	parseCode(convertHex("EE00D40C823060"), -1)
 }
 
 func Test2021Day16(t *testing.T) {
@@ -60,7 +55,6 @@ func Test2021Day16(t *testing.T) {
 	}
 
 	for _, scase := range cases {
-		log.Printf("Running  %v", scase.in)
 		pc, _ := parseCode(convertHex(scase.in), -1)
 		count := sumVersion(pc)
 		if count != scase.want {
@@ -86,7 +80,6 @@ func Test2021Day16Close(t *testing.T) {
 	}
 
 	for _, scase := range cases {
-		log.Printf("Running  %v", scase.in)
 		pc, _ := parseCode(convertHex(scase.in), -1)
 		count := computeCode(pc[0])
 		if count.String() != fmt.Sprintf("%v", scase.want) {

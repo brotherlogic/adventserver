@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -100,19 +99,6 @@ func rotateArray(arr [][]bool, stuck bool) [][]bool {
 	}
 
 	return nar
-}
-
-func printArr(arr [][]bool) {
-	for i := 1; i < len(arr)-1; i++ {
-		for j := 1; j < len(arr)-1; j++ {
-			if arr[i][j] {
-				fmt.Print("#")
-			} else {
-				fmt.Print(".")
-			}
-		}
-		fmt.Print("\n")
-	}
 }
 
 func rotate(data string, times int, stuck bool) int {
