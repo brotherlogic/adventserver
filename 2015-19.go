@@ -36,6 +36,7 @@ func buildString(parts []string, pos int, from, adj string) string {
 	for i := pos + 1; i < len(parts)-1; i++ {
 		nstr += parts[i] + from
 	}
+	nstr += parts[len(parts)-1]
 	return nstr
 }
 
@@ -52,6 +53,7 @@ func translate(key string, trans map[string][]string) map[string]bool {
 		}
 	}
 
+	//log.Printf("RES %v", result)
 	return result
 }
 
