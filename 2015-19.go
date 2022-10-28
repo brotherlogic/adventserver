@@ -27,13 +27,26 @@ func buildMaps(data string) (map[string][]string, string) {
 	return mapper, key
 }
 
+func buildString(parts []string, pos int, from, adj string) string {
+	nstr := ""
+	for i := 0; i < pos; i++ {
+		nstr += parts[i] + from
+	}
+	nstr += parts[pos] + adj
+	for i := pos + 1; i < len(parts)-1; i++ {
+		nstr += parts[i] + from
+	}
+	return nstr
+}
+
 func translate(key string, trans map[string][]string) map[string]bool {
 	result := make(map[string]bool)
 
-	for i, ch := range key {
-		if res, ok := trans[string(ch)]; ok {
-			for _, r := range res {
-				nstr := key[:i] + r + key[i:]
+	for adj, tos := range trans {
+		for _, to := range tos {
+			parts := strings.Split(key, adj)
+			for i := 0; i < len(parts)-1; i++ {
+				nstr := buildString(parts, i, adj, to)
 				result[nstr] = true
 			}
 		}
