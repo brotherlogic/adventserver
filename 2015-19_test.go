@@ -26,6 +26,6 @@ func Test2015Day19Part1Other(t *testing.T) {
 	num := getMolecules(data)
 
 	if num != 7 {
-		t.Errorf("Bad moles: %v -> 4", num)
+		t.Errorf("Bad moles: %v -> 7", num)
 	}
 }
