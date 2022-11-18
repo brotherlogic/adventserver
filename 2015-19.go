@@ -57,6 +57,10 @@ func translate(key string, trans map[string][]string) map[string]bool {
 	return result
 }
 
+func treeMolecules(data string) int {
+	return 0
+}
+
 func getMolecules(data string) int {
 	trans, key := buildMaps(data)
 
