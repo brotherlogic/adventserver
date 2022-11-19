@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -55,6 +56,49 @@ func translate(key string, trans map[string][]string) map[string]bool {
 
 	//log.Printf("RES %v", result)
 	return result
+}
+
+func treeMolecules(data string) int {
+	trans, key := buildMaps(data)
+
+	res := runMTree("e", strings.TrimSpace(key), trans, 0)
+
+	return res
+}
+
+func getIndices(key string, lon string) []int {
+	var indices []int
+	for i := 0; i <= len(lon)-len(key); i++ {
+		if lon[i:i+len(key)] == key {
+			indices = append(indices, i)
+		}
+	}
+
+	return indices
+}
+
+func runMTree(sofar string, key string, trans map[string][]string, count int) int {
+	if len(sofar) > len(key) {
+		return math.MaxInt
+	}
+
+	if sofar == key {
+		return count
+	}
+
+	best := math.MaxInt
+	for tkey, transl := range trans {
+		for _, val := range getIndices(tkey, sofar) {
+			for _, tval := range transl {
+				nval := runMTree(sofar[:val]+tval+sofar[val+len(tkey):], key, trans, count+1)
+				if nval < best {
+					best = nval
+				}
+			}
+		}
+	}
+
+	return best
 }
 
 func getMolecules(data string) int {
