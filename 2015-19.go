@@ -34,7 +34,7 @@ func buildMaps(data string) (map[string][]string, string) {
 		}
 	}
 
-	return mapper, key
+	return mapper, strings.TrimSpace(key)
 }
 
 func buildString(parts []string, pos int, from, adj string) string {
@@ -70,9 +70,37 @@ func translate(key string, trans map[string][]string) map[string]bool {
 func treeMolecules(data string) int {
 	trans, key := buildMaps(data)
 
-	res, _ := runMTree("e", strings.TrimSpace(key), trans, 0, make(map[string]bool))
+	flipped := make(map[string]string)
+	for k, v := range trans {
+		for _, vv := range v {
+			flipped[vv] = k
+		}
+	}
+
+	res := runBackwards(key, "e", flipped, 0)
 
 	return res
+}
+
+func runBackwards(current, goal string, trans map[string]string, count int) int {
+	if current == goal {
+		return count
+	}
+
+	best := math.MaxInt
+	for key, res := range trans {
+		indices := getIndices(key, current)
+		for _, index := range indices {
+			nstr := current[:index] + res + current[index+len(key):]
+			nval := runBackwards(nstr, goal, trans, count+1)
+
+			if nval < best {
+				best = nval
+			}
+		}
+	}
+
+	return best
 }
 
 func getIndices(key string, lon string) []int {
