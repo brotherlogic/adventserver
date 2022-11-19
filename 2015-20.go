@@ -1,7 +1,7 @@
 package main
 
 import (
-	"math"
+	"log"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
@@ -26,17 +26,12 @@ func findMaxHouse(sval int) int {
 			houses[start*i] += (start * 10)
 		}
 
-		start++
-
-		if start > sval {
-			best := math.MaxInt
-			for num, nval := range houses {
-				if nval >= sval && num < best {
-					best = num
-				}
-			}
-			return best
+		if houses[start] >= sval {
+			log.Printf("%v", houses)
+			return start
 		}
+
+		start++
 	}
 }
 
