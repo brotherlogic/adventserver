@@ -78,12 +78,50 @@ func treeMolecules(data string) int {
 		}
 	}
 
-	res := runBackwards(key, "e", flipped, 0)
+	//res := runBackwards(key, "e", flipped, 0)
+	seen := make(map[string]int)
+	seen[key] = 0
+	res := runSearch(seen, "e", flipped)
 
 	return res
 }
 
+func runSearch(seen map[string]int, goal string, trans map[string]string) int {
+	searches.Inc()
+	if val, ok := seen[goal]; ok {
+		return val
+	}
+
+	best := ""
+	bv := math.MaxInt
+	for key, val := range seen {
+		if val < bv {
+			best = key
+			bv = val
+		}
+	}
+
+	log.Printf("%v", best)
+
+	delete(seen, best)
+
+	for key, val := range trans {
+		indices := getIndices(key, best)
+		for _, index := range indices {
+			nstr := best[:index] + val + best[index+len(key):]
+			if strings.Count(nstr, "e") == 0 || (strings.Count(nstr, "e") == 1 && len(nstr) == 1) {
+				if _, ok := seen[nstr]; !ok {
+					seen[nstr] = bv + 1
+				}
+			}
+		}
+	}
+
+	return runSearch(seen, goal, trans)
+}
+
 func runBackwards(current, goal string, trans map[string]string, count int) int {
+	log.Printf("%v", current)
 	searches.Inc()
 	if current == goal {
 		return count
