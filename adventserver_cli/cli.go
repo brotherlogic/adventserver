@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -89,6 +88,4 @@ func main() {
 			}
 		}
 	}
-
-	tp.Shutdown(context.Background())
 }
