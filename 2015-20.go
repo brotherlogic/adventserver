@@ -2,7 +2,16 @@ package main
 
 import (
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	thouses = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day20_houses",
+		Help: "The number of server requests",
+	})
 )
 
 func findMaxHouse(sval int) int {
@@ -10,6 +19,7 @@ func findMaxHouse(sval int) int {
 
 	start := 1
 	for {
+		thouses.Set(float64(start))
 		for i := 1; i <= 10; i++ {
 			houses[start*i] += start * 10
 		}
