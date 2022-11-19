@@ -16,6 +16,10 @@ var (
 		Name: "adventserver_day19_searches",
 		Help: "The number of server requests",
 	})
+	msize = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day19_msize",
+		Help: "The number of server requests",
+	})
 )
 
 func buildMaps(data string) (map[string][]string, string) {
@@ -88,6 +92,7 @@ func treeMolecules(data string) int {
 
 func runSearch(seen map[string]int, goal string, trans map[string]string) int {
 	searches.Inc()
+	msize.Set(float64(len(seen)))
 	if val, ok := seen[goal]; ok {
 		return val
 	}
