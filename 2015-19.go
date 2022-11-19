@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math"
 	"strings"
 
@@ -87,6 +88,12 @@ func runBackwards(current, goal string, trans map[string]string, count int) int 
 	if current == goal {
 		return count
 	}
+
+	if strings.Contains(current, "e") {
+		return math.MaxInt
+	}
+
+	log.Printf("%v", current)
 
 	best := math.MaxInt
 	for key, res := range trans {
