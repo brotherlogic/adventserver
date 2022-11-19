@@ -22,13 +22,11 @@ func findMaxHouse(sval int) int {
 		thouses.Set(float64(start))
 		for i := 1; i <= 10; i++ {
 			houses[start*i] += start * 10
-		}
-
-		for key, val := range houses {
-			if val >= sval {
-				return key
+			if houses[start*i] >= sval {
+				return start * i
 			}
 		}
+
 		start++
 	}
 }
