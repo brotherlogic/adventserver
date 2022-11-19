@@ -83,6 +83,7 @@ func treeMolecules(data string) int {
 }
 
 func runBackwards(current, goal string, trans map[string]string, count int) int {
+	searches.Inc()
 	if current == goal {
 		return count
 	}
