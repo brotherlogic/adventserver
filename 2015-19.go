@@ -70,7 +70,7 @@ func translate(key string, trans map[string][]string) map[string]bool {
 func treeMolecules(data string) int {
 	trans, key := buildMaps(data)
 
-	res := runMTree("e", strings.TrimSpace(key), trans, 0)
+	res, _ := runMTree("e", strings.TrimSpace(key), trans, 0, make(map[string]bool))
 
 	return res
 }
@@ -86,21 +86,30 @@ func getIndices(key string, lon string) []int {
 	return indices
 }
 
-func runMTree(sofar string, key string, trans map[string][]string, count int) int {
+func runMTree(sofar string, key string, trans map[string][]string, count int, seen map[string]bool) (int, map[string]bool) {
+	if _, ok := seen[sofar]; ok {
+		return math.MaxInt, seen
+	}
+	//log.Printf("SEARCH %v", sofar)
+
+	seen[sofar] = true
+
 	searches.Inc()
 	if len(sofar) > len(key) {
-		return math.MaxInt
+		return math.MaxInt, seen
 	}
 
 	if sofar == key {
-		return count
+		return count, seen
 	}
 
 	best := math.MaxInt
 	for tkey, transl := range trans {
 		for _, val := range getIndices(tkey, sofar) {
 			for _, tval := range transl {
-				nval := runMTree(sofar[:val]+tval+sofar[val+len(tkey):], key, trans, count+1)
+				nstring := sofar[:val] + tval + sofar[val+len(tkey):]
+				nval, nseen := runMTree(nstring, key, trans, count+1, seen)
+				seen = nseen
 				if nval < best {
 					best = nval
 				}
@@ -108,7 +117,7 @@ func runMTree(sofar string, key string, trans map[string][]string, count int) in
 		}
 	}
 
-	return best
+	return best, seen
 }
 
 func getMolecules(data string) int {
