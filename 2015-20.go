@@ -30,6 +30,7 @@ func findMaxHouse(sval int) int {
 			log.Printf("%v", houses)
 			return start
 		}
+		delete(houses, start)
 
 		start++
 	}
