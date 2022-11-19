@@ -83,26 +83,31 @@ func treeMolecules(data string) int {
 	}
 
 	//res := runBackwards(key, "e", flipped, 0)
-	seen := make(map[string]int)
-	seen[key] = 0
+	seen := make(map[string]tracker)
+	seen[key] = tracker{cost: 0, processed: false}
 	res := runSearch(seen, "e", flipped)
 
 	return res
 }
 
-func runSearch(seen map[string]int, goal string, trans map[string]string) int {
+type tracker struct {
+	cost      int
+	processed bool
+}
+
+func runSearch(seen map[string]tracker, goal string, trans map[string]string) int {
 	searches.Inc()
 	msize.Set(float64(len(seen)))
 	if val, ok := seen[goal]; ok {
-		return val
+		return val.cost
 	}
 
 	best := ""
 	bv := math.MaxInt
 	for key, val := range seen {
-		if val < bv {
+		if val.cost < bv && !val.processed {
 			best = key
-			bv = val
+			bv = val.cost
 		}
 	}
 
@@ -116,7 +121,7 @@ func runSearch(seen map[string]int, goal string, trans map[string]string) int {
 			nstr := best[:index] + val + best[index+len(key):]
 			if strings.Count(nstr, "e") == 0 || (strings.Count(nstr, "e") == 1 && len(nstr) == 1) {
 				if _, ok := seen[nstr]; !ok {
-					seen[nstr] = bv + 1
+					seen[nstr] = tracker{cost: bv + 1, processed: false}
 				}
 			}
 		}
