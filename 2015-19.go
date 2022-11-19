@@ -103,16 +103,18 @@ func runSearch(seen map[string]tracker, goal string, trans map[string]string) in
 	}
 
 	best := ""
+	var bval tracker
 	bv := math.MaxInt
 	for key, val := range seen {
-		if len(key) < bv {
+		if len(key) < bv && !val.processed {
 			best = key
-			bv = val.cost
+			bv = len(key)
+			bval = val
 		}
 	}
 
-	log.Printf("%v", best)
-	delete(seen, best)
+	bval.processed = true
+	//delete(seen, best)
 
 	for key, val := range trans {
 		indices := getIndices(key, best)
@@ -120,7 +122,7 @@ func runSearch(seen map[string]tracker, goal string, trans map[string]string) in
 			nstr := best[:index] + val + best[index+len(key):]
 			if strings.Count(nstr, "e") == 0 || (strings.Count(nstr, "e") == 1 && len(nstr) == 1) {
 				if _, ok := seen[nstr]; !ok {
-					seen[nstr] = tracker{cost: bv + 1, processed: false}
+					seen[nstr] = tracker{cost: bval.cost + 1, processed: false}
 				}
 			}
 		}
