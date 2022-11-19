@@ -111,8 +111,6 @@ func runSearch(seen map[string]tracker, goal string, trans map[string]string) in
 		}
 	}
 
-	log.Printf("%v", best)
-
 	delete(seen, best)
 
 	for key, val := range trans {
