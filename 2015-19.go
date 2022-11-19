@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	searches = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day19_searches",
+		Help: "The number of server requests",
+	})
 )
 
 func buildMaps(data string) (map[string][]string, string) {
@@ -78,6 +87,7 @@ func getIndices(key string, lon string) []int {
 }
 
 func runMTree(sofar string, key string, trans map[string][]string, count int) int {
+	searches.Inc()
 	if len(sofar) > len(key) {
 		return math.MaxInt
 	}
