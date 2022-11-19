@@ -105,12 +105,13 @@ func runSearch(seen map[string]tracker, goal string, trans map[string]string) in
 	best := ""
 	bv := math.MaxInt
 	for key, val := range seen {
-		if val.cost < bv && !val.processed {
+		if len(key) < bv {
 			best = key
 			bv = val.cost
 		}
 	}
 
+	log.Printf("%v", best)
 	delete(seen, best)
 
 	for key, val := range trans {
