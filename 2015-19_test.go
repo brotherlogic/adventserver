@@ -18,7 +18,7 @@ func Test2015Day19Part2(t *testing.T) {
 	}
 }
 
-func Test2015Day19Part2Sup(t *testing.T) {
+func TestSup2015Day19Part2(t *testing.T) {
 	data := `e => H
 	e => O
 	H => HO
