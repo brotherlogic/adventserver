@@ -60,7 +60,7 @@ func main() {
 		return
 	}
 
-	server.MemCap = math.MaxInt64
+	server.MemCap = math.MaxInt32
 
 	server.Serve()
 }
