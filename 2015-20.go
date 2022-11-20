@@ -14,6 +14,10 @@ var (
 		Name: "adventserver_day20_houses",
 		Help: "The number of server requests",
 	})
+	tlen = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day20_len",
+		Help: "The number of server requests",
+	})
 )
 
 func findMaxHouse(sval int) int {
@@ -22,6 +26,7 @@ func findMaxHouse(sval int) int {
 	start := 1
 	for {
 		thouses.Set(float64(start))
+		tlen.Set(float64(len(houses)))
 		for i := 1; i <= 10; i++ {
 			houses[start*i] += (start * 10)
 		}
