@@ -12,6 +12,24 @@ type player struct {
 }
 
 func fight(p1, p2 player) bool {
+
+	p1hp := p1.hitp
+	p2hp := p2.hitp
+
+	for {
+		p2hp -= p1.damage - p2.armor
+
+		if p2hp <= 0 {
+			return true
+		}
+
+		p1hp -= p2.damage - p1.armor
+
+		if p1hp <= 0 {
+			return false
+		}
+	}
+
 	return false
 }
 
