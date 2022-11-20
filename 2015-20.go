@@ -40,7 +40,7 @@ func findMaxElves(sval int) int {
 	for i := 1; i < len(houses); i++ {
 		count := 0
 		for j := i; j < len(houses); j += i {
-			houses[j] += i * 10
+			houses[j] += i * 11
 			count++
 			if count >= 50 {
 				break
