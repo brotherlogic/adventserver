@@ -20,15 +20,15 @@ var (
 	})
 )
 
-func findMaxHouse(sval int) int {
-	houses := make(map[int]int)
+func findMaxHouse(sval int32) int {
+	houses := make(map[int]int32)
 
 	start := 1
 	for {
 		thouses.Set(float64(start))
 		tlen.Set(float64(len(houses)))
 		for i := 1; i <= 10; i++ {
-			houses[start*i] += (start * 10)
+			houses[start*i] += int32(start * 10)
 		}
 
 		if houses[start] >= sval {
