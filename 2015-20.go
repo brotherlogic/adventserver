@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -30,6 +32,7 @@ func findMaxHouse(sval int32) int {
 		}
 
 		if houses[start] >= sval {
+			log.Printf("FOUND AT %v", houses[start])
 			return start
 		}
 		delete(houses, start)
@@ -40,5 +43,5 @@ func findMaxHouse(sval int32) int {
 
 func (s *Server) Solve2015day20part1(ctx context.Context) (*pb.SolveResponse, error) {
 
-	return &pb.SolveResponse{Answer: int32(findMaxHouse(3600000))}, nil
+	return &pb.SolveResponse{Answer: int32(findMaxHouse(36000000 / 10))}, nil
 }
