@@ -34,7 +34,31 @@ func findMaxHouse(sval int) int {
 	return -1
 }
 
-func (s *Server) Solve2015day20part1(ctx context.Context) (*pb.SolveResponse, error) {
+func findMaxElves(sval int) int {
+	houses := make([]int, sval)
 
+	for i := 1; i < len(houses); i++ {
+		count := 0
+		for j := i; j < len(houses); j += i {
+			houses[j] += i * 10
+			count++
+			if count >= 50 {
+				break
+			}
+		}
+
+		if houses[i] >= sval {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func (s *Server) Solve2015day20part1(ctx context.Context) (*pb.SolveResponse, error) {
 	return &pb.SolveResponse{Answer: int32(findMaxHouse(36000000))}, nil
+}
+
+func (s *Server) Solve2015day20part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(findMaxElves(36000000))}, nil
 }
