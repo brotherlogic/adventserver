@@ -1,6 +1,8 @@
 package main
 
 import (
+	"math"
+
 	"github.com/brotherlogic/goserver"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -57,6 +59,8 @@ func main() {
 	if err != nil {
 		return
 	}
+
+	server.MemCap = math.MaxInt64
 
 	server.Serve()
 }
