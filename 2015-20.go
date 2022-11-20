@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -32,7 +30,6 @@ func findMaxHouse(sval int32) int {
 		}
 
 		if houses[start] >= sval {
-			log.Printf("%v", houses)
 			return start
 		}
 		delete(houses, start)
