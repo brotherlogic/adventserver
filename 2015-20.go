@@ -28,7 +28,7 @@ func findMaxHouse(sval int32) int {
 		thouses.Set(float64(start))
 		tlen.Set(float64(len(houses)))
 		for i := 1; i <= 10; i++ {
-			houses[start*i] += int32(start * 10)
+			houses[start*i] += int32(start)
 		}
 
 		if houses[start] >= sval {
@@ -43,5 +43,5 @@ func findMaxHouse(sval int32) int {
 
 func (s *Server) Solve2015day20part1(ctx context.Context) (*pb.SolveResponse, error) {
 
-	return &pb.SolveResponse{Answer: int32(findMaxHouse(36000000))}, nil
+	return &pb.SolveResponse{Answer: int32(findMaxHouse(3600000))}, nil
 }
