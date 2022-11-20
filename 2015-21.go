@@ -8,7 +8,7 @@ import (
 )
 
 type player struct {
-	hitp, armor, damage int
+	hitp, armor, damage, mana int
 }
 
 func fight(p1, p2 player) bool {
