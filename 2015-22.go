@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
@@ -10,23 +11,30 @@ import (
 type spell struct {
 	name                                   string
 	cost, damage, heal, armor, mana, turns int
+	cd                                     string
 }
 
 func magicFight(p1, p2 player) int {
 	spells := []spell{
-		{"Poison", 173, 3, 0, 0, 0, 6},
-		{"Magic Missile", 53, 4, 0, 0, 0, 1},
-		{"Drain", 73, 2, 2, 0, 0, 1},
-		{"Shield", 113, 0, 0, 7, 0, 6},
-		{"Recharge", 229, 0, 0, 0, 101, 5},
+		{"Poison", 173, 3, 0, 0, 0, 6, "P"},
+		{"Magic Missile", 53, 4, 0, 0, 0, 1, "M"},
+		{"Drain", 73, 2, 2, 0, 0, 1, "D"},
+		{"Shield", 113, 0, 0, 7, 0, 6, "S"},
+		{"Recharge", 229, 0, 0, 0, 101, 5, "R"},
 	}
 
-	return magicFightInternal(p1, p2, spells, make([]spell, 0), 0)
+	val, _ := magicFightInternal(p1, p2, spells, make([]spell, 0), 0, "")
+	return val
 }
 
-func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int) int {
+func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
 	bmana := math.MaxInt
+	bcast := ""
+
 	for _, nspell := range spells {
+		if strings.HasPrefix("RSDPM", cast) {
+			//log.Printf("TRYING %v %v and %v [%v]", nspell.name, p1.hitp, p2.hitp, cast)
+		}
 
 		if p1.mana < nspell.cost {
 			continue
@@ -50,44 +58,50 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int) i
 		var nactiveSpells []spell
 		nactiveSpells = append(nactiveSpells, activeSpells...)
 		nactiveSpells = append(nactiveSpells, nspell)
+		ncast := cast + nspell.cd
 
-		nval := magicFightRound(p1copy, p2, spells, nactiveSpells, mana+nspell.cost)
+		nval, cast := magicFightRound(p1copy, p2, spells, nactiveSpells, mana+nspell.cost, ncast)
+		//log.Printf("%v -> %v", nval, cast)
 
 		if nval < bmana {
 			bmana = nval
+			bcast = cast
 		}
 	}
 
-	return bmana
+	return bmana, bcast
 }
 
-func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int) int {
+func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
 	for t := 0; t < 2; t++ {
-		for _, as := range activeSpells {
-			if as.turns > 0 {
-				p2.hitp -= as.damage
-				p1.hitp += as.heal
-				p1.mana += as.mana
+		for i := range activeSpells {
+			if activeSpells[i].turns > 0 {
+				//log.Printf("%v -> %v : %v [%v]", cast, activeSpells[i].name, p2.hitp-activeSpells[i].damage, activeSpells[i].turns)
+				p2.hitp -= activeSpells[i].damage
+				p1.hitp += activeSpells[i].heal
+				p1.mana += activeSpells[i].mana
 
+				//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 				if p2.hitp <= 0 {
-					return mana
+					return mana, cast
 				}
 
-				if as.turns == 1 {
-					p1.armor -= as.armor
+				if activeSpells[i].turns == 0 {
+					p1.armor -= activeSpells[i].armor
 				}
 
-				as.turns--
+				activeSpells[i].turns = activeSpells[i].turns - 1
 			}
 		}
 	}
 
 	p1.hitp -= max(1, p2.damage-p1.armor)
+	//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 	if p1.hitp <= 0 {
-		return math.MaxInt
+		return math.MaxInt, cast
 	}
 
-	return magicFightInternal(p1, p2, spells, activeSpells, mana)
+	return magicFightInternal(p1, p2, spells, activeSpells, mana, cast)
 }
 
 func (s *Server) Solve2015day22part1(ctx context.Context) (*pb.SolveResponse, error) {
