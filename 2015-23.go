@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -21,7 +22,7 @@ type computer struct {
 	a, b int
 }
 
-func runProgram(program string) computer {
+func runProgram(ctx context.Context, program string, log func(context.Context, string)) computer {
 	tcommands := strings.Split(program, "\n")
 	var commands []string
 	for i := range tcommands {
@@ -82,6 +83,8 @@ func runProgram(program string) computer {
 			} else {
 				i++
 			}
+		default:
+			log(ctx, fmt.Sprintf("Unable to process %v", commands[i]))
 		}
 	}
 
@@ -94,6 +97,7 @@ func (s *Server) Solve2015day23part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	result := runProgram(data)
+	result := runProgram(ctx, data, s.CtxLog)
+	s.CtxLog(ctx, fmt.Sprintf("COMPUTED %+v", result))
 	return &pb.SolveResponse{Answer: int32(result.b)}, nil
 }
