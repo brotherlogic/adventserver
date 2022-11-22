@@ -64,10 +64,10 @@ func runProgram(ctx context.Context, program string, log func(context.Context, s
 			val, _ := strconv.ParseInt(elems[1], 10, 16)
 			i += int(val)
 		case "jio":
-			if elems[1] == "a," && curr.a%2 == 1 {
+			if elems[1] == "a," && curr.a == 1 {
 				val, _ := strconv.ParseInt(elems[2], 10, 16)
 				i += int(val)
-			} else if elems[1] == "b," && curr.b%2 == 1 {
+			} else if elems[1] == "b," && curr.b == 1 {
 				val, _ := strconv.ParseInt(elems[2], 10, 16)
 				i += int(val)
 			} else {
