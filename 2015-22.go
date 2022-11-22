@@ -106,6 +106,14 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 	}
 
 	p1.hitp -= max(1, p2.damage-p1.armor)
+
+	for i := range activeSpells {
+		if activeSpells[i].turns == 0 {
+			p1.armor -= activeSpells[i].armor
+			activeSpells[i].turns = activeSpells[i].turns - 1
+		}
+	}
+
 	//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 	if p1.hitp <= 0 {
 		return math.MaxInt, cast
