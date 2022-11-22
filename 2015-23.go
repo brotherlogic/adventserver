@@ -22,7 +22,7 @@ type computer struct {
 	a, b int
 }
 
-func runProgram(ctx context.Context, program string, log func(context.Context, string)) computer {
+func runProgram(ctx context.Context, program string, log func(context.Context, string), start int) computer {
 	tcommands := strings.Split(program, "\n")
 	var commands []string
 	for i := range tcommands {
@@ -30,7 +30,7 @@ func runProgram(ctx context.Context, program string, log func(context.Context, s
 		commands = append(commands, nstr)
 	}
 
-	curr := computer{}
+	curr := computer{a: start}
 	i := 0
 	for i < len(commands) {
 		comCount.Inc()
@@ -97,7 +97,18 @@ func (s *Server) Solve2015day23part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	result := runProgram(ctx, data, s.CtxLog)
+	result := runProgram(ctx, data, s.CtxLog, 0)
+	s.CtxLog(ctx, fmt.Sprintf("COMPUTED %+v", result))
+	return &pb.SolveResponse{Answer: int32(result.b)}, nil
+}
+
+func (s *Server) Solve2015day23part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-23.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	result := runProgram(ctx, data, s.CtxLog, 1)
 	s.CtxLog(ctx, fmt.Sprintf("COMPUTED %+v", result))
 	return &pb.SolveResponse{Answer: int32(result.b)}, nil
 }
