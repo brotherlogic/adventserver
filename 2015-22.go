@@ -4,7 +4,16 @@ import (
 	"math"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	casts = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day22_casts",
+		Help: "The number of server requests",
+	})
 )
 
 type spell struct {
@@ -71,6 +80,7 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, c
 }
 
 func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
+	casts.Inc()
 	for t := 0; t < 2; t++ {
 		for i := range activeSpells {
 			if activeSpells[i].turns > 0 {
