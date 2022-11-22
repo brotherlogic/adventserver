@@ -83,7 +83,9 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, c
 func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast string, dec int) (int, string) {
 	casts.Inc()
 	for t := 0; t < 2; t++ {
-		p1.hitp -= dec
+		if t == 0 {
+			p1.hitp -= dec
+		}
 		for i := range activeSpells {
 			if activeSpells[i].turns > 0 {
 				//log.Printf("%v -> %v : %v [%v]", cast, activeSpells[i].name, p2.hitp-activeSpells[i].damage, activeSpells[i].turns)
