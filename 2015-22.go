@@ -82,7 +82,7 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int) int 
 		}
 	}
 
-	p1.hitp -= p2.damage - p1.armor
+	p1.hitp -= max(1, p2.damage-p1.armor)
 	if p1.hitp <= 0 {
 		return math.MaxInt
 	}
