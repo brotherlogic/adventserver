@@ -116,7 +116,6 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 		}
 	}
 
-	//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 	if p1.hitp <= 0 {
 		return math.MaxInt, cast
 	}
