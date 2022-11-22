@@ -2,7 +2,6 @@ package main
 
 import (
 	"math"
-	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
@@ -28,17 +27,13 @@ func magicFight(p1, p2 player) int {
 }
 
 func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
-	if len(cast) > 10 {
+	if len(cast) > 15 {
 		return math.MaxInt, cast
 	}
 	bmana := math.MaxInt
 	bcast := ""
 
 	for _, nspell := range spells {
-		if strings.HasPrefix("RSDPM", cast) {
-			//log.Printf("TRYING %v %v and %v [%v]", nspell.name, p1.hitp, p2.hitp, cast)
-		}
-
 		if p1.mana < nspell.cost {
 			continue
 		}
