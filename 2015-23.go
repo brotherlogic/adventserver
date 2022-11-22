@@ -22,9 +22,11 @@ type computer struct {
 }
 
 func runProgram(program string) computer {
-	commands := strings.Split(program, "\n")
-	for i := range commands {
-		commands[i] = strings.TrimSpace(commands[i])
+	tcommands := strings.Split(program, "\n")
+	var commands []string
+	for i := range tcommands {
+		nstr := strings.TrimSpace(tcommands[i])
+		commands = append(commands, nstr)
 	}
 
 	curr := computer{}
