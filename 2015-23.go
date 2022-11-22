@@ -32,6 +32,9 @@ func runProgram(program string) computer {
 	for i < len(commands) {
 		comCount.Inc()
 		elems := strings.Fields(commands[i])
+		if len(elems) == 0 {
+			return curr
+		}
 		switch elems[0] {
 		case "hlf":
 			if elems[1] == "a" {
