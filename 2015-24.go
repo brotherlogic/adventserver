@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	evals = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day23_evals",
+		Help: "The number of server requests",
+	})
 )
 
 func computeGrouping(weights []int) int {
@@ -41,6 +50,7 @@ func sum(v []int) int {
 
 func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 	if sum(g1) > goal || sum(g2) > goal || sum(g3) > goal {
+		evals.Inc()
 		return math.MaxInt, math.MaxInt
 	}
 
