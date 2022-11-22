@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	comCount = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day23_commands",
+		Help: "The number of server requests",
+	})
 )
 
 type computer struct {
@@ -21,6 +30,7 @@ func runProgram(program string) computer {
 	curr := computer{}
 	i := 0
 	for i < len(commands) {
+		comCount.Inc()
 		elems := strings.Fields(commands[i])
 		switch elems[0] {
 		case "hlf":
