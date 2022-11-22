@@ -36,7 +36,7 @@ func magicFight(p1, p2 player) int {
 }
 
 func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
-	if len(cast) > 15 {
+	if len(cast) > 11 {
 		return math.MaxInt, cast
 	}
 	bmana := math.MaxInt
