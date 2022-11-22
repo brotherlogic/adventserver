@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -60,7 +59,6 @@ func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 
 	if len(weights) == 0 {
 		evals.Inc()
-		log.Printf("%v %v %v", g1, g2, g3)
 
 		if len(g1) <= len(g2) && len(g1) <= len(g3) {
 			return prod(g1), len(g1)
