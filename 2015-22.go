@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"math"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -95,7 +94,6 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 
 				//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 				if p2.hitp <= 0 {
-					log.Printf("WIN %v (%v) -> %+v and %+v -> %+v", mana, cast, p1, p2, activeSpells)
 					return mana, cast
 				}
 
