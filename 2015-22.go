@@ -23,7 +23,7 @@ type spell struct {
 	cd                                     string
 }
 
-func magicFight(p1, p2 player) int {
+func magicFight(p1, p2 player, dec int) int {
 	spells := []spell{
 		{"Poison", 173, 3, 0, 0, 0, 6, "P"},
 		{"Magic Missile", 53, 4, 0, 0, 0, 1, "M"},
@@ -32,11 +32,11 @@ func magicFight(p1, p2 player) int {
 		{"Recharge", 229, 0, 0, 0, 101, 5, "R"},
 	}
 
-	val, _ := magicFightInternal(p1, p2, spells, make([]spell, 0), 0, "")
+	val, _ := magicFightInternal(p1, p2, spells, make([]spell, 0), 0, "", dec)
 	return val
 }
 
-func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
+func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string, dec int) (int, string) {
 	if len(cast) > 14 {
 		return math.MaxInt, cast
 	}
@@ -68,7 +68,7 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, c
 		nactiveSpells = append(nactiveSpells, nspell)
 		ncast := cast + nspell.cd
 
-		nval, cast := magicFightRound(p1copy, p2, spells, nactiveSpells, mana+nspell.cost, ncast)
+		nval, cast := magicFightRound(p1copy, p2, spells, nactiveSpells, mana+nspell.cost, ncast, dec)
 		//log.Printf("%v -> %v", nval, cast)
 
 		if nval < bmana {
@@ -80,7 +80,7 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, c
 	return bmana, bcast
 }
 
-func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
+func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast string, dec int) (int, string) {
 	casts.Inc()
 	for t := 0; t < 2; t++ {
 		for i := range activeSpells {
@@ -101,6 +101,8 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 				}
 
 				activeSpells[i].turns = activeSpells[i].turns - 1
+
+				p1.hitp -= dec
 			}
 		}
 	}
@@ -119,9 +121,13 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 		return math.MaxInt, cast
 	}
 
-	return magicFightInternal(p1, p2, spells, activeSpells, mana, cast)
+	return magicFightInternal(p1, p2, spells, activeSpells, mana, cast, dec)
 }
 
 func (s *Server) Solve2015day22part1(ctx context.Context) (*pb.SolveResponse, error) {
-	return &pb.SolveResponse{Answer: int32(magicFight(player{hitp: 50, mana: 500}, player{hitp: 71, damage: 10}))}, nil
+	return &pb.SolveResponse{Answer: int32(magicFight(player{hitp: 50, mana: 500}, player{hitp: 71, damage: 10}, 0))}, nil
+}
+
+func (s *Server) Solve2015day22part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(magicFight(player{hitp: 50, mana: 500}, player{hitp: 71, damage: 10}, 1))}, nil
 }
