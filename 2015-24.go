@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -50,12 +51,25 @@ func sum(v []int) int {
 
 func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 	if sum(g1) > goal || sum(g2) > goal || sum(g3) > goal {
-		evals.Inc()
+		return math.MaxInt, math.MaxInt
+	}
+
+	if len(g1) > 0 && len(g2) > 0 && len(g3) > 0 && (g1[0] > g2[0] || g2[0] > g3[0]) {
 		return math.MaxInt, math.MaxInt
 	}
 
 	if len(weights) == 0 {
-		return prod(g1), len(g1)
+		evals.Inc()
+		log.Printf("%v %v %v", g1, g2, g3)
+
+		if len(g1) <= len(g2) && len(g1) <= len(g3) {
+			return prod(g1), len(g1)
+		}
+		if len(g2) <= len(g1) && len(g2) <= len(g3) {
+			return prod(g2), len(g2)
+		}
+
+		return prod(g3), len(g3)
 	}
 
 	bestv := math.MaxInt
