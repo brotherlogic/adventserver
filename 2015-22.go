@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -36,7 +37,7 @@ func magicFight(p1, p2 player) int {
 }
 
 func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, cast string) (int, string) {
-	if len(cast) > 12 {
+	if len(cast) > 14 {
 		return math.MaxInt, cast
 	}
 	bmana := math.MaxInt
@@ -91,6 +92,7 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 
 				//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 				if p2.hitp <= 0 {
+					log.Printf("WIN %v (%v) -> %+v and %+v -> %+v", mana, cast, p1, p2, activeSpells)
 					return mana, cast
 				}
 
