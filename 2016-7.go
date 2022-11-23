@@ -9,6 +9,29 @@ import (
 )
 
 func sslSupport(in string) bool {
+	inBracks := false
+	bracks := make(map[string]string)
+	iBracks := make(map[string]bool)
+	for i := 0; i < len(in)-2; i++ {
+		if in[i] == '[' {
+			inBracks = true
+		} else if in[i] == ']' {
+			inBracks = false
+		} else if in[i] == in[i+2] && in[i] != in[i+1] {
+			if inBracks {
+				iBracks[in[i:i+3]] = true
+			} else {
+				bracks[in[i:i+3]] = fmt.Sprintf("%v%v%v", string(in[i+1]), string(in[i]), string(in[i+1]))
+			}
+		}
+	}
+
+	for _, end := range bracks {
+		if _, ok := iBracks[end]; ok {
+			return true
+		}
+	}
+
 	return false
 }
 
