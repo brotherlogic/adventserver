@@ -8,6 +8,10 @@ import (
 	"golang.org/x/net/context"
 )
 
+func sslSupport(in string) bool {
+	return false
+}
+
 func tlsSupport(in string) bool {
 	inBracks := false
 	found := false
