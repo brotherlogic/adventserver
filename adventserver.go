@@ -1,6 +1,8 @@
 package main
 
 import (
+	"io/ioutil"
+	"log"
 	"math"
 
 	"github.com/brotherlogic/goserver"
@@ -51,6 +53,8 @@ func (s *Server) GetState() []*gspb.State {
 }
 
 func main() {
+	log.SetOutput(ioutil.Discard)
+
 	server := Init()
 	server.PrepServer("adventserver")
 	server.Register = server
