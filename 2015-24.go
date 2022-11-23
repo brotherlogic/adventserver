@@ -132,7 +132,9 @@ func (s *Server) Solve2015day24part1(ctx context.Context) (*pb.SolveResponse, er
 	var weights []int
 	for _, line := range strings.Split(data, "\n") {
 		val, _ := strconv.ParseInt(line, 10, 32)
-		weights = append(weights, int(val))
+		if val > 0 {
+			weights = append(weights, int(val))
+		}
 	}
 
 	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", len(weights)))
