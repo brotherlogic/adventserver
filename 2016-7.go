@@ -11,7 +11,7 @@ import (
 func tlsSupport(in string) bool {
 	inBracks := false
 	found := false
-	for i := 0; i < len(in)-4; i++ {
+	for i := 0; i < len(in)-3; i++ {
 		if in[i] == '[' {
 			inBracks = true
 		} else if in[i] == ']' {
