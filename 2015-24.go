@@ -50,17 +50,11 @@ func sum(v []int) int {
 }
 
 func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
-	log.Printf("%v %v %v", g1, g2, g3)
 
 	if len(weights) == 0 {
-		evals.Inc()
+		log.Printf("%v %v %v", g1, g2, g3)
 
-		if len(g1) <= len(g2) && len(g1) <= len(g3) {
-			return prod(g1), len(g1)
-		}
-		if len(g2) <= len(g1) && len(g2) <= len(g3) {
-			return prod(g2), len(g2)
-		}
+		evals.Inc()
 
 		return prod(g3), len(g3)
 	}
