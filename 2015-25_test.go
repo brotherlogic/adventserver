@@ -6,7 +6,7 @@ func Test2015_25_1(t *testing.T) {
 	cases := []struct {
 		row int
 		col int
-		val int
+		val int64
 	}{
 		{1, 1, 20151125},
 		{4, 3, 21345942},
