@@ -103,8 +103,8 @@ func altGrouping(weights []int, goal int) int {
 
 func buildGrouping(weights, built []int, length, goal int) int {
 	if len(built) == length {
-		log.Printf("%v", built)
 		if sum(built) == goal {
+			log.Printf("%v %v %v", len(built), sum(built), built)
 			return prod(built)
 		}
 		return 0
@@ -112,8 +112,8 @@ func buildGrouping(weights, built []int, length, goal int) int {
 
 	best := math.MaxInt
 	found := false
-	for _, w := range weights {
-		res := buildGrouping(weights, append(built, w), length, goal)
+	for i, w := range weights {
+		res := buildGrouping(weights[i+1:], append(built, w), length, goal)
 		if res > 0 && res < best {
 			best = res
 			found = true
