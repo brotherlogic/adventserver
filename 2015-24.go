@@ -19,13 +19,13 @@ var (
 	})
 )
 
-func computeGrouping(weights []int) int {
+func computeGrouping(weights []int, count int) int {
 
 	sumv := 0
 	for _, weight := range weights {
 		sumv += weight
 	}
-	goal := sumv / 3
+	goal := sumv / count
 
 	res := altGrouping(weights, goal)
 
@@ -139,5 +139,24 @@ func (s *Server) Solve2015day24part1(ctx context.Context) (*pb.SolveResponse, er
 
 	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", weights))
 
-	return &pb.SolveResponse{BigAnswer: int64(computeGrouping(weights))}, nil
+	return &pb.SolveResponse{BigAnswer: int64(computeGrouping(weights, 3))}, nil
+}
+
+func (s *Server) Solve2015day24part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-24.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	var weights []int
+	for _, line := range strings.Split(data, "\n") {
+		val, _ := strconv.ParseInt(line, 10, 32)
+		if val > 0 {
+			weights = append(weights, int(val))
+		}
+	}
+
+	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", weights))
+
+	return &pb.SolveResponse{BigAnswer: int64(computeGrouping(weights, 4))}, nil
 }
