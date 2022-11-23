@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -51,8 +51,6 @@ func sum(v []int) int {
 func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 
 	if len(weights) == 0 {
-		log.Printf("%v %v %v", g1, g2, g3)
-
 		evals.Inc()
 
 		return prod(g3), len(g3)
@@ -104,7 +102,6 @@ func altGrouping(weights []int, goal int) int {
 func buildGrouping(weights, built []int, length, goal int) int {
 	if len(built) == length {
 		if sum(built) == goal {
-			log.Printf("%v %v %v", len(built), sum(built), built)
 			return prod(built)
 		}
 		return 0
@@ -137,6 +134,8 @@ func (s *Server) Solve2015day24part1(ctx context.Context) (*pb.SolveResponse, er
 		val, _ := strconv.ParseInt(line, 10, 32)
 		weights = append(weights, int(val))
 	}
+
+	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", len(weights)))
 
 	return &pb.SolveResponse{Answer: int32(computeGrouping(weights))}, nil
 }
