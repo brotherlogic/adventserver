@@ -91,6 +91,7 @@ func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 func altGrouping(weights []int, goal int) int {
 	i := 1
 	for {
+		evals.Set(float64(i))
 		var built []int
 		res := buildGrouping(weights, built, i, goal)
 		if res > 0 {
