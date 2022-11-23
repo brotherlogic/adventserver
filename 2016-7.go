@@ -48,3 +48,22 @@ func (s *Server) Solve2016day7part1(ctx context.Context) (*pb.SolveResponse, err
 
 	return &pb.SolveResponse{Answer: int32(count)}, nil
 }
+
+func (s *Server) Solve2016day7part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-7.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	count := 0
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			if sslSupport(line) {
+				s.CtxLog(ctx, fmt.Sprintf("%v", line))
+				count++
+			}
+		}
+	}
+
+	return &pb.SolveResponse{Answer: int32(count)}, nil
+}
