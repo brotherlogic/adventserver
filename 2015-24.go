@@ -27,8 +27,7 @@ func computeGrouping(weights []int) int {
 	}
 	goal := sumv / 3
 
-	var g1, g2, g3 []int
-	res, _ := placeWeights(weights, g1, g2, g3, goal)
+	res := altGrouping(weights, goal)
 
 	return res
 }
@@ -87,6 +86,43 @@ func placeWeights(weights, g1, g2, g3 []int, goal int) (int, int) {
 	}
 
 	return bestv, bestl
+}
+
+func altGrouping(weights []int, goal int) int {
+	i := 1
+	for {
+		var built []int
+		res := buildGrouping(weights, built, i, goal)
+		if res > 0 {
+			return res
+		}
+		i++
+	}
+}
+
+func buildGrouping(weights, built []int, length, goal int) int {
+	if len(built) == length {
+		log.Printf("%v", built)
+		if sum(built) == goal {
+			return prod(built)
+		}
+		return 0
+	}
+
+	best := math.MaxInt
+	found := false
+	for _, w := range weights {
+		res := buildGrouping(weights, append(built, w), length, goal)
+		if res > 0 && res < best {
+			best = res
+			found = true
+		}
+	}
+
+	if found {
+		return best
+	}
+	return 0
 }
 
 func (s *Server) Solve2015day24part1(ctx context.Context) (*pb.SolveResponse, error) {
