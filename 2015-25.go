@@ -26,5 +26,5 @@ func convertCode(base, row, col int) int {
 }
 
 func (s *Server) Solve2015day25part1(ctx context.Context) (*pb.SolveResponse, error) {
-	return &pb.SolveResponse{BigAnswer: int64(convertCode(20151125, 2981, 3075))}, nil
+	return &pb.SolveResponse{BigAnswer: int64(convertCode(20151125, 3075, 2981))}, nil
 }
