@@ -8,6 +8,16 @@ import (
 )
 
 func tlsSupport(in string) bool {
+	inBracks := false
+	for i := 0; i < len(in)-4; i++ {
+		if in[i] == '[' {
+			inBracks = true
+		} else if in[i] == ']' {
+			inBracks = false
+		} else if in[i] == in[i+3] && in[i+1] == in[i+2] && in[i] != in[i+1] {
+			return !inBracks
+		}
+	}
 	return false
 }
 
