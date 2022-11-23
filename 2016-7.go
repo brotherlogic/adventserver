@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -31,6 +32,7 @@ func (s *Server) Solve2016day7part1(ctx context.Context) (*pb.SolveResponse, err
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
 			if tlsSupport(line) {
+				s.CtxLog(ctx, fmt.Sprintf("%v", line))
 				count++
 			}
 		}
