@@ -137,7 +137,7 @@ func (s *Server) Solve2015day24part1(ctx context.Context) (*pb.SolveResponse, er
 		}
 	}
 
-	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", len(weights)))
+	s.CtxLog(ctx, fmt.Sprintf("LENGTH = %v", weights))
 
-	return &pb.SolveResponse{Answer: int32(computeGrouping(weights))}, nil
+	return &pb.SolveResponse{BigAnswer: int64(computeGrouping(weights))}, nil
 }
