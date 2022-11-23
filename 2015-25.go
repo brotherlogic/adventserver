@@ -13,7 +13,7 @@ func getTriangleIndex(row, col int) int {
 	return top
 }
 
-func convertCode(base, row, col int) int {
+func convertCode(base int64, row, col int) int64 {
 	nth := getTriangleIndex(row, col)
 
 	currv := base
