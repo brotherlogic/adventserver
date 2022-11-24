@@ -1,7 +1,6 @@
 package main
 
 import (
-	"strings"
 	"testing"
 )
 
@@ -33,20 +32,4 @@ func Test2016_8_1(t *testing.T) {
 	if doPrint(result) != answer {
 		t.Errorf("MISMATCH\n'%v'\n-------\n'%v'", answer, doPrint(result))
 	}
-}
-
-func doPrint(arr [][]bool) string {
-	response := ""
-	for _, i := range arr {
-		for _, j := range i {
-			if j {
-				response += "#"
-			} else {
-				response += "."
-			}
-		}
-		response += "\n"
-	}
-
-	return strings.TrimSpace(response)
 }

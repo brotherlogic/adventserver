@@ -96,3 +96,27 @@ func (s *Server) Solve2016day8part1(ctx context.Context) (*pb.SolveResponse, err
 
 	return &pb.SolveResponse{Answer: int32(countBoolArr(runLightProgram(50, 6, data)))}, nil
 }
+func doPrint(arr [][]bool) string {
+	response := ""
+	for _, i := range arr {
+		for _, j := range i {
+			if j {
+				response += "#"
+			} else {
+				response += "."
+			}
+		}
+		response += "\n"
+	}
+
+	return strings.TrimSpace(response)
+}
+
+func (s *Server) Solve2016day8part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-8.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{StringAnswer: (doPrint(runLightProgram(50, 6, data)))}, nil
+}
