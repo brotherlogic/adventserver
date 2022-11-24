@@ -15,59 +15,61 @@ func runLightProgram(x, y int, program string) [][]bool {
 	}
 
 	for _, line := range strings.Split(program, "\n") {
-		elems := strings.Fields(line)
-		switch elems[0] {
-		case "rect":
-			bits := strings.Split(elems[1], "x")
-			val1, _ := strconv.ParseInt(bits[0], 10, 32)
-			val2, _ := strconv.ParseInt(bits[1], 10, 32)
+		if len(strings.TrimSpace(line)) > 0 {
+			elems := strings.Fields(line)
+			switch elems[0] {
+			case "rect":
+				bits := strings.Split(elems[1], "x")
+				val1, _ := strconv.ParseInt(bits[0], 10, 32)
+				val2, _ := strconv.ParseInt(bits[1], 10, 32)
 
-			for i := 0; i < int(val1); i++ {
-				for j := 0; j < int(val2); j++ {
-					b[j][i] = true
-				}
-			}
-		case "rotate":
-			if elems[1] == "column" {
-				bits := strings.Split(elems[2], "=")
-				num, _ := strconv.ParseInt(bits[1], 10, 32)
-				by, _ := strconv.ParseInt(elems[4], 10, 32)
-
-				ncol := make([]bool, y)
-
-				for i := 0; i < y; i++ {
-					nindex := i - int(by)
-					if nindex < 0 {
-						nindex += y
-					} else if nindex > y {
-						nindex -= y
+				for i := 0; i < int(val1); i++ {
+					for j := 0; j < int(val2); j++ {
+						b[j][i] = true
 					}
-					ncol[i] = b[nindex][num]
 				}
+			case "rotate":
+				if elems[1] == "column" {
+					bits := strings.Split(elems[2], "=")
+					num, _ := strconv.ParseInt(bits[1], 10, 32)
+					by, _ := strconv.ParseInt(elems[4], 10, 32)
 
-				for i := 0; i < y; i++ {
-					b[i][num] = ncol[i]
-				}
-			}
-			if elems[1] == "row" {
-				bits := strings.Split(elems[2], "=")
-				num, _ := strconv.ParseInt(bits[1], 10, 32)
-				by, _ := strconv.ParseInt(elems[4], 10, 32)
+					ncol := make([]bool, y)
 
-				ncol := make([]bool, x)
-
-				for i := 0; i < x; i++ {
-					nindex := i - int(by)
-					if nindex < 0 {
-						nindex += x
-					} else if nindex > x {
-						nindex -= x
+					for i := 0; i < y; i++ {
+						nindex := i - int(by)
+						if nindex < 0 {
+							nindex += y
+						} else if nindex > y {
+							nindex -= y
+						}
+						ncol[i] = b[nindex][num]
 					}
-					ncol[i] = b[num][nindex]
-				}
 
-				for i := 0; i < x; i++ {
-					b[num][i] = ncol[i]
+					for i := 0; i < y; i++ {
+						b[i][num] = ncol[i]
+					}
+				}
+				if elems[1] == "row" {
+					bits := strings.Split(elems[2], "=")
+					num, _ := strconv.ParseInt(bits[1], 10, 32)
+					by, _ := strconv.ParseInt(elems[4], 10, 32)
+
+					ncol := make([]bool, x)
+
+					for i := 0; i < x; i++ {
+						nindex := i - int(by)
+						if nindex < 0 {
+							nindex += x
+						} else if nindex > x {
+							nindex -= x
+						}
+						ncol[i] = b[num][nindex]
+					}
+
+					for i := 0; i < x; i++ {
+						b[num][i] = ncol[i]
+					}
 				}
 			}
 		}
