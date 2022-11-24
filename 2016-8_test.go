@@ -35,6 +35,19 @@ func Test2016_8_1(t *testing.T) {
 	}
 }
 
+func TestBlankLineSkip(t *testing.T) {
+	data := `rect 3x2
+	rotate column x=1 by 1
+	rotate row y=0 by 4
+	rotate column x=1 by 1
+	`
+
+	result := runLightProgram(7, 3, data)
+	if countLit(result) != 6 {
+		t.Errorf("Bad proc of extra line")
+	}
+}
+
 func doPrint(arr [][]bool) string {
 	response := ""
 	for _, i := range arr {
