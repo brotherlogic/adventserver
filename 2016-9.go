@@ -43,6 +43,11 @@ func expandString(str string) int {
 	log.Printf("%v -> %v", len(nstr), nstr)
 	return len(nstr)
 }
+
+func searchString(str string) int {
+	return 0
+}
+
 func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-9.txt")
 	if err != nil {
@@ -50,4 +55,13 @@ func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	return &pb.SolveResponse{Answer: int32(expandString(strings.TrimSpace(data)))}, nil
+}
+
+func (s *Server) Solve2016day9part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-9.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(searchString(strings.TrimSpace(data)))}, nil
 }
