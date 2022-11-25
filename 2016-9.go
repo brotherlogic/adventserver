@@ -43,6 +43,21 @@ func expandString(str string) int {
 	log.Printf("%v -> %v", len(nstr), nstr)
 	return len(nstr)
 }
+
+func searchString(str string) int {
+	findex := strings.Index(str, "(")
+	f2index := strings.Index(str, ")")
+	if findex == -1 {
+		return len(str)
+	}
+
+	elems := strings.Split(str[findex+1:f2index], "x")
+	chars, _ := strconv.ParseInt(elems[0], 10, 32)
+	reps, _ := strconv.ParseInt(elems[1], 10, 32)
+
+	return findex + int(reps)*searchString(str[f2index+1:f2index+1+int(chars)]) + searchString(str[f2index+1+int(chars):])
+}
+
 func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-9.txt")
 	if err != nil {
@@ -50,4 +65,13 @@ func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	return &pb.SolveResponse{Answer: int32(expandString(strings.TrimSpace(data)))}, nil
+}
+
+func (s *Server) Solve2016day9part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-9.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(searchString(strings.TrimSpace(data)))}, nil
 }

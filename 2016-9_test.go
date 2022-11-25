@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test2016_9_1(t *testing.T) {
 	var cases = []struct {
@@ -18,7 +20,26 @@ func Test2016_9_1(t *testing.T) {
 	for _, c := range cases {
 		res := expandString(c.in)
 		if res != c.slen {
-			t.Errorf("Bad length: %v (%v)", res, c.slen)
+			t.Errorf("Bad length #1: %v (%v)", res, c.slen)
+		}
+	}
+}
+
+func Test2016_9_2(t *testing.T) {
+	var cases = []struct {
+		in   string
+		slen int
+	}{
+		{"(3x3)XYZ", 9},
+		{"X(8x2)(3x3)ABCY", len("XABCABCABCABCABCABCY")},
+		{"(27x12)(20x12)(13x14)(7x10)(1x12)A", 241920},
+		{"(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN", 445},
+	}
+
+	for _, c := range cases {
+		res := searchString(c.in)
+		if res != c.slen {
+			t.Errorf("Bad length #2: %v (%v)", res, c.slen)
 		}
 	}
 }
