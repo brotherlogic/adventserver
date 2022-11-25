@@ -49,5 +49,5 @@ func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(expandString(data))}, nil
+	return &pb.SolveResponse{Answer: int32(expandString(strings.TrimSpace(data)))}, nil
 }
