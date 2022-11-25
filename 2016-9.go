@@ -45,7 +45,17 @@ func expandString(str string) int {
 }
 
 func searchString(str string) int {
-	return 0
+	findex := strings.Index(str, "(")
+	f2index := strings.Index(str, ")")
+	if findex == -1 {
+		return len(str)
+	}
+
+	elems := strings.Split(str[findex+1:f2index], "x")
+	chars, _ := strconv.ParseInt(elems[0], 10, 32)
+	reps, _ := strconv.ParseInt(elems[1], 10, 32)
+
+	return findex + int(reps)*searchString(str[f2index+1:f2index+1+int(chars)]) + searchString(str[f2index+1+int(chars):])
 }
 
 func (s *Server) Solve2016day9part1(ctx context.Context) (*pb.SolveResponse, error) {
