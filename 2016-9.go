@@ -73,5 +73,5 @@ func (s *Server) Solve2016day9part2(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(searchString(strings.TrimSpace(data)))}, nil
+	return &pb.SolveResponse{BigAnswer: (searchString(strings.TrimSpace(data)))}, nil
 }
