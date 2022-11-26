@@ -19,6 +19,6 @@ func Test2016_10_1(t *testing.T) {
 	}
 
 	if !found {
-		t.Errorf("Program did not run correctly: %+v", res)
+		t.Errorf("Program did not run correctly: %+v", res[0])
 	}
 }
