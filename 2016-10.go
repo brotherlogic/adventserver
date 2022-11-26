@@ -29,6 +29,9 @@ func runBotProgram(data string) []*bot {
 	output := make(map[int]int)
 
 	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) == 0 {
+			continue
+		}
 		fields := strings.Fields(line)
 		if fields[0] == "value" {
 			num, _ := strconv.ParseInt(fields[1], 10, 32)
