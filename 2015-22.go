@@ -68,7 +68,6 @@ func magicFightInternal(p1, p2 player, spells, activeSpells []spell, mana int, c
 		ncast := cast + nspell.cd
 
 		nval, cast := magicFightRound(p1copy, p2, spells, nactiveSpells, mana+nspell.cost, ncast, dec)
-		//log.Printf("%v -> %v", nval, cast)
 
 		if nval < bmana {
 			bmana = nval
@@ -87,12 +86,10 @@ func magicFightRound(p1, p2 player, spells, activeSpells []spell, mana int, cast
 		}
 		for i := range activeSpells {
 			if activeSpells[i].turns > 0 {
-				//log.Printf("%v -> %v : %v [%v]", cast, activeSpells[i].name, p2.hitp-activeSpells[i].damage, activeSpells[i].turns)
 				p2.hitp -= activeSpells[i].damage
 				p1.hitp += activeSpells[i].heal
 				p1.mana += activeSpells[i].mana
 
-				//log.Printf("HIT = %v / %v", p2.hitp, p1.hitp)
 				if p2.hitp <= 0 {
 					return mana, cast
 				}
