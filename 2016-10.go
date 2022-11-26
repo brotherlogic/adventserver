@@ -3,9 +3,13 @@ package main
 import (
 	"strconv"
 	"strings"
+
+	pb "github.com/brotherlogic/adventserver/proto"
+	"golang.org/x/net/context"
 )
 
 type bot struct {
+	num       int64
 	low, high int
 	nums      []int
 	comps     [][]int
@@ -31,7 +35,7 @@ func runBotProgram(data string) []*bot {
 			bnum, _ := strconv.ParseInt(fields[5], 10, 32)
 			b, ok := bots[int(bnum)]
 			if !ok {
-				b = &bot{}
+				b = &bot{num: bnum}
 				bots[int(bnum)] = b
 			}
 			b.nums = append(b.nums, int(num))
@@ -43,7 +47,7 @@ func runBotProgram(data string) []*bot {
 
 			b, ok := bots[int(bnum)]
 			if !ok {
-				b = &bot{}
+				b = &bot{num: bnum}
 				bots[int(bnum)] = b
 			}
 
@@ -102,4 +106,19 @@ func runBotProgram(data string) []*bot {
 		botList = append(botList, bot)
 	}
 	return botList
+}
+
+func (s *Server) Solve2016day10part1(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-10.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	res := runBotProgram(data)
+	for _, r := range res {
+		if r.comp(17, 61) {
+			return &pb.SolveResponse{Answer: int32(r.num)}, nil
+		}
+	}
+	return &pb.SolveResponse{Answer: int32(-1)}, nil
 }
