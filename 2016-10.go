@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"strings"
 
@@ -57,13 +58,22 @@ func runBotProgram(data string) ([]*bot, map[int]int) {
 			if fields[5] == "bot" {
 				b.low = int(lnum)
 			} else {
-				b.low = -int(lnum)
+				if lnum == 0 {
+					b.low = -9999
+				} else {
+					b.low = -int(lnum)
+				}
 			}
 
+			log.Printf("%v -> %v", fields[10], hnum)
 			if fields[10] == "bot" {
 				b.high = int(hnum)
 			} else {
-				b.high = -int(hnum)
+				if hnum == 0 {
+					b.high = -9999
+				} else {
+					b.high = -int(hnum)
+				}
 			}
 		}
 	}
@@ -72,6 +82,7 @@ func runBotProgram(data string) ([]*bot, map[int]int) {
 		found := false
 		for _, bot := range bots {
 			if len(bot.nums) == 2 {
+				log.Printf("PROC %v", bot.num)
 				found = true
 				low := bot.nums[0]
 				high := bot.nums[1]
@@ -81,17 +92,27 @@ func runBotProgram(data string) ([]*bot, map[int]int) {
 					low = bot.nums[1]
 				}
 
-				if bot.low > 0 {
+				if bot.low >= 0 {
 					bl := bots[bot.low]
 					bl.nums = append(bl.nums, low)
+					log.Printf("Giving %v from bot %v to bot %v", low, bot.num, bot.low)
 				} else {
-					output[-bot.low] = low
+					if bot.low == -9999 {
+						output[0] = low
+					} else {
+						output[-bot.low] = low
+					}
 				}
-				if bot.high > 0 {
+				if bot.high >= 0 {
 					bh := bots[bot.high]
 					bh.nums = append(bh.nums, high)
+					log.Printf("Giving %v from bot %v to bot %v", high, bot.num, bot.high)
 				} else {
-					output[-bot.high] = high
+					if bot.high == -9999 {
+						output[0] = high
+					} else {
+						output[-bot.high] = high
+					}
 				}
 
 				bot.comps = append(bot.comps, []int{low, high})
@@ -103,6 +124,10 @@ func runBotProgram(data string) ([]*bot, map[int]int) {
 			break
 		}
 	}
+
+	log.Printf("BOT 0 %+v", bots[0])
+	log.Printf("BOT 1 %+v", bots[1])
+	log.Printf("BOT 2 %+v", bots[2])
 
 	var botList []*bot
 	for _, bot := range bots {
