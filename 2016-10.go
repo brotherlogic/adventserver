@@ -24,7 +24,7 @@ func (b bot) comp(val1, val2 int) bool {
 	return false
 }
 
-func runBotProgram(data string) []*bot {
+func runBotProgram(data string) ([]*bot, map[int]int) {
 	bots := make(map[int]*bot)
 	output := make(map[int]int)
 
@@ -108,7 +108,7 @@ func runBotProgram(data string) []*bot {
 	for _, bot := range bots {
 		botList = append(botList, bot)
 	}
-	return botList
+	return botList, output
 }
 
 func (s *Server) Solve2016day10part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -117,11 +117,22 @@ func (s *Server) Solve2016day10part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res := runBotProgram(data)
+	res, _ := runBotProgram(data)
 	for _, r := range res {
 		if r.comp(17, 61) {
 			return &pb.SolveResponse{Answer: int32(r.num)}, nil
 		}
 	}
 	return &pb.SolveResponse{Answer: int32(-1)}, nil
+}
+
+func (s *Server) Solve2016day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-10.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	_, outs := runBotProgram(data)
+
+	return &pb.SolveResponse{Answer: int32(outs[0] * outs[1] * outs[2])}, nil
 }
