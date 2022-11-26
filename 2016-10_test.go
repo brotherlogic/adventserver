@@ -11,7 +11,7 @@ func Test2016_10_1(t *testing.T) {
 	value 2 goes to bot 2`
 
 	found := false
-	res := runBotProgram(data)
+	res, _ := runBotProgram(data)
 	for _, r := range res {
 		if r.comp(2, 5) {
 			found = true
@@ -33,7 +33,7 @@ func Test2016_10_1_Blanks(t *testing.T) {
 	`
 
 	found := false
-	res := runBotProgram(data)
+	res, _ := runBotProgram(data)
 	for _, r := range res {
 		if r.comp(2, 5) {
 			found = true
