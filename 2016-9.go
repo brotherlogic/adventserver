@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
@@ -40,7 +39,6 @@ func expandString(str string) int {
 			pointer++
 		}
 	}
-	log.Printf("%v -> %v", len(nstr), nstr)
 	return len(nstr)
 }
 
