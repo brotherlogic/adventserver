@@ -2,10 +2,20 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	states = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day16_searches",
+		Help: "The number of server requests",
+	})
 )
 
 type state struct {
@@ -13,6 +23,19 @@ type state struct {
 	elevator int
 	moves    int
 	path     string
+}
+
+func (s state) getRep() string {
+	ret := fmt.Sprintf("E%v", s.elevator)
+	for floor, list := range s.floors {
+		ret += fmt.Sprintf("%v:", floor)
+		sort.Strings(list)
+		for _, elem := range list {
+			ret += fmt.Sprintf("%v", elem)
+		}
+	}
+
+	return ret
 }
 
 func buildFloors(data string) state {
@@ -125,11 +148,14 @@ func isLegalMove(nstate state, nfloor int, pickups ...string) (state, bool) {
 
 func runFloorSearch(queue []state) (int, string) {
 
+	seen := make(map[string]bool)
+
 	for len(queue) > 0 {
+		states.Inc()
 		head := queue[0]
 		queue = queue[1:]
+		seen[head.getRep()] = true
 		if isWinner(head) {
-
 			return head.moves, head.path
 		}
 		for _, pickup1 := range head.floors[head.elevator] {
@@ -138,7 +164,8 @@ func runFloorSearch(queue []state) (int, string) {
 				if nfloor != head.elevator {
 					nstate := head.copy(pickup1)
 					nstate, ok := isLegalMove(nstate, nfloor, pickup1)
-					if ok {
+					_, found := seen[nstate.getRep()]
+					if ok && !found {
 						queue = append(queue, nstate)
 					}
 				}
@@ -153,7 +180,8 @@ func runFloorSearch(queue []state) (int, string) {
 						if nfloor != head.elevator {
 							nstate := head.copy(pickup1, pickup2)
 							nstate, ok := isLegalMove(nstate, nfloor, pickup1, pickup2)
-							if ok {
+							_, found := seen[nstate.getRep()]
+							if ok && !found {
 								queue = append(queue, nstate)
 							}
 						}
