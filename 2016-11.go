@@ -19,7 +19,7 @@ func buildFloors(data string) state {
 	floors := make(map[int][]string)
 
 	for i, line := range strings.Split(data, "\n") {
-		cline := strings.ReplaceAll(line, ".", "")
+		cline := strings.ReplaceAll(strings.ReplaceAll(line, ",", ""), ".", "")
 		elems := strings.Fields(cline)
 		for j, elem := range elems {
 			if elem == "microchip" {
