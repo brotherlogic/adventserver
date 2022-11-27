@@ -166,10 +166,13 @@ func runFloorSearch(queue []state) (int, string) {
 	return 0, ""
 }
 
-func findFloors(data string) (int, string) {
+func findFloors(data string) (int, string, string) {
 	floors := buildFloors(data)
 
-	return runFloorSearch([]state{floors})
+	str := fmt.Sprintf("%+v", floors)
+
+	r, a := runFloorSearch([]state{floors})
+	return r, a, str
 }
 
 func (s *Server) Solve2016day11part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -178,8 +181,8 @@ func (s *Server) Solve2016day11part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res, path := findFloors(data)
-	s.CtxLog(ctx, fmt.Sprintf("PATH %v", path))
+	res, path, start := findFloors(data)
+	s.CtxLog(ctx, fmt.Sprintf("PATH %v -> %v", path, start))
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
