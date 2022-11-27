@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"math"
 	"strings"
 
@@ -68,7 +67,6 @@ func translate(key string, trans map[string][]string) map[string]bool {
 		}
 	}
 
-	//log.Printf("RES %v", result)
 	return result
 }
 
@@ -132,7 +130,6 @@ func runSearch(seen map[string]tracker, goal string, trans map[string]string) in
 }
 
 func runBackwards(current, goal string, trans map[string]string, count int) int {
-	log.Printf("%v", current)
 	searches.Inc()
 	if current == goal {
 		return count
@@ -141,8 +138,6 @@ func runBackwards(current, goal string, trans map[string]string, count int) int 
 	if strings.Contains(current, "e") {
 		return math.MaxInt
 	}
-
-	log.Printf("%v", current)
 
 	best := math.MaxInt
 	for key, res := range trans {
@@ -175,7 +170,6 @@ func runMTree(sofar string, key string, trans map[string][]string, count int, se
 	if _, ok := seen[sofar]; ok {
 		return math.MaxInt, seen
 	}
-	//log.Printf("SEARCH %v", sofar)
 
 	seen[sofar] = true
 

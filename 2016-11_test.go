@@ -8,7 +8,7 @@ func Test2016_11_1(t *testing.T) {
 	The third floor contains a lithium generator.
 	The fourth floor contains nothing relevant.`
 
-	res := findFloors(data)
+	res, _ := findFloors(data)
 	if res != 11 {
 		t.Errorf("Could not resolve program: %v (%v)", res, 11)
 	}
