@@ -33,4 +33,9 @@ func Test2016_11_1_read(t *testing.T) {
 	if !found {
 		t.Errorf("Did not find rM: %+v", floors)
 	}
+
+	res, _, _ := findFloors(data)
+	if res != 12 {
+		t.Errorf("Huh: %v", res)
+	}
 }

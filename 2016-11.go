@@ -154,6 +154,10 @@ func runFloorSearch(queue []state) (int, string) {
 		states.Inc()
 		head := queue[0]
 		queue = queue[1:]
+		//log.Printf("(%v) CURR %+v", len(seen), head)
+		if _, ok := seen[head.getRep()]; ok {
+			continue
+		}
 		seen[head.getRep()] = true
 		if isWinner(head) {
 			return head.moves, head.path
