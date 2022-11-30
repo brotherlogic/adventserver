@@ -27,7 +27,7 @@ func Test2016_12_1_jump(t *testing.T) {
 
 	state := runMonorailProgram(data)
 
-	if state.a != 42 {
+	if state.a != 41 {
 		t.Errorf("Bad program state: %+v", state)
 	}
 }

@@ -53,18 +53,26 @@ func runMonorailProgram(data string) *mstate {
 			case "a":
 				if mstate.a != 0 {
 					ppoint += int(val)
+				} else {
+					ppoint++
 				}
 			case "b":
 				if mstate.b != 0 {
 					ppoint += int(val)
+				} else {
+					ppoint++
 				}
 			case "c":
 				if mstate.c != 0 {
 					ppoint += int(val)
+				} else {
+					ppoint++
 				}
 			case "d":
 				if mstate.d != 0 {
 					ppoint += int(val)
+				} else {
+					ppoint++
 				}
 			}
 		case "cpy":
