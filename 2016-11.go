@@ -146,15 +146,33 @@ func isLegalMove(nstate state, nfloor int, pickups ...string) (state, bool) {
 	return nstate, true
 }
 
+func getBest(queue []state) (state, []state) {
+	best := queue[0]
+	index := 0
+	for i, elem := range queue {
+		if len(elem.floors[4]) > len(best.floors[4]) {
+			best = elem
+			index = i
+		}
+	}
+
+	var nqueue []state
+	for i, elem := range queue {
+		if i != index {
+			nqueue = append(nqueue, elem)
+		}
+	}
+
+	return best, nqueue
+}
+
 func runFloorSearch(queue []state) (int, string) {
 
 	seen := make(map[string]bool)
-
+	var head state
 	for len(queue) > 0 {
 		states.Inc()
-		head := queue[0]
-		queue = queue[1:]
-		//log.Printf("(%v) CURR %+v", len(seen), head)
+		head, queue = getBest(queue)
 		if _, ok := seen[head.getRep()]; ok {
 			continue
 		}
@@ -167,10 +185,12 @@ func runFloorSearch(queue []state) (int, string) {
 			for nfloor := 1; nfloor <= 4; nfloor++ {
 				if nfloor != head.elevator {
 					nstate := head.copy(pickup1)
-					nstate, ok := isLegalMove(nstate, nfloor, pickup1)
 					_, found := seen[nstate.getRep()]
-					if ok && !found {
-						queue = append(queue, nstate)
+					if !found {
+						nstate, ok := isLegalMove(nstate, nfloor, pickup1)
+						if ok {
+							queue = append(queue, nstate)
+						}
 					}
 				}
 			}
@@ -183,10 +203,12 @@ func runFloorSearch(queue []state) (int, string) {
 					for nfloor := 1; nfloor <= 4; nfloor++ {
 						if nfloor != head.elevator {
 							nstate := head.copy(pickup1, pickup2)
-							nstate, ok := isLegalMove(nstate, nfloor, pickup1, pickup2)
 							_, found := seen[nstate.getRep()]
-							if ok && !found {
-								queue = append(queue, nstate)
+							if !found {
+								nstate, ok := isLegalMove(nstate, nfloor, pickup1, pickup2)
+								if ok {
+									queue = append(queue, nstate)
+								}
 							}
 						}
 					}
