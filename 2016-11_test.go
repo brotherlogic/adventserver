@@ -37,7 +37,7 @@ func Test2016Sup_11_1(t *testing.T) {
 	}
 
 	res, _, _ := findFloors(data, false)
-	if res != 12 {
+	if res != 39 {
 		t.Errorf("Huh: %v", res)
 	}
 }
