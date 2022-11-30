@@ -10,7 +10,7 @@ func Test2016_12_1(t *testing.T) {
 	jnz a 2
 	dec a`
 
-	state := runMonorailProgram(data)
+	state := runMonorailProgram(data, false)
 
 	if state.a != 42 {
 		t.Errorf("Bad program state: %+v", state)
@@ -25,7 +25,7 @@ func Test2016_12_1_jump(t *testing.T) {
 	jnz d 2
 	dec a`
 
-	state := runMonorailProgram(data)
+	state := runMonorailProgram(data, false)
 
 	if state.a != 41 {
 		t.Errorf("Bad program state: %+v", state)
@@ -41,7 +41,7 @@ func Test2016_12_1_blank(t *testing.T) {
 	dec a
 	`
 
-	state := runMonorailProgram(data)
+	state := runMonorailProgram(data, false)
 
 	if state.a != 41 {
 		t.Errorf("Bad program state: %+v", state)

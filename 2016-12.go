@@ -41,11 +41,14 @@ func (m *mstate) set(reg string, value int) {
 	}
 }
 
-func runMonorailProgram(data string) *mstate {
+func runMonorailProgram(data string, set bool) *mstate {
 
 	ppoint := 0
 	lines := strings.Split(strings.TrimSpace(data), "\n")
 	mstate := &mstate{}
+	if set {
+		mstate.c = 1
+	}
 
 	for ppoint < len(lines) {
 		evals12.Inc()
@@ -138,7 +141,18 @@ func (s *Server) Solve2016day12part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	state := runMonorailProgram(data)
+	state := runMonorailProgram(data, false)
+
+	return &pb.SolveResponse{Answer: int32(state.a)}, nil
+}
+
+func (s *Server) Solve2016day12part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-12.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	state := runMonorailProgram(data, true)
 
 	return &pb.SolveResponse{Answer: int32(state.a)}, nil
 }
