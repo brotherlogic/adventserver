@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	line = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day12_line",
+		Help: "The number of server requests",
+	})
 )
 
 type mstate struct {
@@ -35,6 +44,7 @@ func runMonorailProgram(data string) *mstate {
 	mstate := &mstate{}
 
 	for ppoint < len(lines) {
+		line.Set(float64(ppoint))
 		fields := strings.Fields(lines[ppoint])
 		switch fields[0] {
 		case "jnz":
