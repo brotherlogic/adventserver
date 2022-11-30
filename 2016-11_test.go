@@ -36,7 +36,7 @@ func Test2016Sup_11_1(t *testing.T) {
 		t.Errorf("Did not find rM: %+v", floors)
 	}
 
-	res, _, _ := findFloors(data, true)
+	res, _, _ := findFloors(data, false)
 	if res != 12 {
 		t.Errorf("Huh: %v", res)
 	}
