@@ -48,6 +48,7 @@ func runMonorailProgram(data string) *mstate {
 	mstate := &mstate{}
 
 	for ppoint < len(lines) {
+		log.Printf("%v -> %+v", lines[ppoint], mstate)
 		evals12.Inc()
 		line.Set(float64(ppoint))
 		fields := strings.Fields(lines[ppoint])
@@ -94,9 +95,9 @@ func runMonorailProgram(data string) *mstate {
 			} else if fields[1] == "b" {
 				mstate.set(fields[2], mstate.b)
 			} else if fields[1] == "c" {
-				mstate.set(fields[2], mstate.b)
+				mstate.set(fields[2], mstate.c)
 			} else if fields[1] == "d" {
-				mstate.set(fields[2], mstate.b)
+				mstate.set(fields[2], mstate.d)
 			} else {
 				val, _ := strconv.ParseInt(fields[1], 10, 32)
 				mstate.set(fields[2], int(val))
