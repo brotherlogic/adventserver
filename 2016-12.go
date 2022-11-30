@@ -44,11 +44,10 @@ func (m *mstate) set(reg string, value int) {
 func runMonorailProgram(data string) *mstate {
 
 	ppoint := 0
-	lines := strings.Split(data, "\n")
+	lines := strings.Split(strings.TrimSpace(data), "\n")
 	mstate := &mstate{}
 
 	for ppoint < len(lines) {
-		log.Printf("%v -> %+v", lines[ppoint], mstate)
 		evals12.Inc()
 		line.Set(float64(ppoint))
 		fields := strings.Fields(lines[ppoint])
