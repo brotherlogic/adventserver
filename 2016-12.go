@@ -16,6 +16,10 @@ var (
 		Name: "adventserver_day12_line",
 		Help: "The number of server requests",
 	})
+	evals = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day12_evals",
+		Help: "The number of server requests",
+	})
 )
 
 type mstate struct {
@@ -44,6 +48,7 @@ func runMonorailProgram(data string) *mstate {
 	mstate := &mstate{}
 
 	for ppoint < len(lines) {
+		evals.Inc()
 		line.Set(float64(ppoint))
 		fields := strings.Fields(lines[ppoint])
 		switch fields[0] {
