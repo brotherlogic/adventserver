@@ -74,6 +74,14 @@ func runMonorailProgram(data string) *mstate {
 				} else {
 					ppoint++
 				}
+			default:
+				val, _ := strconv.ParseInt(fields[1], 10, 32)
+				val2, _ := strconv.ParseInt(fields[2], 10, 32)
+				if val != 0 {
+					ppoint += int(val2)
+				} else {
+					ppoint++
+				}
 			}
 		case "cpy":
 			if fields[1] == "a" {
