@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -26,13 +25,36 @@ type state struct {
 }
 
 func (s state) getRep() string {
-	ret := fmt.Sprintf("E%v", s.elevator)
+	//ret := fmt.Sprintf("E%v", s.elevator)
+	ret := ""
 	for floor, list := range s.floors {
 		ret += fmt.Sprintf("%v:", floor)
-		sort.Strings(list)
+
+		cmap := make(map[byte]int)
 		for _, elem := range list {
-			ret += fmt.Sprintf("%v", elem)
+			cmap[elem[0]]++
 		}
+
+		ms := 0
+		gs := 0
+		cs := 0
+		for _, elem := range list {
+			if elem[1] == 'G' {
+				if val := cmap[elem[0]]; val == 2 {
+					cs++
+				} else {
+					gs++
+				}
+			}
+
+			if elem[1] == 'M' {
+				if val := cmap[elem[0]]; val < 2 {
+					ms++
+				}
+			}
+		}
+
+		ret += fmt.Sprintf("%v-%v-%v", ms, gs, cs)
 	}
 
 	return ret
@@ -147,31 +169,17 @@ func isLegalMove(nstate state, nfloor int, pickups ...string) (state, bool) {
 }
 
 func getBest(queue []state) (state, []state) {
-	best := queue[0]
-	index := 0
-	for i, elem := range queue {
-		if len(elem.floors[4]) > len(best.floors[4]) {
-			best = elem
-			index = i
-		}
-	}
-
-	var nqueue []state
-	for i, elem := range queue {
-		if i != index {
-			nqueue = append(nqueue, elem)
-		}
-	}
-
-	return best, nqueue
+	return queue[0], queue[1:]
 }
 
 func runFloorSearch(queue []state) (int, string) {
 
 	seen := make(map[string]bool)
 	var head state
+	count := 0
 	for len(queue) > 0 {
 		states.Inc()
+		count++
 		head, queue = getBest(queue)
 		if _, ok := seen[head.getRep()]; ok {
 			continue
@@ -220,8 +228,11 @@ func runFloorSearch(queue []state) (int, string) {
 	return 0, ""
 }
 
-func findFloors(data string) (int, string, string) {
+func findFloors(data string, add bool) (int, string, string) {
 	floors := buildFloors(data)
+	if add {
+		floors.floors[1] = append(floors.floors[1], []string{"eG", "eM", "dG", "dM"}...)
+	}
 
 	str := fmt.Sprintf("%+v", floors)
 
@@ -235,7 +246,19 @@ func (s *Server) Solve2016day11part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res, path, start := findFloors(data)
+	res, path, start := findFloors(data, false)
+	s.CtxLog(ctx, fmt.Sprintf("PATH %v -> %v", path, start))
+
+	return &pb.SolveResponse{Answer: int32(res)}, nil
+}
+
+func (s *Server) Solve2016day11part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-11.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	res, path, start := findFloors(data, true)
 	s.CtxLog(ctx, fmt.Sprintf("PATH %v -> %v", path, start))
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
