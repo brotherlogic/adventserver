@@ -169,7 +169,7 @@ func (s *Server) Solve2016day13part1(ctx context.Context) (*pb.SolveResponse, er
 }
 
 func (s *Server) Solve2016day13part2(ctx context.Context) (*pb.SolveResponse, error) {
-	res := runMazeToLimit(50, 1364)
+	res := runMazeToLimit(49, 1364)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
