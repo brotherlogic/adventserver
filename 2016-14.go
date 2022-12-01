@@ -10,9 +10,10 @@ import (
 	"golang.org/x/net/context"
 )
 
-func makeKey(salt string, index int) string {
+func makeKey(salt string, index int, stretch bool) string {
 	fstring := fmt.Sprintf("%v%v", salt, index)
 	hash := md5.Sum([]byte(fstring))
+
 	return hex.EncodeToString(hash[:])
 }
 
@@ -37,13 +38,13 @@ func countFives(str string) []string {
 	return res
 }
 
-func buildKey(salt string, index int, fives map[string][]int) (string, map[string][]int) {
-	key := makeKey(salt, index)
+func buildKey(salt string, index int, fives map[string][]int, stretch bool) (string, map[string][]int) {
+	key := makeKey(salt, index, stretch)
 	threes := countThrees(key)
 
 	if len(fives) == 0 {
 		for i := index; i < index+1000; i++ {
-			key := makeKey(salt, i)
+			key := makeKey(salt, i, stretch)
 			fivesList := countFives(key)
 			for _, five := range fivesList {
 				if _, ok := fives[five]; !ok {
@@ -53,7 +54,7 @@ func buildKey(salt string, index int, fives map[string][]int) (string, map[strin
 			}
 		}
 	} else {
-		key := makeKey(salt, index+1000)
+		key := makeKey(salt, index+1000, stretch)
 		fivesList := countFives(key)
 		for _, five := range fivesList {
 			if _, ok := fives[five]; !ok {
@@ -66,14 +67,14 @@ func buildKey(salt string, index int, fives map[string][]int) (string, map[strin
 	return threes, fives
 }
 
-func findFives(salt string) int {
+func findFives(salt string, stretch bool) int {
 	seen := make(map[int]string)
 	index := 0
 	count := 0
 	var wins []int
 
 	for {
-		key := makeKey(salt, index)
+		key := makeKey(salt, index, stretch)
 		seen[index] = key
 		c := countFives(key)
 		for _, ff := range c {
@@ -93,14 +94,14 @@ func findFives(salt string) int {
 	}
 }
 
-func buildKeys(salt string) map[int]int {
+func buildKeys(salt string, stretch bool) map[int]int {
 	res := make(map[int]int)
 	fives := make(map[string][]int)
 
 	index := 0
 	curr := 1
 	for len(res) < 64 {
-		three, f := buildKey(salt, index, fives)
+		three, f := buildKey(salt, index, fives, stretch)
 		fives = f
 
 		found := false
@@ -122,5 +123,9 @@ func buildKeys(salt string) map[int]int {
 }
 
 func (s *Server) Solve2016day14part1(ctx context.Context) (*pb.SolveResponse, error) {
-	return &pb.SolveResponse{Answer: int32(findFives("ihaygndm"))}, nil
+	return &pb.SolveResponse{Answer: int32(findFives("ihaygndm", false))}, nil
+}
+
+func (s *Server) Solve2016day14part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(findFives("ihaygndm", true))}, nil
 }
