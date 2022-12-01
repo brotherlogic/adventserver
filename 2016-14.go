@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"log"
 	"sort"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -50,7 +49,6 @@ func buildKey(salt string, index int, fives map[string][]int) (string, map[strin
 				if _, ok := fives[five]; !ok {
 					fives[five] = make([]int, 0)
 				}
-				log.Printf("%v -> %v", five, i)
 				fives[five] = append(fives[five], i)
 			}
 		}
