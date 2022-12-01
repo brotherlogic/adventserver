@@ -28,7 +28,7 @@ func countCalories(data string) int {
 	return best
 }
 
-func (s *Server) Solve2022day22part1(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2022day1part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-1.txt")
 	if err != nil {
 		return nil, err

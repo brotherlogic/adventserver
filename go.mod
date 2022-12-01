@@ -3,7 +3,7 @@ module github.com/brotherlogic/adventserver
 go 1.19
 
 require (
-	github.com/brotherlogic/filecopier v0.0.0-20221129064406-096f93cab80f
+	github.com/brotherlogic/filecopier v0.0.0-20221201070843-6370b519f2d9
 	github.com/brotherlogic/goserver v0.0.0-20221106165541-0672428e3628
 	github.com/golang/protobuf v1.5.2
 	github.com/prometheus/client_golang v1.14.0
@@ -17,15 +17,15 @@ require (
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/brotherlogic/buildserver v0.0.0-20221129081809-fb494461f57b // indirect
-	github.com/brotherlogic/datastore v0.0.0-20221128120426-2b8c2cde11f2 // indirect
-	github.com/brotherlogic/discovery v0.0.0-20221129061748-c7153d86cf35 // indirect
-	github.com/brotherlogic/dstore v0.0.0-20221129072045-a047882367d6 // indirect
-	github.com/brotherlogic/githubcard v0.0.0-20221129071710-e6445a7f0879 // indirect
-	github.com/brotherlogic/gobuildslave v0.0.0-20221129050816-ede1d7000d46 // indirect
-	github.com/brotherlogic/keystore v0.0.0-20221128110345-4d7503224d42 // indirect
-	github.com/brotherlogic/lock v0.0.0-20221129073356-962e76b14756 // indirect
-	github.com/brotherlogic/logging v0.0.0-20221129060719-acd8bf372ed1 // indirect
+	github.com/brotherlogic/buildserver v0.0.0-20221201091928-6ed3780c7017 // indirect
+	github.com/brotherlogic/datastore v0.0.0-20221201132232-16869b22a1fa // indirect
+	github.com/brotherlogic/discovery v0.0.0-20221201071556-b3fdf9703aa2 // indirect
+	github.com/brotherlogic/dstore v0.0.0-20221201092604-81925d9a1e90 // indirect
+	github.com/brotherlogic/githubcard v0.0.0-20221201132208-ce37421c7c60 // indirect
+	github.com/brotherlogic/gobuildslave v0.0.0-20221201055757-da6429be9eee // indirect
+	github.com/brotherlogic/keystore v0.0.0-20221201122047-09503e625b44 // indirect
+	github.com/brotherlogic/lock v0.0.0-20221201091850-933e91c33907 // indirect
+	github.com/brotherlogic/logging v0.0.0-20221201072008-25fc22fa42d3 // indirect
 	github.com/brotherlogic/monitor v0.0.0-20221025152653-c10877c5f9e6 // indirect
 	github.com/brotherlogic/versionserver v0.0.0-20221025154054-c9bcd41be2f2 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
@@ -41,5 +41,5 @@ require (
 	go.opentelemetry.io/otel/trace v1.11.1 // indirect
 	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
-	google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6 // indirect
+	google.golang.org/genproto v0.0.0-20221201164419-0e50fba7f41c // indirect
 )
