@@ -36,6 +36,10 @@ func isWall(key, x, y int) bool {
 }
 
 func isLegitMove(key int, seen map[int]map[int]int, x, y int) bool {
+	if x < 0 || y < 0 {
+		return false
+	}
+
 	if isWall(key, x, y) {
 		return false
 	}
@@ -121,8 +125,9 @@ func runMazeToLimit(limit, key int) int {
 		// Look for a win
 		if head.best > limit+1 {
 			count := 0
-			for _, val := range seen {
-				for _, vval := range val {
+			for i, val := range seen {
+				for j, vval := range val {
+
 					if vval <= limit {
 						count++
 					}
@@ -169,7 +174,7 @@ func (s *Server) Solve2016day13part1(ctx context.Context) (*pb.SolveResponse, er
 }
 
 func (s *Server) Solve2016day13part2(ctx context.Context) (*pb.SolveResponse, error) {
-	res := runMazeToLimit(49, 1364)
+	res := runMazeToLimit(50, 1364)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
