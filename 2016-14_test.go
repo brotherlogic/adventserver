@@ -9,7 +9,7 @@ import (
 func Test2016_14_2(t *testing.T) {
 	indexes := buildKeys("abc", true)
 
-	if indexes[64] != 22859 {
+	if indexes[64] != 22551 {
 		t.Errorf("Bad Key: %v", indexes[64])
 	}
 }

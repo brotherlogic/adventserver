@@ -14,6 +14,13 @@ func makeKey(salt string, index int, stretch bool) string {
 	fstring := fmt.Sprintf("%v%v", salt, index)
 	hash := md5.Sum([]byte(fstring))
 
+	if stretch {
+		for i := 0; i < 2016; i++ {
+			nstring := hex.EncodeToString(hash[:])
+			hash = md5.Sum([]byte(nstring))
+		}
+	}
+
 	return hex.EncodeToString(hash[:])
 }
 
