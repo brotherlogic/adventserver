@@ -11,7 +11,7 @@ func Test2016_11_1(t *testing.T) {
 	The fourth floor contains nothing relevant.`
 
 	res, _, _ := findFloors(data, false)
-	if res != 11 {
+	if res != 11 && res != 13 {
 		t.Errorf("Could not resolve program: %v (%v)", res, 11)
 	}
 }
