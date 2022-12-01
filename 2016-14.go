@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"log"
 	"sort"
+
+	pb "github.com/brotherlogic/adventserver/proto"
+	"golang.org/x/net/context"
 )
 
 func makeKey(salt string, index int) string {
@@ -118,4 +121,8 @@ func buildKeys(salt string) map[int]int {
 	}
 
 	return res
+}
+
+func (s *Server) Solve2016day14part1(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(findFives("ihaygndm"))}, nil
 }
