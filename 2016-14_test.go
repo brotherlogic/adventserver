@@ -13,6 +13,13 @@ func Test2016_14_2(t *testing.T) {
 		t.Errorf("Bad Key: %v", indexes[64])
 	}
 }
+func Test2016Also_14_2(t *testing.T) {
+	indexes := findFives("abc", true)
+
+	if indexes != 22551 {
+		t.Errorf("Bad Key: %v", indexes)
+	}
+}
 
 func Test2016Comp_14_2(t *testing.T) {
 	key := makeKey("abc", 0, true)

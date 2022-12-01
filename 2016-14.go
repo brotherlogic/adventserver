@@ -85,9 +85,17 @@ func findFives(salt string, stretch bool) int {
 		seen[index] = key
 		c := countFives(key)
 		for _, ff := range c {
-			for i := index - 1001; i < index; i++ {
+			for i := index - 1000; i < index; i++ {
 				if countThrees(seen[i]) == ff {
-					wins = append(wins, i)
+					already := false
+					for _, w := range wins {
+						if i == w {
+							already = true
+						}
+					}
+					if !already {
+						wins = append(wins, i)
+					}
 					count++
 					if count > 64*2 {
 						sort.Ints(wins)
