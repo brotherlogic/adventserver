@@ -98,7 +98,7 @@ func runMaze(key, x, y int) int {
 
 }
 
-func runMazeToLimit(limit, key, x, y int) int {
+func runMazeToLimit(limit, key int) int {
 	var queue []*mazePoint
 	queue = append(queue, &mazePoint{x: 1, y: 1, best: 0})
 
@@ -119,7 +119,7 @@ func runMazeToLimit(limit, key, x, y int) int {
 		queue = queue[1:]
 
 		// Look for a win
-		if head.best > limit {
+		if head.best > limit+1 {
 			count := 0
 			for _, val := range seen {
 				for _, vval := range val {
@@ -169,7 +169,7 @@ func (s *Server) Solve2016day13part1(ctx context.Context) (*pb.SolveResponse, er
 }
 
 func (s *Server) Solve2016day13part2(ctx context.Context) (*pb.SolveResponse, error) {
-	res := runMazeToLimit(50, 1364, 31, 39)
+	res := runMazeToLimit(50, 1364)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }

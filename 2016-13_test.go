@@ -10,8 +10,8 @@ func Test2016_13_1(t *testing.T) {
 }
 
 func Test2016_13_2(t *testing.T) {
-	answer := runMazeToLimit(1, 10, 7, 4)
-	if answer != 3 {
+	answer := runMazeToLimit(2, 10)
+	if answer != 5 {
 		t.Errorf("Bad maze run: %v (2)", answer)
 	}
 }
