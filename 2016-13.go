@@ -108,6 +108,16 @@ func runMazeToLimit(limit, key, x, y int) int {
 
 	for {
 		mapPoints.Inc()
+		if len(queue) == 0 {
+			count := 0
+			for _, val := range seen {
+				for _, vval := range val {
+					if vval == limit {
+						count++
+					}
+				}
+			}
+		}
 		head := queue[0]
 		queue = queue[1:]
 
