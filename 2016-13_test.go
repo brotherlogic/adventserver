@@ -11,7 +11,7 @@ func Test2016_13_1(t *testing.T) {
 
 func Test2016_13_2(t *testing.T) {
 	answer := runMazeToLimit(3, 10)
-	if answer != 5 {
+	if answer != 9 {
 		t.Errorf("Bad maze run: %v (2)", answer)
 	}
 }
