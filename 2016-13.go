@@ -125,8 +125,8 @@ func runMazeToLimit(limit, key int) int {
 		// Look for a win
 		if head.best > limit+1 {
 			count := 0
-			for i, val := range seen {
-				for j, vval := range val {
+			for _, val := range seen {
+				for _, vval := range val {
 
 					if vval <= limit {
 						count++
