@@ -117,6 +117,7 @@ func runMazeToLimit(limit, key, x, y int) int {
 					}
 				}
 			}
+			return count
 		}
 		head := queue[0]
 		queue = queue[1:]
@@ -131,6 +132,7 @@ func runMazeToLimit(limit, key, x, y int) int {
 					}
 				}
 			}
+			return count
 		}
 
 		// Generate all other locations
