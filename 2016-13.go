@@ -111,11 +111,7 @@ func runMazeToLimit(limit, key, x, y int) int {
 		if len(queue) == 0 {
 			count := 0
 			for _, val := range seen {
-				for _, vval := range val {
-					if vval == limit {
-						count++
-					}
-				}
+				count += len(val)
 			}
 			return count
 		}
@@ -127,7 +123,7 @@ func runMazeToLimit(limit, key, x, y int) int {
 			count := 0
 			for _, val := range seen {
 				for _, vval := range val {
-					if vval == limit {
+					if vval <= limit {
 						count++
 					}
 				}
