@@ -96,11 +96,72 @@ func runMaze(key, x, y int) int {
 		}
 	}
 
-	return 0
+}
+
+func runMazeToLimit(limit, key, x, y int) int {
+	var queue []*mazePoint
+	queue = append(queue, &mazePoint{x: 1, y: 1, best: 0})
+
+	seen := make(map[int]map[int]int)
+	seen[1] = make(map[int]int)
+	seen[1][1] = 0
+
+	for {
+		mapPoints.Inc()
+		head := queue[0]
+		queue = queue[1:]
+
+		// Look for a win
+		if head.best > limit {
+			count := 0
+			for _, val := range seen {
+				for _, vval := range val {
+					if vval == limit {
+						count++
+					}
+				}
+			}
+		}
+
+		// Generate all other locations
+		if isLegitMove(key, seen, head.x+1, head.y) {
+			queue = append(queue, &mazePoint{head.x + 1, head.y, head.best + 1})
+			if _, ok := seen[head.x+1]; !ok {
+				seen[head.x+1] = make(map[int]int)
+			}
+			seen[head.x+1][head.y] = head.best + 1
+		}
+
+		if isLegitMove(key, seen, head.x-1, head.y) {
+			queue = append(queue, &mazePoint{head.x - 1, head.y, head.best + 1})
+			if _, ok := seen[head.x-1]; !ok {
+				seen[head.x-1] = make(map[int]int)
+			}
+			seen[head.x-1][head.y] = head.best + 1
+
+		}
+
+		if isLegitMove(key, seen, head.x, head.y+1) {
+			queue = append(queue, &mazePoint{head.x, head.y + 1, head.best + 1})
+			seen[head.x][head.y+1] = head.best + 1
+		}
+
+		if isLegitMove(key, seen, head.x, head.y-1) {
+			queue = append(queue, &mazePoint{head.x, head.y - 1, head.best + 1})
+			seen[head.x][head.y-1] = head.best + 1
+		}
+	}
+
 }
 
 func (s *Server) Solve2016day13part1(ctx context.Context) (*pb.SolveResponse, error) {
 	res := runMaze(1364, 31, 39)
+
+	return &pb.SolveResponse{Answer: int32(res)}, nil
+}
+
+func (s *Server) Solve2016day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	res := runMazeToLimit(50, 1364, 31, 39)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
