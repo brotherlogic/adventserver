@@ -4,7 +4,16 @@ import (
 	"strconv"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	mapPoints = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_day13_points",
+		Help: "The number of server requests",
+	})
 )
 
 type mazePoint struct {
@@ -49,6 +58,7 @@ func runMaze(key, x, y int) int {
 	seen[1][1] = 0
 
 	for {
+		mapPoints.Inc()
 		head := queue[0]
 		queue = queue[1:]
 
