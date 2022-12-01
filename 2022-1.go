@@ -28,6 +28,13 @@ func countCalories(data string) int {
 	return best
 }
 
+func topThreeCalories(data string) int {
+
+	sum := 0
+
+	return sum
+}
+
 func (s *Server) Solve2022day1part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-1.txt")
 	if err != nil {
