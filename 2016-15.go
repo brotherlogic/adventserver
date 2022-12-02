@@ -27,7 +27,7 @@ func runFall(t int, discs []disc) bool {
 	return true
 }
 
-func fallBalls(data string) int {
+func fallBalls(data string, add bool) int {
 	var discs []disc
 
 	for _, line := range strings.Split(data, "\n") {
@@ -37,6 +37,10 @@ func fallBalls(data string) int {
 			p, _ := strconv.ParseInt(strings.ReplaceAll(elems[11], ".", ""), 10, 32)
 			discs = append(discs, disc{positions: int(pos), start: int(p)})
 		}
+	}
+
+	if add {
+		discs = append(discs, disc{positions: 11, start: 0})
 	}
 
 	t := 0
@@ -54,5 +58,14 @@ func (s *Server) Solve2016day15part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(fallBalls(data))}, nil
+	return &pb.SolveResponse{Answer: int32(fallBalls(data, false))}, nil
+}
+
+func (s *Server) Solve2016day15part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-15.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(fallBalls(data, true))}, nil
 }
