@@ -1,12 +1,50 @@
 package main
 
 import (
+	"strings"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
 func getRPSScore(data string) int {
-	return 0
+	score := 0
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			elems := strings.Fields(line)
+			switch elems[0] {
+			case "A":
+				switch elems[1] {
+				case "X":
+					score += 1 + 3
+				case "Y":
+					score += 2 + 6
+				case "Z":
+					score += 3 + 0
+				}
+			case "B":
+				switch elems[1] {
+				case "X":
+					score += 1 + 0
+				case "Y":
+					score += 2 + 3
+				case "Z":
+					score += 3 + 6
+				}
+			case "C":
+				switch elems[1] {
+				case "X":
+					score += 1 + 6
+				case "Y":
+					score += 2 + 0
+				case "Z":
+					score += 3 + 3
+				}
+			}
+		}
+	}
+
+	return score
 }
 
 func (s *Server) Solve2022day2part1(ctx context.Context) (*pb.SolveResponse, error) {
