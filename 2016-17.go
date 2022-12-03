@@ -55,6 +55,21 @@ func getShortestPath(key string) string {
 	}
 }
 
+func getLongestPath(key string) int {
+	searchQueue := []mazeEntry{{0, 0, key, ""}}
+
+	for {
+		head := searchQueue[0]
+		searchQueue = searchQueue[1:]
+
+		if head.x == 3 && head.y == 3 {
+			return len(head.path)
+		}
+
+		searchQueue = append(searchQueue, head.nextSteps()...)
+	}
+}
+
 func (s *Server) Solve2016day17part1(ctx context.Context) (*pb.SolveResponse, error) {
 	return &pb.SolveResponse{StringAnswer: (getShortestPath("mmsxrhfx"))}, nil
 }

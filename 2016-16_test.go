@@ -5,6 +5,7 @@ import (
 )
 
 func TestExpansion(t *testing.T) {
+
 	tests := []struct {
 		in  string
 		out string
@@ -14,7 +15,6 @@ func TestExpansion(t *testing.T) {
 		{"11111", "11111000000"},
 		{"111100001010", "1111000010100101011110000"},
 	}
-
 	for _, test := range tests {
 		expansion := dragonExpand(test.in)
 		if expansion != test.out {
