@@ -1,11 +1,28 @@
 package main
 
 import (
+	"strings"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
 func sumOfPriorities(data string) int {
+	sumv := 0
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			sumv += getPriority(getPCommon(line))
+		}
+	}
+
+	return sumv
+}
+
+func getPCommon(line string) string {
+	return ""
+}
+
+func getPriority(char string) int {
 	return 0
 }
 
