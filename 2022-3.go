@@ -19,11 +19,23 @@ func sumOfPriorities(data string) int {
 }
 
 func getPCommon(line string) string {
+	halfOne := line[:len(line)/2]
+	halfTwo := line[len(line)/2:]
+	for _, char := range halfOne {
+		if strings.Contains(halfTwo, string(char)) {
+			return string(char)
+		}
+	}
 	return ""
 }
 
 func getPriority(char string) int {
-	return 0
+	rune := int(char[0])
+	if (rune) < 'z' && (rune) > 'a' {
+		return rune - 96
+	} else {
+		return rune - 38
+	}
 }
 
 func (s *Server) Solve2022day3part1(ctx context.Context) (*pb.SolveResponse, error) {

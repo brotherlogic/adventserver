@@ -38,7 +38,7 @@ func Test2022_3_1_Pick(t *testing.T) {
 		} else {
 			val := getPriority(let)
 			if val != test.value {
-				t.Errorf("Bad get priority: %v (%v) -> %v", val, test.value, test.in)
+				t.Errorf("Bad get priority: %v => %v (%v) -> %v", let, val, test.value, test.in)
 			}
 		}
 	}
