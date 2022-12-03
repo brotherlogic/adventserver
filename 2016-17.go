@@ -78,3 +78,7 @@ func getLongestPath(key string) int {
 func (s *Server) Solve2016day17part1(ctx context.Context) (*pb.SolveResponse, error) {
 	return &pb.SolveResponse{StringAnswer: (getShortestPath("mmsxrhfx"))}, nil
 }
+
+func (s *Server) Solve2016day17part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(getLongestPath("mmsxrhfx"))}, nil
+}
