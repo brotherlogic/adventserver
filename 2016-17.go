@@ -58,15 +58,20 @@ func getShortestPath(key string) string {
 func getLongestPath(key string) int {
 	searchQueue := []mazeEntry{{0, 0, key, ""}}
 
+	best := 0
+
 	for {
+		if len(searchQueue) == 0 {
+			return best
+		}
 		head := searchQueue[0]
 		searchQueue = searchQueue[1:]
 
 		if head.x == 3 && head.y == 3 {
-			return len(head.path)
+			best = len(head.path)
+		} else {
+			searchQueue = append(searchQueue, head.nextSteps()...)
 		}
-
-		searchQueue = append(searchQueue, head.nextSteps()...)
 	}
 }
 
