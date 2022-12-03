@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -43,7 +42,6 @@ func dragonExpand(in string) string {
 }
 
 func dragonChecksum(in string) string {
-	log.Printf("HUH: %v", len(in))
 	clen.Set(float64(len(in)))
 	var nstr strings.Builder
 	for i := 0; i < len(in); i += 2 {
