@@ -62,3 +62,8 @@ func (s *Server) Solve2016day16part1(ctx context.Context) (*pb.SolveResponse, er
 
 	return &pb.SolveResponse{StringAnswer: (dragonRun("11100010111110100", 272))}, nil
 }
+
+func (s *Server) Solve2016day16part2(ctx context.Context) (*pb.SolveResponse, error) {
+
+	return &pb.SolveResponse{StringAnswer: (dragonRun("11100010111110100", 35651584))}, nil
+}
