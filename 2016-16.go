@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"strings"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -40,16 +43,17 @@ func dragonExpand(in string) string {
 }
 
 func dragonChecksum(in string) string {
+	log.Printf("HUH: %v", len(in))
 	clen.Set(float64(len(in)))
-	nstr := ""
+	var nstr strings.Builder
 	for i := 0; i < len(in); i += 2 {
 		if in[i] == in[i+1] {
-			nstr += "1"
+			nstr.WriteString("1")
 		} else {
-			nstr += "0"
+			nstr.WriteString("0")
 		}
 	}
-	return nstr
+	return nstr.String()
 }
 
 func dragonRun(in string, size int) string {
