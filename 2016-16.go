@@ -2,7 +2,16 @@ package main
 
 import (
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	clen = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2016_day16_clen",
+		Help: "The number of server requests",
+	})
 )
 
 func flip(r rune) rune {
@@ -31,6 +40,7 @@ func dragonExpand(in string) string {
 }
 
 func dragonChecksum(in string) string {
+	clen.Set(float64(len(in)))
 	nstr := ""
 	for i := 0; i < len(in); i += 2 {
 		if in[i] == in[i+1] {
