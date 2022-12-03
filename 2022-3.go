@@ -39,6 +39,25 @@ func sumOfCommons(data string) int {
 }
 
 func getFCommon(line1, line2, line3 string) string {
+	found := make(map[rune]int)
+	for _, char := range strings.TrimSpace(line1) {
+		found[char] = 1
+	}
+	for _, char := range strings.TrimSpace(line2) {
+		if found[char] == 1 {
+			found[char]++
+		}
+	}
+	for _, char := range strings.TrimSpace(line3) {
+		if found[char] == 2 {
+			found[char]++
+		}
+	}
+	for k, v := range found {
+		if v == 3 {
+			return string(k)
+		}
+	}
 	return ""
 }
 
