@@ -32,7 +32,7 @@ func getPCommon(line string) string {
 func sumOfCommons(data string) int {
 	elems := strings.Split(data, "\n")
 	sumv := 0
-	for i := 0; i < len(elems); i += 3 {
+	for i := 0; i < len(elems)-2; i += 3 {
 		sumv += getPriority(getFCommon(elems[i], elems[i+1], elems[i+2]))
 	}
 	return sumv
