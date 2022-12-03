@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestExpansion(t *testing.T) {
 	tests := []struct {
@@ -16,8 +18,15 @@ func TestExpansion(t *testing.T) {
 	for _, test := range tests {
 		expansion := dragonExpand(test.in)
 		if expansion != test.out {
-			t.Errorf("Bad expansion: %v (%v)", expansion, test.out)
+			t.Errorf("Bad expansion: %v -> %v (%v)", test.in, expansion, test.out)
 		}
+	}
+}
+
+func TestChecksum(t *testing.T) {
+	cs := dragonChecksum(dragonChecksum("110010110100"))
+	if cs != "100" {
+		t.Errorf("bad checksum: %v", cs)
 	}
 }
 
