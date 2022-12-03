@@ -31,7 +31,7 @@ func getPCommon(line string) string {
 
 func getPriority(char string) int {
 	rune := int(char[0])
-	if (rune) < 'z' && (rune) > 'a' {
+	if (rune) <= 'z' && (rune) >= 'a' {
 		return rune - 96
 	} else {
 		return rune - 38
