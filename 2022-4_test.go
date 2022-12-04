@@ -59,6 +59,9 @@ func Test2022_4_2_Overlap(t *testing.T) {
 		{"6-6,4-6", true},
 		{"2-6,4-8", true},
 		{"2-4,6-8", false},
+		{"2-6,3-5", true},
+		{"2-6,5-7", true},
+		{"2-6,1-2", true},
 		{"", false},
 	}
 
