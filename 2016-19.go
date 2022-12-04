@@ -50,6 +50,59 @@ func runPresents(num int) int {
 	}
 }
 
+func runCircularPresents(num int) int {
+	elves := make([]bool, num)
+	pointer := 0
+	find := 0
+
+	for {
+		if find == num-1 {
+			for i, elf := range elves {
+				if !elf {
+					return i + 1
+				}
+			}
+		}
+
+		for {
+			// Find the next in play elf
+			if elves[pointer] {
+				pointer++
+				pointer = pointer % num
+			} else {
+				break
+			}
+		}
+
+		// Get the elf to steal from
+		stealJump := (num - find) / 2
+		sPointer := pointer
+		for {
+			if elves[sPointer] {
+				sPointer++
+				sPointer = sPointer % num
+			} else {
+				if stealJump == 0 {
+					break
+				} else {
+					stealJump--
+					sPointer++
+					sPointer = sPointer % num
+				}
+			}
+		}
+
+		find++
+		elves[sPointer] = true
+
+		pointer++
+		pointer = pointer % num
+	}
+}
+
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
 	return &pb.SolveResponse{Answer: int32(runPresents(3018458))}, nil
+}
+func (s *Server) Solve2016day19part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(runCircularPresents(3018458))}, nil
 }
