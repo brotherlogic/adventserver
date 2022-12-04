@@ -29,6 +29,9 @@ func getNums(piece string) []int {
 }
 
 func doesOverlap(line string) bool {
+	if len(strings.TrimSpace(line)) == 0 {
+		return false
+	}
 	elems := strings.Split(line, ",")
 
 	nums1 := getNums(elems[0])

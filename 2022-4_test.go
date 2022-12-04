@@ -25,6 +25,7 @@ func Test2022_4_1_Overlap(t *testing.T) {
 		{"6-6,4-6", true},
 		{"2-6,4-8", false},
 		{"2-4,6-8", false},
+		{"", false},
 	}
 
 	for _, test := range tests {
