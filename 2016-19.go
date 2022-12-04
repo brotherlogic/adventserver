@@ -15,40 +15,39 @@ var (
 )
 
 func runPresents(num int) int {
-	elfNum := make([]int, num)
-	elfPres := make([]int, num)
-	for i := 0; i < num; i++ {
-		elfNum[i] = i + 1
-		elfPres[i] = 1
-	}
-
+	elves := make([]bool, num)
+	count := 0
 	pointer := 0
+	keep := true
+
 	for {
-		celf.Set(float64(len(elfNum)))
-		if len(elfNum) == 1 {
-			return elfNum[0]
+		for {
+			// Find the next in play elf
+			if elves[pointer] {
+				pointer++
+				pointer = pointer % num
+			} else {
+				break
+			}
 		}
 
-		if elfPres[pointer] == 0 {
-			var nElfNum []int
-			var nElfPres []int
-			for i := 0; i < len(elfNum); i++ {
-				if i != pointer {
-					nElfNum = append(nElfNum, elfNum[i])
-					nElfPres = append(nElfPres, elfPres[i])
+		if keep {
+			keep = false
+		} else {
+			keep = true
+			elves[pointer] = true
+			count++
+			if count == num-1 {
+				for i, val := range elves {
+					if !val {
+						return i + 1
+					}
 				}
 			}
-
-			elfNum = nElfNum
-			elfPres = nElfPres
-		} else {
-			elfPres[pointer] += elfPres[(pointer+1)%len(elfPres)]
-			elfPres[(pointer+1)%len(elfPres)] = 0
-			pointer++
-			pointer = pointer % len(elfPres)
 		}
+		pointer++
+		pointer = pointer % num
 	}
-
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
