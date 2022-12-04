@@ -66,12 +66,11 @@ func doesOverlapEven(line string) bool {
 	nums1 := getNums(elems[0])
 	nums2 := getNums(elems[1])
 
-	if (nums1[0] <= nums2[0] && nums1[1] >= nums2[1]) ||
-		(nums2[0] <= nums1[0] && nums2[1] >= nums1[1]) {
-		return true
+	if nums1[1] < nums2[0] || nums1[0] > nums2[1] {
+		return false
 	}
 
-	return false
+	return true
 }
 
 func (s *Server) Solve2022day4part1(ctx context.Context) (*pb.SolveResponse, error) {
