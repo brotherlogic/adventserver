@@ -52,11 +52,18 @@ func runPresents(num int) int {
 
 func runCircularPresents(num int) int {
 	elves := make([]bool, num)
-	count := 0
 	pointer := 0
-	keep := true
+	find := 0
 
 	for {
+		if find == num-1 {
+			for i, elf := range elves {
+				if !elf {
+					return i + 1
+				}
+			}
+		}
+
 		for {
 			// Find the next in play elf
 			if elves[pointer] {
@@ -67,20 +74,27 @@ func runCircularPresents(num int) int {
 			}
 		}
 
-		if keep {
-			keep = false
-		} else {
-			keep = true
-			elves[pointer] = true
-			count++
-			if count == num-1 {
-				for i, val := range elves {
-					if !val {
-						return i + 1
-					}
+		// Get the elf to steal from
+		stealJump := (num - find) / 2
+		sPointer := pointer
+		for {
+			if elves[sPointer] {
+				sPointer++
+				sPointer = sPointer % num
+			} else {
+				if stealJump == 0 {
+					break
+				} else {
+					stealJump--
+					sPointer++
+					sPointer = sPointer % num
 				}
 			}
 		}
+
+		find++
+		elves[sPointer] = true
+
 		pointer++
 		pointer = pointer % num
 	}
