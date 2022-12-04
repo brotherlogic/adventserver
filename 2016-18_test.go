@@ -2,12 +2,12 @@ package main
 
 import "testing"
 
-func Test_2016_18_1_Transform(t *testing.T) {
+func Test2016_18_1_Transform(t *testing.T) {
 	line := "..^^."
 
 	trans := nextLine(line)
 
-	if trans != ".^^^^." {
+	if trans != ".^^^^" {
 		t.Errorf("Bad next line: %v (%v)", trans, ".^^^^.")
 	}
 }
