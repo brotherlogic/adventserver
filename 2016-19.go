@@ -2,7 +2,16 @@ package main
 
 import (
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	celf = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2016_day19_current",
+		Help: "The number of server requests",
+	})
 )
 
 func runPresents(num int) int {
@@ -15,6 +24,7 @@ func runPresents(num int) int {
 
 	pointer := 0
 	for {
+		celf.Set(float64(len(elfNum)))
 		if len(elfNum) == 1 {
 			return elfNum[0]
 		}
