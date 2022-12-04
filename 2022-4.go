@@ -42,7 +42,7 @@ func doesOverlap(line string) bool {
 	return false
 }
 
-func (s *Server) Solve2022da43part1(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2022day4part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-4.txt")
 	if err != nil {
 		return nil, err
