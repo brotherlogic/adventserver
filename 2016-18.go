@@ -46,3 +46,7 @@ func runTiles(line string, c int) int {
 func (s *Server) Solve2016day18part1(ctx context.Context) (*pb.SolveResponse, error) {
 	return &pb.SolveResponse{Answer: int32(runTiles("^^.^..^.....^..^..^^...^^.^....^^^.^.^^....^.^^^...^^^^.^^^^.^..^^^^.^^.^.^.^.^.^^...^^..^^^..^.^^^^", 40))}, nil
 }
+
+func (s *Server) Solve2016day18part2(ctx context.Context) (*pb.SolveResponse, error) {
+	return &pb.SolveResponse{Answer: int32(runTiles("^^.^..^.....^..^..^^...^^.^....^^^.^.^^....^.^^^...^^^^.^^^^.^..^^^^.^^.^.^.^.^.^^...^^..^^^..^.^^^^", 400000))}, nil
+}
