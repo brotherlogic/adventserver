@@ -12,6 +12,6 @@ func Test2016_19_1(t *testing.T) {
 func Test2016_19_2(t *testing.T) {
 	p := runCircularPresents(5)
 	if p != 2 {
-		t.Errorf("Bad present run: %v (3)", p)
+		t.Errorf("Bad present run: %v (2)", p)
 	}
 }

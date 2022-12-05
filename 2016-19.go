@@ -51,54 +51,21 @@ func runPresents(num int) int {
 }
 
 func runCircularPresents(num int) int {
-	elves := make([]bool, num)
-	pointer := 0
-	find := 0
-
-	for {
-		celf.Set(float64(num - find))
-		if find == num-1 {
-			for i, elf := range elves {
-				if !elf {
-					return i + 1
-				}
-			}
-		}
-
-		for {
-			// Find the next in play elf
-			if elves[pointer] {
-				pointer++
-				pointer = pointer % num
-			} else {
-				break
-			}
-		}
-
-		// Get the elf to steal from
-		stealJump := (num - find) / 2
-		sPointer := pointer
-		for {
-			if elves[sPointer] {
-				sPointer++
-				sPointer = sPointer % num
-			} else {
-				if stealJump == 0 {
-					break
-				} else {
-					stealJump--
-					sPointer++
-					sPointer = sPointer % num
-				}
-			}
-		}
-
-		find++
-		elves[sPointer] = true
-
-		pointer++
-		pointer = pointer % num
+	elves := make([]int, num)
+	for i := 1; i <= num; i++ {
+		elves[i-1] = i
 	}
+	pointer := 0
+
+	for len(elves) > 1 {
+		toRemove := (pointer + len(elves)/2) % len(elves)
+		pointer++
+		pointer = pointer % len(elves)
+		elves = append(elves[0:toRemove], elves[toRemove+1:]...)
+
+	}
+
+	return elves[0]
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
