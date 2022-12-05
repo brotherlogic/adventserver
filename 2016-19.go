@@ -52,16 +52,30 @@ func runPresents(num int) int {
 
 func runCircularPresents(num int) int {
 	nextElf := make(map[int]int)
+	prevElf := make(map[int]int)
 	for i := 0; i < num; i++ {
 		nextElf[i] = (i + 1) % num
+		prevElf[(i+1)%num] = i
 	}
 
+	currElf := 0
 	for len(nextElf) > 1 {
-		break
+		jump := len(nextElf) / 2
+		find := currElf
+		for i := 0; i < jump; i++ {
+			find = nextElf[find]
+		}
+
+		nextElf[prevElf[find]] = nextElf[find]
+		prevElf[nextElf[find]] = prevElf[find]
+		delete(nextElf, find)
+		delete(prevElf, find)
+
+		currElf = nextElf[currElf]
 	}
 
-	for num, _ := range nextElf {
-		return num
+	for num := range nextElf {
+		return num + 1
 	}
 
 	return -1
