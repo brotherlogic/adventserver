@@ -74,6 +74,10 @@ func runCircularPresents(num int) int {
 		start = start.next
 	}
 
+	if num%2 == 0 {
+		start = start.prev
+	}
+
 	for start.next.num != start.num {
 		celf.Set(float64(count))
 		remove := start
