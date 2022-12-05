@@ -58,6 +58,7 @@ func runCircularPresents(num int) int {
 	pointer := 0
 
 	for len(elves) > 1 {
+		celf.Set(float64(len(elves)))
 		toRemove := (pointer + len(elves)/2) % len(elves)
 		pointer++
 		pointer = pointer % len(elves)
