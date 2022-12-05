@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -67,7 +65,7 @@ func runCircularPresents(num int) int {
 
 	pointer := 0
 	for len(elves) > 1 {
-		log.Printf("%v: %v", pointer, elves)
+		celf.Set(float64(len(elves)))
 		npos := (pointer + len(elves)/2) % len(elves)
 		for i := npos; i < len(elves)-1; i++ {
 			elves[i] = elves[i+1]
