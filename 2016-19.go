@@ -56,6 +56,7 @@ func runCircularPresents(num int) int {
 	find := 0
 
 	for {
+		celf.Set(float64(num - find))
 		if find == num-1 {
 			for i, elf := range elves {
 				if !elf {
