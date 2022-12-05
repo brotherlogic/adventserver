@@ -32,7 +32,7 @@ func buildCrates(data string) map[int][]string {
 	return crates
 }
 
-func rearrangeCrates(data string) string {
+func rearrangeCrates(data string, rev bool) string {
 	crates := buildCrates(data)
 
 	for _, line := range strings.Split(data, "\n") {
@@ -64,5 +64,14 @@ func (s *Server) Solve2022day5part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{StringAnswer: rearrangeCrates((data))}, nil
+	return &pb.SolveResponse{StringAnswer: rearrangeCrates(data, false)}, nil
+}
+
+func (s *Server) Solve2022day5part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-5.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{StringAnswer: rearrangeCrates(data, true)}, nil
 }
