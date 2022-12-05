@@ -5,8 +5,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
-
-	"golang.org/x/exp/slices"
 )
 
 var (
@@ -52,22 +50,42 @@ func runPresents(num int) int {
 	}
 }
 
+type elfNode struct {
+	num  int
+	next *elfNode
+	prev *elfNode
+}
+
 func runCircularPresents(num int) int {
-	elves := make([]int, num)
-	for i := 1; i <= num; i++ {
-		elves[i-1] = i
-	}
-	pointer := 0
-
-	for len(elves) > 1 {
-		celf.Set(float64(len(elves)))
-		toRemove := (pointer + len(elves)/2) % len(elves)
-		pointer++
-		pointer = pointer % len(elves)
-		elves = slices.Delete(elves, toRemove, toRemove+1)
+	head := &elfNode{num: 1}
+	h := head
+	for i := 2; i <= num; i++ {
+		next := &elfNode{num: i, prev: head}
+		head.next = next
+		head = next
 	}
 
-	return elves[0]
+	head.next = h
+	head.next.prev = head
+	head = h
+	count := num
+
+	for {
+		celf.Set(float64(count))
+		if head.next.num == head.num {
+			return head.num
+		}
+		jump := count / 2
+		c := head
+		for i := 0; i < jump; i++ {
+			c = c.next
+		}
+		c.next.prev = c.prev
+		c.prev.next = c.next
+
+		count--
+		head = head.next
+	}
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
