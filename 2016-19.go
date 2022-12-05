@@ -5,6 +5,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+
+	"golang.org/x/exp/slices"
 )
 
 var (
@@ -62,8 +64,7 @@ func runCircularPresents(num int) int {
 		toRemove := (pointer + len(elves)/2) % len(elves)
 		pointer++
 		pointer = pointer % len(elves)
-		elves = append(elves[0:toRemove], elves[toRemove+1:]...)
-
+		elves = slices.Delete(elves, toRemove, toRemove+1)
 	}
 
 	return elves[0]
