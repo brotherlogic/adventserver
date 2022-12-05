@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	pb "github.com/brotherlogic/adventserver/proto"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
