@@ -32,7 +32,7 @@ func buildCrates(data string) map[int][]string {
 	return crates
 }
 
-func rearrangeCrates(data string) string {
+func rearrangeCrates(data string, rev bool) string {
 	crates := buildCrates(data)
 
 	for _, line := range strings.Split(data, "\n") {
@@ -42,10 +42,18 @@ func rearrangeCrates(data string) string {
 			start, _ := strconv.ParseInt(elems[3], 10, 32)
 			end, _ := strconv.ParseInt(elems[5], 10, 32)
 
-			for i := 0; i < int(count); i++ {
-				crate := crates[int(start)-1][0]
-				crates[int(start)-1] = crates[int(start)-1][1:]
-				crates[int(end)-1] = append([]string{crate}, crates[int(end)-1]...)
+			if !rev {
+				for i := 0; i < int(count); i++ {
+					crate := crates[int(start)-1][0]
+					crates[int(start)-1] = crates[int(start)-1][1:]
+					crates[int(end)-1] = append([]string{crate}, crates[int(end)-1]...)
+				}
+			} else {
+				ccrate := crates[int(start)-1][:count]
+				var crate []string
+				crate = append(crate, ccrate...)
+				crates[int(start)-1] = crates[int(start)-1][count:]
+				crates[int(end)-1] = append(crate, crates[int(end)-1]...)
 			}
 		}
 	}
@@ -64,5 +72,14 @@ func (s *Server) Solve2022day5part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{StringAnswer: rearrangeCrates((data))}, nil
+	return &pb.SolveResponse{StringAnswer: rearrangeCrates(data, false)}, nil
+}
+
+func (s *Server) Solve2022day5part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-5.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{StringAnswer: rearrangeCrates(data, true)}, nil
 }
