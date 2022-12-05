@@ -42,10 +42,18 @@ func rearrangeCrates(data string, rev bool) string {
 			start, _ := strconv.ParseInt(elems[3], 10, 32)
 			end, _ := strconv.ParseInt(elems[5], 10, 32)
 
-			for i := 0; i < int(count); i++ {
-				crate := crates[int(start)-1][0]
-				crates[int(start)-1] = crates[int(start)-1][1:]
-				crates[int(end)-1] = append([]string{crate}, crates[int(end)-1]...)
+			if !rev {
+				for i := 0; i < int(count); i++ {
+					crate := crates[int(start)-1][0]
+					crates[int(start)-1] = crates[int(start)-1][1:]
+					crates[int(end)-1] = append([]string{crate}, crates[int(end)-1]...)
+				}
+			} else {
+				ccrate := crates[int(start)-1][:count]
+				var crate []string
+				crate = append(crate, ccrate...)
+				crates[int(start)-1] = crates[int(start)-1][count:]
+				crates[int(end)-1] = append(crate, crates[int(end)-1]...)
 			}
 		}
 	}
