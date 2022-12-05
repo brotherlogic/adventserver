@@ -5,8 +5,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
-
-	"golang.org/x/exp/slices"
 )
 
 var (
@@ -53,21 +51,20 @@ func runPresents(num int) int {
 }
 
 func runCircularPresents(num int) int {
-	elves := make([]int, num)
-	for i := 1; i <= num; i++ {
-		elves[i-1] = i
-	}
-	pointer := 0
-
-	for len(elves) > 1 {
-		celf.Set(float64(len(elves)))
-		toRemove := (pointer + len(elves)/2) % len(elves)
-		pointer++
-		pointer = pointer % len(elves)
-		elves = slices.Delete(elves, toRemove, toRemove+1)
+	nextElf := make(map[int]int)
+	for i := 0; i < num; i++ {
+		nextElf[i] = (i + 1) % num
 	}
 
-	return elves[0]
+	for len(nextElf) > 1 {
+		break
+	}
+
+	for num, _ := range nextElf {
+		return num
+	}
+
+	return -1
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
