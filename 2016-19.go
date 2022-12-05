@@ -61,11 +61,13 @@ func runCircularPresents(num int) int {
 	head := &elfNode{num: 1}
 	c := head
 	for i := 2; i <= num; i++ {
-		newOne := &elfNode{num: 2, prev: c}
+		newOne := &elfNode{num: i, prev: c}
+
 		c.next = newOne
 		c = newOne
 	}
 	head.prev = c
+	c.next = head
 
 	start := head
 	for i := 0; i < num/2; i++ {
@@ -74,13 +76,14 @@ func runCircularPresents(num int) int {
 
 	for start.next.num != start.num {
 		celf.Set(float64(count))
-		remove := start.next
-		if count%2 == 1 {
+		remove := start
+		if count%2 == 0 {
 			remove = remove.next
 		}
 
 		remove.prev.next = remove.next
 		remove.next.prev = remove.prev
+		start = remove.next
 		count--
 	}
 
