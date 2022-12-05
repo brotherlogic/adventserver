@@ -51,42 +51,31 @@ func runPresents(num int) int {
 }
 
 type elfNode struct {
-	num  int
-	next *elfNode
-	prev *elfNode
+	num      int
+	next     *elfNode
+	prev     *elfNode
+	opposite *elfNode
 }
 
 func runCircularPresents(num int) int {
-	head := &elfNode{num: 1}
-	h := head
-	for i := 2; i <= num; i++ {
-		next := &elfNode{num: i, prev: head}
-		head.next = next
-		head = next
+	var elves []int
+	for i := 0; i < num; i++ {
+		elves = append(elves, i+1)
 	}
 
-	head.next = h
-	head.next.prev = head
-	head = h
-	count := num
-
-	for {
-		celf.Set(float64(count))
-		if head.next.num == head.num {
-			return head.num
+	pointer := 0
+	for len(elves) > 1 {
+		celf.Set(float64(len(elves)))
+		npos := (pointer + len(elves)/2) % len(elves)
+		for i := npos; i < len(elves)-1; i++ {
+			elves[i] = elves[i+1]
 		}
-		jump := count / 2
-		c := head
-		for i := 0; i < jump; i++ {
-			c = c.next
-		}
-		c.next.prev = c.prev
-		c.prev.next = c.next
-
-		count--
-		head = head.next
+		pointer++
+		pointer = pointer % len(elves)
+		elves = elves[:len(elves)-1]
 	}
 
+	return elves[0]
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
