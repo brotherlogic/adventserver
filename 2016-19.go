@@ -86,6 +86,7 @@ func runCircularPresents(num int) int {
 		count--
 		head = head.next
 	}
+
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
