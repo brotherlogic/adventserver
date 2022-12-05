@@ -60,6 +60,7 @@ func runCircularPresents(num int) int {
 
 	currElf := 0
 	for len(nextElf) > 1 {
+		celf.Set(float64(len(nextElf)))
 		jump := len(nextElf) / 2
 		find := currElf
 		for i := 0; i < jump; i++ {
