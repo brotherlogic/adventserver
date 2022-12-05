@@ -64,6 +64,7 @@ func runCircularPresents(num int) int {
 	c := head
 	for i := 2; i <= num; i++ {
 		newOne := &elfNode{num: i, prev: c}
+
 		c.next = newOne
 		c = newOne
 	}
@@ -75,7 +76,6 @@ func runCircularPresents(num int) int {
 		start = start.next
 	}
 
-	log.Printf("%v -> %v -> %v", start.prev.num, start.num, start.next)
 	for start.next.num != start.num {
 		celf.Set(float64(count))
 		remove := start
