@@ -50,36 +50,43 @@ func runPresents(num int) int {
 	}
 }
 
+type elfNode struct {
+	num  int
+	next *elfNode
+	prev *elfNode
+}
+
 func runCircularPresents(num int) int {
-	nextElf := make(map[int]int)
-	prevElf := make(map[int]int)
-	for i := 0; i < num; i++ {
-		nextElf[i] = (i + 1) % num
-		prevElf[(i+1)%num] = i
+	head := &elfNode{num: 1}
+	h := head
+	for i := 2; i <= num; i++ {
+		next := &elfNode{num: i, prev: head}
+		head.next = next
+		head = next
 	}
 
-	currElf := 0
-	for len(nextElf) > 1 {
-		celf.Set(float64(len(nextElf)))
-		jump := len(nextElf) / 2
-		find := currElf
-		for i := 0; i < jump; i++ {
-			find = nextElf[find]
+	head.next = h
+	head.next.prev = head
+	head = h
+	count := num
+
+	for {
+		celf.Set(float64(count))
+		if head.next.num == head.num {
+			return head.num
 		}
+		jump := count / 2
+		c := head
+		for i := 0; i < jump; i++ {
+			c = c.next
+		}
+		c.next.prev = c.prev
+		c.prev.next = c.next
 
-		nextElf[prevElf[find]] = nextElf[find]
-		prevElf[nextElf[find]] = prevElf[find]
-		delete(nextElf, find)
-		delete(prevElf, find)
-
-		currElf = nextElf[currElf]
+		count--
+		head = head.next
 	}
 
-	for num := range nextElf {
-		return num + 1
-	}
-
-	return -1
 }
 
 func (s *Server) Solve2016day19part1(ctx context.Context) (*pb.SolveResponse, error) {
