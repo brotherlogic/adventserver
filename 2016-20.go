@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -47,6 +48,8 @@ func getLowIp(data string) int {
 	sort.SliceStable(ranges, func(i, j int) bool {
 		return ranges[i][0] < ranges[j][0]
 	})
+
+	log.Printf("%v", ranges)
 
 	for i := 0; i < len(ranges)-1; i++ {
 		if ranges[i][1] != ranges[i+1][0]-1 {
