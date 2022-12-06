@@ -20,7 +20,7 @@ func Test2016_20_1_Sup(t *testing.T) {
 	low := getLowIp(data)
 
 	if low != 9 {
-		t.Errorf("Bad Low IP: %v (9)", low)
+		t.Errorf("Bad Low on IP: %v (9)", low)
 	}
 }
 

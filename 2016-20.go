@@ -49,7 +49,7 @@ func getLowIp(data string) int {
 	})
 
 	for i := 0; i < len(ranges)-1; i++ {
-		if ranges[i][1] <= ranges[i+1][0]-1 {
+		if ranges[i][1] < ranges[i+1][0]-1 {
 			return ranges[i][1] + 1
 		}
 	}
