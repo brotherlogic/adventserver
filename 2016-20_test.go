@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test_2016_20_1_Main(t *testing.T) {
+func Test2016_20_1_Main(t *testing.T) {
 	data := `5-8
 0-2
 4-7`
