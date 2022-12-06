@@ -6,6 +6,23 @@ import (
 )
 
 func findMarker(str string) int {
+	for i := 0; i < len(str)-3; i++ {
+		counts := make(map[byte]bool)
+		found := false
+		for j := i; j < i+4; j++ {
+			if _, ok := counts[str[j]]; ok {
+				found = true
+				break
+			} else {
+				counts[str[j]] = true
+			}
+		}
+
+		if !found {
+			return i + 4
+		}
+	}
+
 	return 0
 }
 
