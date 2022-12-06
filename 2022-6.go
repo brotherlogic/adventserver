@@ -9,7 +9,7 @@ func findMarker(str string, cc int) int {
 	for i := 0; i < len(str)-3; i++ {
 		counts := make(map[byte]bool)
 		found := false
-		for j := i; j < i+4; j++ {
+		for j := i; j < i+cc; j++ {
 			if _, ok := counts[str[j]]; ok {
 				found = true
 				break
@@ -19,7 +19,7 @@ func findMarker(str string, cc int) int {
 		}
 
 		if !found {
-			return i + 4
+			return i + cc
 		}
 	}
 
