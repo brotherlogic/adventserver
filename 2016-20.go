@@ -48,7 +48,13 @@ func getLowIp(data string) int {
 		return ranges[i][0] < ranges[j][0]
 	})
 
-	return ranges[0][1] + 1
+	for i := 0; i < len(ranges)-1; i++ {
+		if ranges[i][1] != ranges[i+1][0]-1 {
+			return ranges[i][1] + 1
+		}
+	}
+
+	return ranges[len(ranges)-1][1] + 1
 }
 
 func (s *Server) Solve2016day20part1(ctx context.Context) (*pb.SolveResponse, error) {
