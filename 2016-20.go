@@ -40,6 +40,7 @@ func getLowIp(data string) int {
 					}
 				}
 
+				//End overlap
 				if int(en) >= ranges[i][0] && int(en) <= ranges[i][1] {
 					if int(st) < ranges[i][0] {
 						ranges[i][0] = int(st)
@@ -47,8 +48,13 @@ func getLowIp(data string) int {
 					}
 				}
 
+				//Envelops
 				if int(st) <= ranges[i][0] && int(en) >= ranges[i][1] {
 					ranges[i] = []int{int(st), int(en)}
+					found = true
+				}
+
+				if int(st) >= ranges[i][0] && int(en) <= ranges[i][1] {
 					found = true
 				}
 			}
