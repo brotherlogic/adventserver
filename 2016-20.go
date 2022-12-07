@@ -21,8 +21,8 @@ func ipOverlap(comp []int, st, en int) ([]int, bool) {
 	return []int{}, false
 }
 
-func getIps(data string, m int) int {
-	var ranges [][]int
+func getIps(data string, m int64) int64 {
+	var ranges [][]int64
 
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
@@ -33,33 +33,33 @@ func getIps(data string, m int) int {
 			found := false
 			for i := 0; i < len(ranges); i++ {
 				// See if the start overlaps
-				if int(st) >= ranges[i][0] && int(st) <= ranges[i][1] {
-					if int(en) > ranges[i][1] {
-						ranges[i][1] = int(en)
+				if (st) >= ranges[i][0] && (st) <= ranges[i][1] {
+					if (en) > ranges[i][1] {
+						ranges[i][1] = (en)
 						found = true
 					}
 				}
 
 				//End overlap
-				if int(en) >= ranges[i][0] && int(en) <= ranges[i][1] {
-					if int(st) < ranges[i][0] {
-						ranges[i][0] = int(st)
+				if (en) >= ranges[i][0] && (en) <= ranges[i][1] {
+					if (st) < ranges[i][0] {
+						ranges[i][0] = (st)
 						found = true
 					}
 				}
 
 				//Envelops
-				if int(st) <= ranges[i][0] && int(en) >= ranges[i][1] {
-					ranges[i] = []int{int(st), int(en)}
+				if (st) <= ranges[i][0] && (en) >= ranges[i][1] {
+					ranges[i] = []int64{(st), (en)}
 					found = true
 				}
 
-				if int(st) >= ranges[i][0] && int(en) <= ranges[i][1] {
+				if (st) >= ranges[i][0] && (en) <= ranges[i][1] {
 					found = true
 				}
 			}
 			if !found {
-				ranges = append(ranges, []int{int(st), int(en)})
+				ranges = append(ranges, []int64{(st), (en)})
 			}
 
 		}
@@ -69,7 +69,7 @@ func getIps(data string, m int) int {
 		return ranges[i][0] < ranges[j][0]
 	})
 
-	sumv := 0
+	sumv := int64(0)
 	for i := 0; i < len(ranges)-1; i++ {
 		sumv += ranges[i+1][0] - ranges[i][1] - 1
 	}
@@ -155,5 +155,5 @@ func (s *Server) Solve2016day20part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getIps(data, 4294967295))}, nil
+	return &pb.SolveResponse{BigAnswer: (getIps(data, 4294967295))}, nil
 }
