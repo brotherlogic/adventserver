@@ -74,6 +74,8 @@ func getIps(data string, m int) int {
 		sumv += ranges[i+1][0] - ranges[i][1] - 1
 	}
 
+	sumv += m - ranges[len(ranges)-1][1]
+
 	return sumv
 }
 
@@ -145,4 +147,13 @@ func (s *Server) Solve2016day20part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(getLowIp(data))}, nil
+}
+
+func (s *Server) Solve2016day20part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-20.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(getIps(data, 4294967295))}, nil
 }
