@@ -31,6 +31,6 @@ func Test2016_20_1_Sup2(t *testing.T) {
 	low := getLowIp(data)
 
 	if low != 4793564 {
-		t.Errorf("Bad Low IP: %v (9)", low)
+		t.Errorf("Bad Low IP on biggy: %v (4793564)", low)
 	}
 }
