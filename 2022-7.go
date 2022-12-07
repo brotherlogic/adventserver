@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math"
 	"strconv"
 	"strings"
 
@@ -94,6 +95,42 @@ func (d *dir) size() int {
 	return local
 }
 
+func (d *dir) remove(total int, left int) int {
+
+	used := d.size()
+	actLeft := total - used
+	toRemove := left - actLeft
+
+	smallest := math.MaxInt
+	for _, dd := range d.dirs {
+		smol := dd.small(toRemove)
+		if smol < smallest {
+			smallest = smol
+		}
+	}
+
+	return smallest
+}
+
+func (d *dir) small(toRemove int) int {
+	smallest := math.MaxInt
+
+	smaller := d.size()
+	if smaller < smallest && smaller >= toRemove {
+		smallest = smaller
+	}
+
+	for _, dd := range d.dirs {
+		sm := dd.small(toRemove)
+		if sm < smallest {
+			smallest = sm
+		}
+	}
+
+	return smallest
+
+}
+
 func (s *Server) Solve2022day7part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-7.txt")
 	if err != nil {
@@ -103,4 +140,15 @@ func (s *Server) Solve2022day7part1(ctx context.Context) (*pb.SolveResponse, err
 	d := buildDirs(data)
 
 	return &pb.SolveResponse{Answer: int32(d.dirSum(100000))}, nil
+}
+
+func (s *Server) Solve2022day7part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-7.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	d := buildDirs(data)
+
+	return &pb.SolveResponse{Answer: int32(d.remove(70000000, 30000000))}, nil
 }
