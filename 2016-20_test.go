@@ -16,10 +16,6 @@ func Test2016_20_1_Main(t *testing.T) {
 	}
 }
 
-func tlog(ctx context.Context, str string) {
-
-}
-
 func Test2016_20_2_Main(t *testing.T) {
 	data := `5-8
 0-2
@@ -39,6 +35,16 @@ func Test2016_20_2_Sup(t *testing.T) {
 
 	if low != 4294967295-9+2 {
 		t.Errorf("Bad Low IP: %v (%v)", low, 4294967295-9+2)
+	}
+}
+
+func Test2016_20_2_Range(t *testing.T) {
+	data := `3872622758-3876157728
+4222455331-4230019102`
+	low := getIps(context.Background(), data, 4294967295, tlog)
+
+	if low != 411245795 {
+		t.Errorf("Bad Low IP: %v (%v)", low, 411245795)
 	}
 }
 

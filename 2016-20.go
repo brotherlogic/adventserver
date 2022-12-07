@@ -22,14 +22,14 @@ func ipOverlap(comp []int, st, en int) ([]int, bool) {
 	return []int{}, false
 }
 
-func getIps(ctx context.Context, data string, m int64, log func(context.Context, string)) int64 {
+func getIps(ctx context.Context, data string, m int64, rlog func(context.Context, string)) int64 {
 	var ranges [][]int64
 
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
 			elems := strings.Split(line, "-")
-			st, _ := strconv.ParseInt(elems[0], 10, 32)
-			en, _ := strconv.ParseInt(elems[1], 10, 32)
+			st, _ := strconv.ParseInt(elems[0], 10, 64)
+			en, _ := strconv.ParseInt(elems[1], 10, 64)
 
 			found := false
 			for i := 0; i < len(ranges); i++ {
@@ -70,7 +70,7 @@ func getIps(ctx context.Context, data string, m int64, log func(context.Context,
 		return ranges[i][0] < ranges[j][0]
 	})
 
-	log(ctx, fmt.Sprintf("%v", ranges))
+	rlog(ctx, fmt.Sprintf("RANGES %v", ranges))
 
 	sumv := int64(0)
 	for i := 0; i < len(ranges)-1; i++ {
