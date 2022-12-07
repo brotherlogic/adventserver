@@ -71,10 +71,9 @@ func getIps(ctx context.Context, data string, m int64, rlog func(context.Context
 		return ranges[i][0] < ranges[j][0]
 	})
 
-	rlog(ctx, fmt.Sprintf("RANGES %v", ranges))
-
 	sumv := big.NewInt(0)
 	for i := 0; i < len(ranges)-1; i++ {
+		rlog(ctx, fmt.Sprintf("Bounce: %v", big.NewInt(ranges[i+1][0]-ranges[i][1]-int64(1))))
 		sumv.Add(sumv, big.NewInt(ranges[i+1][0]-ranges[i][1]-int64(1)))
 	}
 
