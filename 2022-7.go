@@ -94,6 +94,10 @@ func (d *dir) size() int {
 	return local
 }
 
+func (d *dir) remove(total int, left int) int {
+	return 0
+}
+
 func (s *Server) Solve2022day7part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-7.txt")
 	if err != nil {
@@ -103,4 +107,15 @@ func (s *Server) Solve2022day7part1(ctx context.Context) (*pb.SolveResponse, err
 	d := buildDirs(data)
 
 	return &pb.SolveResponse{Answer: int32(d.dirSum(100000))}, nil
+}
+
+func (s *Server) Solve2022day7part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-7.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	d := buildDirs(data)
+
+	return &pb.SolveResponse{Answer: int32(d.remove(70000000, 30000000))}, nil
 }
