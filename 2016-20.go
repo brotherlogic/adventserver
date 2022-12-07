@@ -55,6 +55,7 @@ func getLowIp(data string) int {
 			if !found {
 				ranges = append(ranges, []int{int(st), int(en)})
 			}
+
 		}
 	}
 
@@ -63,10 +64,14 @@ func getLowIp(data string) int {
 	})
 
 	for i := 0; i < len(ranges)-1; i++ {
-		if ranges[i][1] < ranges[i+1][0]-1 {
+		if ranges[i+1][0] > ranges[i][1]+1 {
 			return ranges[i][1] + 1
 		}
 	}
+
+	sort.SliceStable(ranges, func(i, j int) bool {
+		return ranges[i][1] < ranges[j][1]
+	})
 
 	return ranges[len(ranges)-1][1] + 1
 }
