@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -79,7 +80,7 @@ func getIps(data string, m int64) int64 {
 	return sumv
 }
 
-func getLowIp(data string) int {
+func getLowIp(data string, log func(context.Context, string)) int {
 	var ranges [][]int
 
 	for _, line := range strings.Split(data, "\n") {
@@ -137,6 +138,8 @@ func getLowIp(data string) int {
 		return ranges[i][1] < ranges[j][1]
 	})
 
+	log(context.Background(), fmt.Sprintf("%v", ranges))
+
 	return ranges[len(ranges)-1][1] + 1
 }
 
@@ -146,7 +149,7 @@ func (s *Server) Solve2016day20part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getLowIp(data))}, nil
+	return &pb.SolveResponse{Answer: int32(getLowIp(data, s.CtxLog))}, nil
 }
 
 func (s *Server) Solve2016day20part2(ctx context.Context) (*pb.SolveResponse, error) {
