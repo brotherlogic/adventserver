@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"context"
+	"testing"
+)
 
 func Test2016_20_1_Main(t *testing.T) {
 	data := `5-8
@@ -13,11 +16,15 @@ func Test2016_20_1_Main(t *testing.T) {
 	}
 }
 
+func tlog(ctx context.Context, str string) {
+
+}
+
 func Test2016_20_2_Main(t *testing.T) {
 	data := `5-8
 0-2
 4-7`
-	low := getIps(data, 9)
+	low := getIps(context.Background(), data, 9, tlog)
 
 	if low != 2 {
 		t.Errorf("Bad Low IP: %v (2)", low)
@@ -28,7 +35,7 @@ func Test2016_20_2_Sup(t *testing.T) {
 	data := `5-8
 0-2
 4-7`
-	low := getIps(data, 4294967295)
+	low := getIps(context.Background(), data, 4294967295, tlog)
 
 	if low != 4294967295-9+2 {
 		t.Errorf("Bad Low IP: %v (%v)", low, 4294967295-9+2)

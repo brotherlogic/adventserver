@@ -22,7 +22,7 @@ func ipOverlap(comp []int, st, en int) ([]int, bool) {
 	return []int{}, false
 }
 
-func getIps(data string, m int64) int64 {
+func getIps(ctx context.Context, data string, m int64, log func(context.Context, string)) int64 {
 	var ranges [][]int64
 
 	for _, line := range strings.Split(data, "\n") {
@@ -70,6 +70,8 @@ func getIps(data string, m int64) int64 {
 		return ranges[i][0] < ranges[j][0]
 	})
 
+	log(ctx, fmt.Sprintf("%v", ranges))
+
 	sumv := int64(0)
 	for i := 0; i < len(ranges)-1; i++ {
 		sumv += ranges[i+1][0] - ranges[i][1] - 1
@@ -80,7 +82,7 @@ func getIps(data string, m int64) int64 {
 	return sumv
 }
 
-func getLowIp(data string, log func(context.Context, string)) int {
+func getLowIp(data string) int {
 	var ranges [][]int
 
 	for _, line := range strings.Split(data, "\n") {
@@ -138,8 +140,6 @@ func getLowIp(data string, log func(context.Context, string)) int {
 		return ranges[i][1] < ranges[j][1]
 	})
 
-	log(context.Background(), fmt.Sprintf("%v", ranges))
-
 	return ranges[len(ranges)-1][1] + 1
 }
 
@@ -149,7 +149,7 @@ func (s *Server) Solve2016day20part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getLowIp(data, s.CtxLog))}, nil
+	return &pb.SolveResponse{Answer: int32(getLowIp(data))}, nil
 }
 
 func (s *Server) Solve2016day20part2(ctx context.Context) (*pb.SolveResponse, error) {
@@ -158,5 +158,5 @@ func (s *Server) Solve2016day20part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{BigAnswer: (getIps(data, 4294967295))}, nil
+	return &pb.SolveResponse{BigAnswer: (getIps(ctx, data, 4294967295, s.CtxLog))}, nil
 }
