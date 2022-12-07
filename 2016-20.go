@@ -30,7 +30,31 @@ func getLowIp(data string) int {
 			st, _ := strconv.ParseInt(elems[0], 10, 32)
 			en, _ := strconv.ParseInt(elems[1], 10, 32)
 
-			ranges = append(ranges, []int{int(st), int(en)})
+			found := false
+			for i := 0; i < len(ranges); i++ {
+				// See if the start overlaps
+				if int(st) >= ranges[i][0] && int(st) <= ranges[i][1] {
+					if int(en) > ranges[i][1] {
+						ranges[i][1] = int(en)
+						found = true
+					}
+				}
+
+				if int(en) >= ranges[i][0] && int(en) <= ranges[i][1] {
+					if int(st) < ranges[i][0] {
+						ranges[i][0] = int(st)
+						found = true
+					}
+				}
+
+				if int(st) <= ranges[i][0] && int(en) >= ranges[i][1] {
+					ranges[i] = []int{int(st), int(en)}
+					found = true
+				}
+			}
+			if !found {
+				ranges = append(ranges, []int{int(st), int(en)})
+			}
 		}
 	}
 
@@ -39,14 +63,10 @@ func getLowIp(data string) int {
 	})
 
 	for i := 0; i < len(ranges)-1; i++ {
-		if ranges[i+1][0] > ranges[i][1]+1 {
+		if ranges[i][1] < ranges[i+1][0]-1 {
 			return ranges[i][1] + 1
 		}
 	}
-
-	sort.SliceStable(ranges, func(i, j int) bool {
-		return ranges[i][1] < ranges[j][1]
-	})
 
 	return ranges[len(ranges)-1][1] + 1
 }
