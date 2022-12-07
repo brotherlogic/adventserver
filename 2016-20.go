@@ -23,6 +23,32 @@ func ipOverlap(comp []int, st, en int) ([]int, bool) {
 	return []int{}, false
 }
 
+func runMerge(p1, p2 []int64) ([]int64, bool) {
+	if p1[0] <= p2[1] && p1[0] >= p2[0] {
+		if p1[1] >= p2[1] {
+			return []int64{p2[0], p1[1]}, true
+		}
+		return []int64{p2[0], p2[1]}, true
+	}
+
+	if p1[1] <= p2[1] && p1[1] >= p2[0] {
+		if p1[0] <= p2[0] {
+			return []int64{p1[0], p2[1]}, true
+		}
+		return []int64{p2[0], p2[1]}, true
+	}
+
+	if p1[0] <= p2[0] && p1[1] >= p2[1] {
+		return []int64{p1[0], p1[1]}, true
+	}
+
+	if p2[0] <= p1[0] && p2[1] >= p1[1] {
+		return []int64{p2[0], p2[1]}, true
+	}
+
+	return []int64{}, false
+}
+
 func getIps(ctx context.Context, data string, m int64, rlog func(context.Context, string)) string {
 	var ranges [][]int64
 
@@ -32,38 +58,21 @@ func getIps(ctx context.Context, data string, m int64, rlog func(context.Context
 			st, _ := strconv.ParseInt(elems[0], 10, 64)
 			en, _ := strconv.ParseInt(elems[1], 10, 64)
 
-			found := false
-			for i := 0; i < len(ranges); i++ {
-				// See if the start overlaps
-				if (st) >= ranges[i][0] && (st) <= ranges[i][1] {
-					if (en) > ranges[i][1] {
-						ranges[i][1] = (en)
-						found = true
-					}
-				}
+			ranges = append(ranges, []int64{st, en})
+		}
+	}
 
-				//End overlap
-				if (en) >= ranges[i][0] && (en) <= ranges[i][1] {
-					if (st) < ranges[i][0] {
-						ranges[i][0] = (st)
-						found = true
-					}
-				}
-
-				//Envelops
-				if (st) <= ranges[i][0] && (en) >= ranges[i][1] {
-					ranges[i] = []int64{(st), (en)}
-					found = true
-				}
-
-				if (st) >= ranges[i][0] && (en) <= ranges[i][1] {
-					found = true
+	merge := true
+	for merge {
+		merge = false
+		for p1 := 0; p1 < len(ranges); p1++ {
+			for p2 := p1 + 1; p2 < len(ranges); p2++ {
+				if val, ok := runMerge(ranges[p1], ranges[p2]); ok {
+					ranges[p1] = val
+					ranges = append(ranges[:p2], ranges[p2+1:]...)
+					merge = true
 				}
 			}
-			if !found {
-				ranges = append(ranges, []int64{(st), (en)})
-			}
-
 		}
 	}
 
