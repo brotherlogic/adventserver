@@ -65,7 +65,7 @@ func Test2022_7_2_Main(t *testing.T) {
 
 	sumv := list.remove(70000000, 30000000)
 
-	if sumv != 95437 {
-		t.Errorf("Bad sum of dirs: %v (95437)", sumv)
+	if sumv != 24933642 {
+		t.Errorf("Bad sum of dirs: %v (24933642)", sumv)
 	}
 }
