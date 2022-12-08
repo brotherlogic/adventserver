@@ -79,7 +79,35 @@ func fullTranslate(data, code string) string {
 	return code
 }
 
+func generateAll(code, sofar, goal, data string) string {
+	if len(code) == 0 {
+		ncode := fullTranslate(data, sofar)
+		if ncode == goal {
+			return sofar
+		}
+		return ""
+	}
+
+	for _, char := range code {
+		val := generateAll(strings.ReplaceAll(code, string(char), ""), sofar+string(char), goal, data)
+		if val != "" {
+			return val
+		}
+	}
+
+	return ""
+}
+
 func (s *Server) Solve2016day21part1(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-21.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{StringAnswer: fullTranslate(data, "abcdefgh")}, nil
+}
+
+func (s *Server) Solve2016day21part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-21.txt")
 	if err != nil {
 		return nil, err

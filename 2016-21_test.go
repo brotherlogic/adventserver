@@ -24,5 +24,23 @@ func Test2016_21_1(t *testing.T) {
 			t.Errorf("Bad translate %v -> %v => %v (%v)", test.in, test.code, out, test.out)
 		}
 	}
+}
 
+func Test2016_21_2(t *testing.T) {
+	data := `swap position 4 with position 0
+swap letter d with letter b
+reverse positions 0 through 4
+rotate left 1 step
+move position 1 to position 4
+move position 3 to position 0
+rotate based on position of letter b
+rotate based on position of letter d`
+
+	result := "decab"
+
+	start := generateAll("abcde", "", result, data)
+
+	if start != "abcde" {
+		t.Errorf("Bad result: %v", start)
+	}
 }
