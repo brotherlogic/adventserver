@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -37,13 +38,14 @@ func buildNodes(data string) []*df {
 	return nodes
 }
 
-func calcNodes(nodes []*df) int {
+func calcNodes(ctx context.Context, nodes []*df, log func(context.Context, string)) int {
 	count := 0
 	for i, n1 := range nodes {
 		for j, n2 := range nodes {
 			if i != j {
 				if n1.used != 0 {
 					if n1.used < n2.avail {
+						log(ctx, fmt.Sprintf("%+v and %+v", n1, n2))
 						count++
 					}
 				}
@@ -60,5 +62,5 @@ func (s *Server) Solve2016day22part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(calcNodes(buildNodes(data)))}, nil
+	return &pb.SolveResponse{Answer: int32(calcNodes(ctx, buildNodes(data), s.CtxLog))}, nil
 }
