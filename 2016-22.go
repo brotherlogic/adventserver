@@ -21,7 +21,7 @@ func convertNum(str string) int {
 func buildNodes(data string) []*df {
 	var nodes []*df
 	for _, line := range strings.Split(data, "\n") {
-		if line[0] == '/' {
+		if len(line) > 0 && line[0] == '/' {
 			fields := strings.Fields(line)
 
 			df := &df{name: fields[0]}
