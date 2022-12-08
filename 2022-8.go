@@ -25,6 +25,76 @@ func buildTreeGrid(data string) [][]int {
 	return grid
 }
 
+func countSeen(grid [][]int, y, x int) int {
+	seenU := 0
+	for ny := y - 1; ny >= 0; ny-- {
+		if grid[ny][x] < grid[y][x] {
+			seenU++
+		} else {
+			seenU++
+			break
+		}
+	}
+	seenD := 0
+	for ny := y + 1; ny < len(grid); ny++ {
+		if grid[ny][x] < grid[y][x] {
+			seenD++
+		} else {
+			seenD++
+			break
+		}
+	}
+	seenL := 0
+	for nx := x - 1; nx >= 0; nx-- {
+		if grid[y][nx] < grid[y][x] {
+			seenL++
+		} else {
+			seenL++
+			break
+		}
+	}
+	seenR := 0
+	for nx := x + 1; nx < len(grid[0]); nx++ {
+		if grid[y][nx] < grid[y][x] {
+			seenR++
+		} else {
+			seenR++
+			break
+		}
+	}
+
+	return seenU * seenD * seenL * seenR
+}
+
+func bestTree(data string) int {
+	grid := buildTreeGrid(data)
+	var see [][]int
+	for i := 0; i < len(grid); i++ {
+		var s []int
+		for j := 0; j < len(grid[i]); j++ {
+			s = append(s, 0)
+		}
+		see = append(see, s)
+	}
+
+	for y := 0; y < len(grid); y++ {
+		for x := 0; x < len(grid[y]); x++ {
+			see[y][x] = countSeen(grid, y, x)
+		}
+	}
+
+	count := 0
+	for i := 0; i < len(see); i++ {
+		for j := 0; j < len(see[i]); j++ {
+			if see[i][j] > count {
+				count = see[i][j]
+			}
+		}
+	}
+
+	return count
+}
+
 func countVisibleTrees(data string) int {
 	grid := buildTreeGrid(data)
 	var visible [][]bool
@@ -91,4 +161,13 @@ func (s *Server) Solve2022day8part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	return &pb.SolveResponse{Answer: int32(countVisibleTrees(data))}, nil
+}
+
+func (s *Server) Solve2022day8part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-8.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(bestTree(data))}, nil
 }
