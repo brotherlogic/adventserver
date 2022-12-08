@@ -162,3 +162,12 @@ func (s *Server) Solve2022day8part1(ctx context.Context) (*pb.SolveResponse, err
 
 	return &pb.SolveResponse{Answer: int32(countVisibleTrees(data))}, nil
 }
+
+func (s *Server) Solve2022day8part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-8.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(bestTree(data))}, nil
+}
