@@ -10,7 +10,8 @@ func Test2016_21_1(t *testing.T) {
 	}{
 		{"abcde", "swap position 4 with position 0", "ebcda"},
 		{"ebcda", "swap letter d with letter b", "edcba"},
-		{"edcba", "rotate left 1 step", "bcdea"},
+		{"edcba", "reverse positions 0 through 4", "abcde"},
+		{"abcde", "rotate left 1 step", "bcdea"},
 		{"bcdea", "move position 1 to position 4", "bdeac"},
 		{"bdeac", "move position 3 to position 0", "abdec"},
 		{"abdec", "rotate based on position of letter b", "ecabd"},
