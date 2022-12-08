@@ -11,13 +11,15 @@ import (
 func buildTreeGrid(data string) [][]int {
 	var grid [][]int
 	for _, line := range strings.Split(data, "\n") {
-		var internal []int
-		for _, char := range line {
-			val, _ := strconv.ParseInt(string(char), 10, 32)
-			internal = append(internal, int(val))
-		}
+		if len(strings.TrimSpace(line)) > 0 {
+			var internal []int
+			for _, char := range line {
+				val, _ := strconv.ParseInt(string(char), 10, 32)
+				internal = append(internal, int(val))
+			}
 
-		grid = append(grid, internal)
+			grid = append(grid, internal)
+		}
 	}
 
 	return grid
