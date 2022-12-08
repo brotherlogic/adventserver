@@ -113,5 +113,5 @@ func (s *Server) Solve2016day21part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{StringAnswer: fullTranslate(data, "abcdefgh")}, nil
+	return &pb.SolveResponse{StringAnswer: generateAll("fbgdceah", "", "fbgdceah", data)}, nil
 }
