@@ -40,10 +40,12 @@ func buildNodes(data string) []*df {
 func calcNodes(nodes []*df) int {
 	count := 0
 	for i, n1 := range nodes {
-		for _, n2 := range nodes[i+1:] {
-			if n1.used != 0 {
-				if n1.used < n2.avail {
-					count++
+		for j, n2 := range nodes {
+			if i != j {
+				if n1.used != 0 {
+					if n1.used < n2.avail {
+						count++
+					}
 				}
 			}
 		}
