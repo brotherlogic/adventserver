@@ -26,9 +26,9 @@ func buildNodes(data string) []*df {
 
 			df := &df{name: fields[0]}
 			df.size = convertNum(fields[1])
-			df.used = convertNum(fields[1])
-			df.avail = convertNum(fields[1])
-			df.use = convertNum(fields[1])
+			df.used = convertNum(fields[2])
+			df.avail = convertNum(fields[3])
+			df.use = convertNum(fields[4])
 
 			nodes = append(nodes, df)
 		}
