@@ -9,6 +9,47 @@ import (
 )
 
 func ropeMove(hx, hy, tx, ty int) (int, int) {
+	if hx == tx {
+		if hy-ty > 1 {
+			return tx, ty + 1
+		}
+		if ty-hy > 1 {
+			return tx, ty - 1
+		}
+
+		return tx, ty
+	}
+
+	if hy == ty {
+		if hx-tx > 1 {
+			return tx + 1, ty
+		}
+
+		if tx-hx > 1 {
+			return tx - 1, ty
+		}
+	}
+
+	if (hx-tx == 2 && ty-hy == 1) ||
+		(ty-hy == 2 && hx-tx == 1) {
+		return tx + 1, ty - 1
+	}
+
+	if (hx-tx == 2 && hy-ty == 1) ||
+		(hy-ty == 2 && hx-tx == 1) {
+		return tx + 1, ty + 1
+	}
+
+	if (tx-hx == 2 && ty-hy == 1) ||
+		(ty-hy == 2 && tx-hx == 1) {
+		return tx - 1, ty - 1
+	}
+
+	if (tx-hx == 2 && hy-ty == 1) ||
+		(hy-ty == 2 && tx-hx == 1) {
+		return tx - 1, ty + 1
+	}
+
 	return tx, ty
 }
 
@@ -32,7 +73,7 @@ func runRopeBridge(data string) int {
 			case "L":
 				xadj = -1
 			case "R":
-				yadj = 1
+				xadj = 1
 			}
 
 			for i := 0; i < int(count); i++ {
@@ -40,6 +81,11 @@ func runRopeBridge(data string) int {
 				hy += yadj
 
 				tx, ty = ropeMove(hx, hy, tx, ty)
+
+				if _, ok := seen[tx]; !ok {
+					seen[tx] = make(map[int]bool)
+				}
+				seen[tx][ty] = true
 			}
 		}
 	}
