@@ -53,8 +53,11 @@ func ropeMove(hx, hy, tx, ty int) (int, int) {
 	return tx, ty
 }
 
-func runRopeBridge(data string) int {
-	hx, hy, tx, ty := 0, 0, 0, 0
+func runRopeBridge(data string, num int) int {
+	friends := make([][]int, num)
+	for i := range friends {
+		friends[i] = make([]int, 2)
+	}
 	seen := make(map[int]map[int]bool)
 	seen[0] = make(map[int]bool)
 	seen[0][0] = true
@@ -77,29 +80,33 @@ func runRopeBridge(data string) int {
 			}
 
 			for i := 0; i < int(count); i++ {
-				hx += xadj
-				hy += yadj
+				friends[0][0] += xadj
+				friends[0][1] += yadj
 
-				tx, ty = ropeMove(hx, hy, tx, ty)
-
-				if _, ok := seen[tx]; !ok {
-					seen[tx] = make(map[int]bool)
+				for i := 1; i < num; i++ {
+					nx, ny := ropeMove(friends[i-1][0], friends[i-1][1], friends[i][0], friends[i][1])
+					friends[i][0] = nx
+					friends[i][1] = ny
 				}
-				seen[tx][ty] = true
+
+				if _, ok := seen[friends[len(friends)-1][0]]; !ok {
+					seen[friends[len(friends)-1][0]] = make(map[int]bool)
+				}
 			}
+			seen[friends[len(friends)-1][0]][friends[len(friends)-1][1]] = true
 		}
 	}
 
-	count := 0
+	cc := 0
 	for _, blah := range seen {
 		for _, blahblah := range blah {
 			if blahblah {
-				count++
+				cc++
 			}
 		}
 	}
 
-	return count
+	return cc
 }
 
 func (s *Server) Solve2022day9part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -108,5 +115,5 @@ func (s *Server) Solve2022day9part1(ctx context.Context) (*pb.SolveResponse, err
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runRopeBridge(data))}, nil
+	return &pb.SolveResponse{Answer: int32(runRopeBridge(data, 2))}, nil
 }
