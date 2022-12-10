@@ -187,7 +187,7 @@ func makeMoves(maze [][]int, x, y int, isGoal bool) [][]int {
 	if goaly > 0 && maze[goalx][goaly-1] == match {
 		moves = append(moves, []int{goalx, goaly - 1})
 	}
-	if goaly < len(maze)-1 && maze[goalx][goaly+1] == match {
+	if goaly < len(maze[goalx])-1 && maze[goalx][goaly+1] == match {
 		moves = append(moves, []int{goalx, goaly + 1})
 	}
 
