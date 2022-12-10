@@ -56,6 +56,10 @@ func calcNodes(ctx context.Context, nodes []*df, log func(context.Context, strin
 	return count
 }
 
+func runDiskMaze(data string) int {
+	return 0
+}
+
 func (s *Server) Solve2016day22part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-22.txt")
 	if err != nil {
@@ -63,4 +67,13 @@ func (s *Server) Solve2016day22part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(calcNodes(ctx, buildNodes(data), s.CtxLog))}, nil
+}
+
+func (s *Server) Solve2016day22part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-22.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runDiskMaze(data))}, nil
 }
