@@ -22,6 +22,10 @@ func (e elfProgram) getSignal() int {
 	return val
 }
 
+func (e elfProgram) getScreen() string {
+	return ""
+}
+
 func runElfProgram(data string) elfProgram {
 
 	prog := elfProgram{a: 1, values: []int{1}}
