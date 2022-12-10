@@ -31,7 +31,7 @@ func Test2022_9_2_Main(t *testing.T) {
 
 	result := runRopeBridge(data, 9)
 
-	if result != 9 {
+	if result != 1 {
 		t.Errorf("Bad rope bridge run part 2: %v", result)
 	}
 }
@@ -46,9 +46,16 @@ func Test2022_9_2_Extra(t *testing.T) {
 	L 25
 	U 20`
 
-	result := runRopeBridge(data, 9)
+	result := runRopeBridge(data, 10)
 
 	if result != 36 {
 		t.Errorf("Bad rope bridge run part 2 extra: %v", result)
+	}
+}
+
+func Test2022_9_2_Sup(t *testing.T) {
+	m1, m2 := ropeMove(2, -2, 0, 0)
+	if m1 != 1 && m2 != -1 {
+		t.Errorf("Bad move, %v %v", m1, m2)
 	}
 }

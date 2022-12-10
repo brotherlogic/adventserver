@@ -50,6 +50,22 @@ func ropeMove(hx, hy, tx, ty int) (int, int) {
 		return tx - 1, ty + 1
 	}
 
+	if hx-tx == 2 && hy-ty == 2 {
+		return hx - 1, hy - 1
+	}
+
+	if hx-tx == 2 && ty-hy == 2 {
+		return hx - 1, hy + 1
+	}
+
+	if tx-hx == 2 && hy-ty == 2 {
+		return hx + 1, hy - 1
+	}
+
+	if tx-hx == 2 && ty-hy == 2 {
+		return hx + 1, hy + 1
+	}
+
 	return tx, ty
 }
 
@@ -92,8 +108,8 @@ func runRopeBridge(data string, num int) int {
 				if _, ok := seen[friends[len(friends)-1][0]]; !ok {
 					seen[friends[len(friends)-1][0]] = make(map[int]bool)
 				}
+				seen[friends[len(friends)-1][0]][friends[len(friends)-1][1]] = true
 			}
-			seen[friends[len(friends)-1][0]][friends[len(friends)-1][1]] = true
 		}
 	}
 
@@ -116,4 +132,13 @@ func (s *Server) Solve2022day9part1(ctx context.Context) (*pb.SolveResponse, err
 	}
 
 	return &pb.SolveResponse{Answer: int32(runRopeBridge(data, 2))}, nil
+}
+
+func (s *Server) Solve2022day9par21(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-9.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runRopeBridge(data, 10))}, nil
 }
