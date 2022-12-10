@@ -19,6 +19,7 @@ func runElfProgram(data string) elfProgram {
 	return elfProgram{}
 }
 
+
 func (s *Server) Solve2022day10part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-10.txt")
 	if err != nil {
