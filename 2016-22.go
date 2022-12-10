@@ -104,6 +104,16 @@ type mazeNode struct {
 	steps int
 }
 
+func copy(maze [][]int) [][]int {
+	var nmaze [][]int
+	for _, val := range maze {
+		var newLine []int
+		newLine = append(newLine, val...)
+		nmaze = append(nmaze, newLine)
+	}
+	return nmaze
+}
+
 func solveMaze(maze [][]int) int {
 	queue := []mazeNode{mazeNode{maze: maze, steps: 0}}
 
@@ -129,16 +139,16 @@ func solveMaze(maze [][]int) int {
 		}
 
 		for _, move := range makeMoves(head.maze, x3, y3, true) {
-			nmaze := maze
+			nmaze := copy(head.maze)
 			nmaze[x3][y3] = 1
 			nmaze[move[0]][move[1]] = 3
 			queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
 		}
 
 		for _, move := range makeMoves(head.maze, x1, y1, false) {
-			nmaze := maze
-			nmaze[x3][y3] = 0
-			nmaze[move[0]][move[1]] = 3
+			nmaze := copy(head.maze)
+			nmaze[x1][y1] = 0
+			nmaze[move[0]][move[1]] = 1
 			queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
 		}
 	}
@@ -147,10 +157,41 @@ func solveMaze(maze [][]int) int {
 }
 
 func makeMoves(maze [][]int, x, y int, isGoal bool) [][]int {
+	var moves [][]int
 
+	match := 0
 	if isGoal {
-
+		match = 1
 	}
+
+	finder := 1
+	if isGoal {
+		finder = 3
+	}
+
+	goalx, goaly := 0, 0
+	for x := range maze {
+		for y := range maze[x] {
+			if maze[x][y] == finder {
+				goalx, goaly = x, y
+			}
+		}
+	}
+
+	if goalx > 0 && maze[goalx-1][goaly] == match {
+		moves = append(moves, []int{goalx - 1, goaly})
+	}
+	if goalx < len(maze)-1 && maze[goalx+1][goaly] == match {
+		moves = append(moves, []int{goalx + 1, goaly})
+	}
+	if goaly > 0 && maze[goalx][goaly-1] == match {
+		moves = append(moves, []int{goalx, goaly - 1})
+	}
+	if goaly < len(maze)-1 && maze[goalx][goaly+1] == match {
+		moves = append(moves, []int{goalx, goaly + 1})
+	}
+
+	return moves
 }
 
 func printMaze(maze [][]int) string {
