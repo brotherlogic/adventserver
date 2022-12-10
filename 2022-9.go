@@ -134,7 +134,7 @@ func (s *Server) Solve2022day9part1(ctx context.Context) (*pb.SolveResponse, err
 	return &pb.SolveResponse{Answer: int32(runRopeBridge(data, 2))}, nil
 }
 
-func (s *Server) Solve2022day9par21(ctx context.Context) (*pb.SolveResponse, error) {
+func (s *Server) Solve2022day9part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-9.txt")
 	if err != nil {
 		return nil, err
