@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	equeue = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2016_22_qlen",
+		Help: "The number of server requests",
+	})
 )
 
 type df struct {
@@ -118,6 +127,7 @@ func solveMaze(maze [][]int) int {
 	queue := []mazeNode{mazeNode{maze: maze, steps: 0}}
 
 	for len(queue) > 0 {
+		equeue.Set(float64(len(queue)))
 		head := queue[0]
 		queue = queue[1:]
 
