@@ -23,7 +23,28 @@ func (e elfProgram) getSignal() int {
 }
 
 func (e elfProgram) getScreen() string {
-	return ""
+	screen := ""
+	for i, val := range e.values[1:] {
+		bound0 := i%40 - 1
+		bound1 := i%40 + 1
+		if i%40 == 0 {
+			bound0 = 0
+		}
+		if i%40 == 39 {
+			bound1 = 39
+		}
+
+		if val >= bound0 && val <= bound1 {
+			screen += "#"
+		} else {
+			screen += "."
+		}
+		if i%40 == 39 {
+			screen += "\n"
+		}
+	}
+
+	return screen[:len(screen)-1]
 }
 
 func runElfProgram(data string) elfProgram {
@@ -57,4 +78,15 @@ func (s *Server) Solve2022day10part1(ctx context.Context) (*pb.SolveResponse, er
 	result := runElfProgram(data)
 
 	return &pb.SolveResponse{Answer: int32(result.getSignal())}, nil
+}
+
+func (s *Server) Solve2022day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-10.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	result := runElfProgram(data)
+
+	return &pb.SolveResponse{StringAnswer: result.getScreen()}, nil
 }

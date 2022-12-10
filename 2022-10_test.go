@@ -326,6 +326,6 @@ func Test2022_10_2_Main(t *testing.T) {
 #######.......#######.......#######.....`
 
 	if result.getScreen() != str {
-		t.Errorf("%v", result.getScreen())
+		t.Errorf("\n'%v'\n'%v'\nfrom\n%v", result.getScreen(), str, result.values)
 	}
 }
