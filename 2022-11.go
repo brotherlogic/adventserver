@@ -28,7 +28,7 @@ func buildMonkeys(data string) []*monkey {
 			fields := strings.Fields(nline)
 			switch fields[0] {
 			case "Monkey":
-				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-2], 10, 32)
+				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-1], 10, 32)
 				if num > 0 {
 					monkeys = append(monkeys, cmonkey)
 				}
@@ -38,14 +38,14 @@ func buildMonkeys(data string) []*monkey {
 				tline := strings.Split(nline, ":")
 				nums := strings.Split(tline[1], ",")
 				for _, num := range nums {
-					numv, _ := strconv.ParseInt(num, 10, 32)
+					numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 32)
 					cmonkey.items = append(cmonkey.items, int(numv))
 				}
-			case "Operation":
+			case "Operation:":
 				cmonkey.operation = fields[4]
 				num, _ := strconv.ParseInt(fields[5], 10, 32)
 				cmonkey.adjustment = int(num)
-			case "Test":
+			case "Test:":
 				num, _ := strconv.ParseInt(fields[3], 10, 32)
 				cmonkey.test = int(num)
 			case "If":
