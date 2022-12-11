@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 
@@ -44,7 +45,11 @@ func buildMonkeys(data string) []*monkey {
 			case "Operation:":
 				cmonkey.operation = fields[4]
 				num, _ := strconv.ParseInt(fields[5], 10, 32)
-				cmonkey.adjustment = int(num)
+				if num == 0 {
+					cmonkey.adjustment = -1
+				} else {
+					cmonkey.adjustment = int(num)
+				}
 			case "Test:":
 				num, _ := strconv.ParseInt(fields[3], 10, 32)
 				cmonkey.test = int(num)
@@ -65,11 +70,53 @@ func buildMonkeys(data string) []*monkey {
 }
 
 func runMonkeys(monkeys []*monkey) {
+	mmap := make(map[int]*monkey)
+	for _, monkey := range monkeys {
+		mmap[monkey.number] = monkey
+	}
 
+	for _, monkey := range monkeys {
+		for len(monkey.items) > 0 {
+			vitem := monkey.items[0]
+			switch monkey.operation {
+			case "*":
+				if monkey.adjustment > 0 {
+					vitem *= monkey.adjustment
+				} else {
+					vitem = vitem * vitem
+				}
+			case "+":
+				if monkey.adjustment > 0 {
+					vitem += monkey.adjustment
+				} else {
+					vitem = vitem + vitem
+				}
+			}
+
+			vitem = vitem / 3
+
+			if vitem%monkey.test == 0 {
+				mmap[monkey.trueMonkey].items = append(monkeys[monkey.trueMonkey].items, vitem)
+			} else {
+				mmap[monkey.falseMonkey].items = append(monkeys[monkey.falseMonkey].items, vitem)
+			}
+			monkey.items = monkey.items[1:]
+			monkey.seen++
+		}
+
+	}
 }
 
 func getMonkeyTimes(monkeys []*monkey) []int {
-	return []int{0, 0}
+
+	var values []int
+	for _, m := range monkeys {
+		values = append(values, m.seen)
+	}
+
+	sort.Sort(sort.Reverse(sort.IntSlice(values)))
+
+	return values
 }
 
 func (s *Server) Solve2022day11part1(ctx context.Context) (*pb.SolveResponse, error) {
