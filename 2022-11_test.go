@@ -33,6 +33,51 @@ func Test2022_11_1_Build(t *testing.T) {
 	}
 }
 
+func Test2022_11_1_Once(t *testing.T) {
+	data := `Monkey 0:
+	Starting items: 79, 98
+	Operation: new = old * 19
+	Test: divisible by 23
+	  If true: throw to monkey 2
+	  If false: throw to monkey 3
+  
+  Monkey 1:
+	Starting items: 54, 65, 75, 74
+	Operation: new = old + 6
+	Test: divisible by 19
+	  If true: throw to monkey 2
+	  If false: throw to monkey 0
+  
+  Monkey 2:
+	Starting items: 79, 60, 97
+	Operation: new = old * old
+	Test: divisible by 13
+	  If true: throw to monkey 1
+	  If false: throw to monkey 3
+  
+  Monkey 3:
+	Starting items: 74
+	Operation: new = old + 3
+	Test: divisible by 17
+	  If true: throw to monkey 0
+	  If false: throw to monkey 1`
+
+	monkeys := buildMonkeys(data)
+
+	if len(monkeys) != 4 {
+		t.Fatalf("Did not read all the monkeys: %v", monkeys)
+	}
+
+	for i := 0; i < 2; i++ {
+		runMonkeys(monkeys)
+	}
+
+	values := getMonkeyTimes(monkeys)
+	if values[0]*values[1] != 21 {
+		t.Errorf("Bad monkey run: %v -> %v, \n%+v \n%+v \n%+v \n%+v", values[0]*values[1], values, monkeys[0], monkeys[1], monkeys[2], monkeys[3])
+	}
+}
+
 func Test2022_11_1_Main(t *testing.T) {
 	data := `Monkey 0:
 	Starting items: 79, 98
@@ -77,8 +122,7 @@ func Test2022_11_1_Main(t *testing.T) {
 		t.Errorf("Bad monkey run: %v -> %v", values[0]*values[1], values)
 	}
 }
-
-func Test2022_11_1_Run(t *testing.T) {
+func Test2022_11_2_Main(t *testing.T) {
 	data := `Monkey 0:
 	Starting items: 79, 98
 	Operation: new = old * 19
@@ -108,14 +152,18 @@ func Test2022_11_1_Run(t *testing.T) {
 	  If false: throw to monkey 1`
 
 	monkeys := buildMonkeys(data)
+	monkeys2 := buildMonkeys(data)
 
 	if len(monkeys) != 4 {
 		t.Fatalf("Did not read all the monkeys: %v", monkeys)
 	}
 
-	runMonkeys(monkeys)
+	for i := 0; i < 10000; i++ {
+		runMonkeysLong(monkeys)
+	}
 
-	if len(monkeys[0].items) != 4 || monkeys[0].items[0] != 20 {
-		t.Errorf("Bad items: %v, %v, %v, %v", monkeys[0].items, monkeys[1].items, monkeys[2].items, monkeys[3].items)
+	values := getMonkeyTimes(monkeys)
+	if values[0]*values[1] != 2713310158 {
+		t.Errorf("Bad monkey run: %v vs %v", getMonkeyTimes(monkeys), getMonkeyTimes(monkeys2))
 	}
 }

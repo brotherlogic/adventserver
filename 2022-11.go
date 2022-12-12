@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -37,14 +38,16 @@ func buildMonkeys(data string) []*monkey {
 
 			case "Starting":
 				tline := strings.Split(nline, ":")
-				nums := strings.Split(tline[1], ",")
-				for _, num := range nums {
-					numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 32)
-					cmonkey.items = append(cmonkey.items, int(numv))
+				if len(strings.TrimSpace(tline[1])) > 0 {
+					nums := strings.Split(tline[1], ",")
+					for _, num := range nums {
+						numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 64)
+						cmonkey.items = append(cmonkey.items, int(numv))
+					}
 				}
 			case "Operation:":
 				cmonkey.operation = fields[4]
-				num, _ := strconv.ParseInt(fields[5], 10, 32)
+				num, _ := strconv.ParseInt(fields[5], 10, 64)
 				if num == 0 {
 					cmonkey.adjustment = -1
 				} else {
@@ -67,6 +70,50 @@ func buildMonkeys(data string) []*monkey {
 	monkeys = append(monkeys, cmonkey)
 
 	return monkeys
+}
+
+func runMonkeysLong(monkeys []*monkey) {
+	mmap := make(map[int]*monkey)
+	controller := 1
+	for _, monkey := range monkeys {
+		mmap[monkey.number] = monkey
+		controller *= monkey.test
+	}
+
+	for _, monkey := range monkeys {
+		for len(monkey.items) > 0 {
+			vitem := monkey.items[0]
+
+			vitem = vitem % controller
+			if vitem == 0 {
+				vitem = monkey.test
+			}
+
+			switch monkey.operation {
+			case "*":
+				if monkey.adjustment > 0 {
+					vitem *= monkey.adjustment
+				} else {
+					vitem = vitem * vitem
+				}
+			case "+":
+				if monkey.adjustment > 0 {
+					vitem += monkey.adjustment
+				} else {
+					vitem = vitem + vitem
+				}
+			}
+
+			if vitem%monkey.test == 0 {
+				mmap[monkey.trueMonkey].items = append(monkeys[monkey.trueMonkey].items, vitem)
+			} else {
+				mmap[monkey.falseMonkey].items = append(monkeys[monkey.falseMonkey].items, vitem)
+			}
+			monkey.items = monkey.items[1:]
+			monkey.seen++
+		}
+
+	}
 }
 
 func runMonkeys(monkeys []*monkey) {
@@ -93,11 +140,13 @@ func runMonkeys(monkeys []*monkey) {
 				}
 			}
 
-			vitem = vitem / 3
+			//vitem = vitem / 3
 
 			if vitem%monkey.test == 0 {
+				log.Printf("[%v] Move %v to %v", monkey.number, vitem, monkey.trueMonkey)
 				mmap[monkey.trueMonkey].items = append(monkeys[monkey.trueMonkey].items, vitem)
 			} else {
+				log.Printf("[%v] Move %v to %v", monkey.number, vitem, monkey.falseMonkey)
 				mmap[monkey.falseMonkey].items = append(monkeys[monkey.falseMonkey].items, vitem)
 			}
 			monkey.items = monkey.items[1:]
@@ -128,6 +177,21 @@ func (s *Server) Solve2022day11part1(ctx context.Context) (*pb.SolveResponse, er
 	monkeys := buildMonkeys(data)
 	for i := 0; i < 20; i++ {
 		runMonkeys(monkeys)
+	}
+	vals := getMonkeyTimes(monkeys)
+
+	return &pb.SolveResponse{Answer: int32(vals[0] * vals[1])}, nil
+}
+
+func (s *Server) Solve2022day11part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-11.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	monkeys := buildMonkeys(data)
+	for i := 0; i < 1000; i++ {
+		runMonkeysLong(monkeys)
 	}
 	vals := getMonkeyTimes(monkeys)
 
