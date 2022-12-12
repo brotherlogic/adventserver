@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -78,6 +79,29 @@ func printMap(hmap [][]int) {
 	fmt.Printf("%v\n", string([]byte{byte(hmap[0][1])}))
 }
 
+func buildData(data string) []string {
+	ndata := strings.Replace(data, "S", "a", -1)
+	var res []string
+	for i := 0; i < len(ndata); i++ {
+		if ndata[i] == 'a' {
+			res = append(res, ndata[:i]+"S"+ndata[i+1:])
+		}
+	}
+	return res
+}
+
+func runMultiMap(data string) int {
+	best := math.MaxInt
+	for _, mData := range buildData(data) {
+		val, _ := runMap(mData)
+		if val < best {
+			best = val
+		}
+	}
+
+	return best
+}
+
 func runMap(data string) (int, string) {
 	hMap, x, y, gx, gy := buildMap(data)
 	seen := make(map[string]bool)
@@ -114,4 +138,13 @@ func (s *Server) Solve2022day12part1(ctx context.Context) (*pb.SolveResponse, er
 	s.CtxLog(ctx, fmt.Sprintf("%v, %v", len(bmap), len(bmap[0])))
 	res, _ := runMap(data)
 	return &pb.SolveResponse{Answer: int32(res)}, nil
+}
+
+func (s *Server) Solve2022day12part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-12.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runMultiMap(data))}, nil
 }
