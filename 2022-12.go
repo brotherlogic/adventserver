@@ -80,7 +80,14 @@ func printMap(hmap [][]int) {
 }
 
 func buildData(data string) []string {
-	return []string{data}
+	ndata := strings.Replace(data, "S", "a", -1)
+	var res []string
+	for i := 0; i < len(ndata); i++ {
+		if ndata[i] == 'a' {
+			res = append(res, ndata[:i]+"S"+ndata[i+1:])
+		}
+	}
+	return res
 }
 
 func runMultiMap(data string) int {
