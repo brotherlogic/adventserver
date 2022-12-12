@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"sort"
 	"strconv"
 	"strings"
@@ -143,10 +142,8 @@ func runMonkeys(monkeys []*monkey) {
 			//vitem = vitem / 3
 
 			if vitem%monkey.test == 0 {
-				log.Printf("[%v] Move %v to %v", monkey.number, vitem, monkey.trueMonkey)
 				mmap[monkey.trueMonkey].items = append(monkeys[monkey.trueMonkey].items, vitem)
 			} else {
-				log.Printf("[%v] Move %v to %v", monkey.number, vitem, monkey.falseMonkey)
 				mmap[monkey.falseMonkey].items = append(monkeys[monkey.falseMonkey].items, vitem)
 			}
 			monkey.items = monkey.items[1:]
