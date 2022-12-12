@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"log"
+	"testing"
+)
 
 func Test2022_11_1_Build(t *testing.T) {
 	data := `Monkey 0:
@@ -163,6 +166,7 @@ func Test2022_11_2_Main(t *testing.T) {
 	}
 
 	values := getMonkeyTimes(monkeys)
+	log.Printf("FOUND %v", values)
 	if values[0]*values[1] != 2713310158 {
 		t.Errorf("Bad monkey run: %v vs %v", getMonkeyTimes(monkeys), getMonkeyTimes(monkeys2))
 	}

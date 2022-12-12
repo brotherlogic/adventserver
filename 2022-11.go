@@ -11,13 +11,13 @@ import (
 
 type monkey struct {
 	number      int
-	items       []int
+	items       []int64
 	operation   string
-	adjustment  int
-	test        int
+	adjustment  int64
+	test        int64
 	trueMonkey  int
 	falseMonkey int
-	seen        int
+	seen        int64
 }
 
 func buildMonkeys(data string) []*monkey {
@@ -29,32 +29,32 @@ func buildMonkeys(data string) []*monkey {
 			fields := strings.Fields(nline)
 			switch fields[0] {
 			case "Monkey":
-				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-1], 10, 32)
+				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-1], 10, 64)
 				if num > 0 {
 					monkeys = append(monkeys, cmonkey)
 				}
-				cmonkey = &monkey{number: int(num), items: make([]int, 0)}
+				cmonkey = &monkey{number: int(num), items: make([]int64, 0)}
 
 			case "Starting":
 				tline := strings.Split(nline, ":")
 				if len(strings.TrimSpace(tline[1])) > 0 {
 					nums := strings.Split(tline[1], ",")
 					for _, num := range nums {
-						numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 32)
-						cmonkey.items = append(cmonkey.items, int(numv))
+						numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 64)
+						cmonkey.items = append(cmonkey.items, int64(numv))
 					}
 				}
 			case "Operation:":
 				cmonkey.operation = fields[4]
-				num, _ := strconv.ParseInt(fields[5], 10, 32)
+				num, _ := strconv.ParseInt(fields[5], 10, 64)
 				if num == 0 {
 					cmonkey.adjustment = -1
 				} else {
-					cmonkey.adjustment = int(num)
+					cmonkey.adjustment = int64(num)
 				}
 			case "Test:":
-				num, _ := strconv.ParseInt(fields[3], 10, 32)
-				cmonkey.test = int(num)
+				num, _ := strconv.ParseInt(fields[3], 10, 64)
+				cmonkey.test = int64(num)
 			case "If":
 				num, _ := strconv.ParseInt(fields[5], 10, 32)
 				if fields[1] == "true:" {
@@ -73,7 +73,7 @@ func buildMonkeys(data string) []*monkey {
 
 func runMonkeysLong(monkeys []*monkey) {
 	mmap := make(map[int]*monkey)
-	controller := 1
+	controller := int64(1)
 	for _, monkey := range monkeys {
 		mmap[monkey.number] = monkey
 		controller *= monkey.test
@@ -153,14 +153,14 @@ func runMonkeys(monkeys []*monkey) {
 	}
 }
 
-func getMonkeyTimes(monkeys []*monkey) []int {
+func getMonkeyTimes(monkeys []*monkey) []int64 {
 
-	var values []int
+	var values []int64
 	for _, m := range monkeys {
 		values = append(values, m.seen)
 	}
 
-	sort.Sort(sort.Reverse(sort.IntSlice(values)))
+	sort.Slice(values, func(i, j int) bool { return values[i] > values[j] })
 
 	return values
 }
