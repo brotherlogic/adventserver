@@ -94,7 +94,7 @@ func runMultiMap(data string) int {
 	best := math.MaxInt
 	for _, mData := range buildData(data) {
 		val, _ := runMap(mData)
-		if val < best {
+		if val < best && val > 0 {
 			best = val
 		}
 	}
