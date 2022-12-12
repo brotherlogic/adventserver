@@ -46,7 +46,6 @@ func getNext(node mapNode, hMap [][]int) []mapNode {
 		response = append(response, mapNode{x: node.x - 1, y: node.y, steps: node.steps + 1, route: node.route + fmt.Sprintf(";%v-%v", node.x-1, node.y)})
 	}
 
-	//log.Printf("%v,%v -> %v, %v", node.x, node.y, string([]byte{byte(hMap[node.x+1][node.y])}), string([]byte{byte(hMap[node.x][node.y])}))
 	if node.x < len(hMap)-1 && hMap[node.x+1][node.y] <= hMap[node.x][node.y]+1 {
 		response = append(response, mapNode{x: node.x + 1, y: node.y, steps: node.steps + 1, route: node.route + fmt.Sprintf(";%v-%v", node.x+1, node.y)})
 	}
