@@ -88,7 +88,7 @@ func runMultiMap(data string) int {
 	for _, mData := range buildData(data) {
 		val, _ := runMap(mData)
 		if val < best {
-			val = best
+			best = val
 		}
 	}
 
@@ -131,4 +131,13 @@ func (s *Server) Solve2022day12part1(ctx context.Context) (*pb.SolveResponse, er
 	s.CtxLog(ctx, fmt.Sprintf("%v, %v", len(bmap), len(bmap[0])))
 	res, _ := runMap(data)
 	return &pb.SolveResponse{Answer: int32(res)}, nil
+}
+
+func (s *Server) Solve2022day12part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-12.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runMultiMap(data))}, nil
 }
