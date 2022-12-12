@@ -40,7 +40,7 @@ func buildMonkeys(data string) []*monkey {
 				if len(strings.TrimSpace(tline[1])) > 0 {
 					nums := strings.Split(tline[1], ",")
 					for _, num := range nums {
-						numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 64)
+						numv, _ := strconv.ParseInt(strings.TrimSpace(num), 10, 32)
 						cmonkey.items = append(cmonkey.items, int(numv))
 					}
 				}
