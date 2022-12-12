@@ -206,5 +206,5 @@ func (s *Server) Solve2022day11part2(ctx context.Context) (*pb.SolveResponse, er
 
 	s.CtxLog(ctx, fmt.Sprintf("VALUES: %v", vals))
 
-	return &pb.SolveResponse{Answer: int32(vals[0] * vals[1])}, nil
+	return &pb.SolveResponse{BigAnswer: int64(vals[0] * vals[1])}, nil
 }
