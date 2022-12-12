@@ -40,7 +40,7 @@ func (m *toggler) set(reg string, value int) {
 }
 
 func runToggleProgram(data string) *toggler {
-	toggler := &toggler{program: make([]string, 0)}
+	toggler := &toggler{program: make([]string, 0), a: 7}
 
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
@@ -49,6 +49,7 @@ func runToggleProgram(data string) *toggler {
 	}
 
 	for toggler.pointer < len(toggler.program) {
+		log.Printf("EXEC %v -> %v", toggler.program[toggler.pointer], toggler.c)
 		nline.Set(float64(toggler.pointer))
 		fields := strings.Fields(toggler.program[toggler.pointer])
 		switch fields[0] {
@@ -147,22 +148,24 @@ func runToggleProgram(data string) *toggler {
 				jump = toggler.c
 			}
 
-			newline := toggler.program[toggler.pointer+jump]
-			nfields := strings.Fields(newline)
-			switch nfields[0] {
-			case "inc":
-				newline = strings.Replace(newline, "inc", "dec", -1)
-			case "dec":
-				newline = strings.Replace(newline, "dec", "inc", -1)
-			case "tgl":
-				newline = strings.Replace(newline, "tgl", "inc", -1)
-			case "jnz":
-				newline = strings.Replace(newline, "jnz", "cpy", -1)
-			case "cpy":
-				newline = strings.Replace(newline, "cpy", "jnz", -1)
-			}
+			if toggler.pointer+jump < len(toggler.program) {
+				newline := toggler.program[toggler.pointer+jump]
+				nfields := strings.Fields(newline)
+				switch nfields[0] {
+				case "inc":
+					newline = strings.Replace(newline, "inc", "dec", -1)
+				case "dec":
+					newline = strings.Replace(newline, "dec", "inc", -1)
+				case "tgl":
+					newline = strings.Replace(newline, "tgl", "inc", -1)
+				case "jnz":
+					newline = strings.Replace(newline, "jnz", "cpy", -1)
+				case "cpy":
+					newline = strings.Replace(newline, "cpy", "jnz", -1)
+				}
 
-			toggler.program[toggler.pointer+jump] = newline
+				toggler.program[toggler.pointer+jump] = newline
+			}
 			toggler.pointer++
 		}
 	}
