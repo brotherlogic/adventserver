@@ -125,6 +125,7 @@ func copy(maze [][]int) [][]int {
 
 func solveMaze(maze [][]int) int {
 	queue := []mazeNode{mazeNode{maze: maze, steps: 0}}
+	seen := make(map[string]bool)
 
 	for len(queue) > 0 {
 		equeue.Set(float64(len(queue)))
@@ -148,18 +149,26 @@ func solveMaze(maze [][]int) int {
 			}
 		}
 
+		seen[fmt.Sprintf("%v-%v-%v-%v", x1, y1, x3, y3)] = true
+
 		for _, move := range makeMoves(head.maze, x3, y3, true) {
 			nmaze := copy(head.maze)
 			nmaze[x3][y3] = 1
 			nmaze[move[0]][move[1]] = 3
-			queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
+			if _, ok := seen[fmt.Sprintf("%v-%v-%v-%v", x3, y3, move[0], move[1])]; !ok {
+				queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
+				seen[fmt.Sprintf("%v-%v-%v-%v", x3, y3, move[0], move[1])] = true
+			}
 		}
 
 		for _, move := range makeMoves(head.maze, x1, y1, false) {
 			nmaze := copy(head.maze)
 			nmaze[x1][y1] = 0
 			nmaze[move[0]][move[1]] = 1
-			queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
+			if _, ok := seen[fmt.Sprintf("%v-%v-%v-%v", move[0], move[1], x3, y3)]; !ok {
+				queue = append(queue, mazeNode{maze: nmaze, steps: head.steps + 1})
+				seen[fmt.Sprintf("%v-%v-%v-%v", move[0], move[1], x3, y3)] = true
+			}
 		}
 	}
 
