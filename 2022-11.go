@@ -187,7 +187,7 @@ func (s *Server) Solve2022day11part2(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	monkeys := buildMonkeys(data)
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 10000; i++ {
 		runMonkeysLong(monkeys)
 	}
 	vals := getMonkeyTimes(monkeys)
