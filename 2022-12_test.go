@@ -9,8 +9,8 @@ accszExk
 acctuvwj
 abdefghi`
 
-	steps := runMap(data)
+	steps, route := runMap(data)
 	if steps != 31 {
-		t.Errorf("Bad steps: %v (31)", steps)
+		t.Errorf("Bad steps: %v (31) -> %v", steps, route)
 	}
 }
