@@ -32,8 +32,8 @@ func buildMap(data string) ([][]int, int, int, int, int) {
 					hLine = append(hLine, int(char))
 				}
 			}
+			hMap = append(hMap, hLine)
 		}
-		hMap = append(hMap, hLine)
 	}
 
 	return hMap, x, y, gx, gy
