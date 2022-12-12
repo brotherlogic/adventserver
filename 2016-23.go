@@ -72,6 +72,18 @@ func runToggleProgram(data string) *toggler {
 			default:
 				val, _ := strconv.ParseInt(fields[1], 10, 32)
 				val2, _ := strconv.ParseInt(fields[2], 10, 32)
+				if fields[2] == "a" {
+					val2 = int64(toggler.a)
+				}
+				if fields[2] == "b" {
+					val2 = int64(toggler.b)
+				}
+				if fields[2] == "c" {
+					val2 = int64(toggler.c)
+				}
+				if fields[2] == "d" {
+					val2 = int64(toggler.d)
+				}
 				if val != 0 {
 					toggler.pointer += int(val2)
 				} else {
@@ -117,6 +129,30 @@ func runToggleProgram(data string) *toggler {
 			}
 			toggler.pointer++
 		case "tgl":
+			jump := 0
+			switch fields[1] {
+			case "a":
+				jump = toggler.a
+			case "c":
+				jump = toggler.c
+			}
+
+			newline := toggler.program[toggler.pointer+jump]
+			nfields := strings.Fields(newline)
+			switch nfields[0] {
+			case "inc":
+				newline = strings.Replace(newline, "inc", "dec", -1)
+			case "dec":
+				newline = strings.Replace(newline, "dec", "inc", -1)
+			case "tgl":
+				newline = strings.Replace(newline, "tgl", "inc", -1)
+			case "jnz":
+				newline = strings.Replace(newline, "jnz", "cpy", -1)
+			case "cpy":
+				newline = strings.Replace(newline, "cpy", "jnz", -1)
+			}
+
+			toggler.program[toggler.pointer+jump] = newline
 			toggler.pointer++
 		}
 	}
