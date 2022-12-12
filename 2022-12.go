@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -76,6 +77,22 @@ func printMap(hmap [][]int) {
 	}
 
 	fmt.Printf("%v\n", string([]byte{byte(hmap[0][1])}))
+}
+
+func buildData(data string) []string {
+	return []string{data}
+}
+
+func runMultiMap(data string) int {
+	best := math.MaxInt
+	for _, mData := range buildData(data) {
+		val, _ := runMap(mData)
+		if val < best {
+			val = best
+		}
+	}
+
+	return best
 }
 
 func runMap(data string) (int, string) {
