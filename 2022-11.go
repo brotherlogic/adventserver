@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	monks = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_11_monkeys",
+		Help: "The number of server requests",
+	})
 )
 
 type monkey struct {
@@ -78,6 +87,8 @@ func runMonkeysLong(monkeys []*monkey) {
 		mmap[monkey.number] = monkey
 		controller *= monkey.test
 	}
+
+	monks.Set(float64(len(monkeys)))
 
 	for _, monkey := range monkeys {
 		for len(monkey.items) > 0 {
