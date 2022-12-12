@@ -68,12 +68,12 @@ func Test2022_11_1_Once(t *testing.T) {
 		t.Fatalf("Did not read all the monkeys: %v", monkeys)
 	}
 
-	for i := 0; i < 2; i++ {
+	for i := 0; i < 1; i++ {
 		runMonkeys(monkeys)
 	}
 
 	values := getMonkeyTimes(monkeys)
-	if values[0]*values[1] != 21 {
+	if values[0]*values[1] != 20 {
 		t.Errorf("Bad monkey run: %v -> %v, \n%+v \n%+v \n%+v \n%+v", values[0]*values[1], values, monkeys[0], monkeys[1], monkeys[2], monkeys[3])
 	}
 }

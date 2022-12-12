@@ -46,7 +46,7 @@ func buildMonkeys(data string) []*monkey {
 				}
 			case "Operation:":
 				cmonkey.operation = fields[4]
-				num, _ := strconv.ParseInt(fields[5], 10, 64)
+				num, _ := strconv.ParseInt(fields[5], 10, 32)
 				if num == 0 {
 					cmonkey.adjustment = -1
 				} else {
@@ -139,7 +139,7 @@ func runMonkeys(monkeys []*monkey) {
 				}
 			}
 
-			//vitem = vitem / 3
+			vitem = vitem / 3
 
 			if vitem%monkey.test == 0 {
 				mmap[monkey.trueMonkey].items = append(monkeys[monkey.trueMonkey].items, vitem)
