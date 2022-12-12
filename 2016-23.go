@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	nline = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2016_day23_line",
+		Help: "The number of server requests",
+	})
 )
 
 type toggler struct {
@@ -40,6 +49,7 @@ func runToggleProgram(data string) *toggler {
 	}
 
 	for toggler.pointer < len(toggler.program) {
+		nline.Set(float64(toggler.pointer))
 		fields := strings.Fields(toggler.program[toggler.pointer])
 		switch fields[0] {
 		case "jnz":
