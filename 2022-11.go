@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -202,6 +203,8 @@ func (s *Server) Solve2022day11part2(ctx context.Context) (*pb.SolveResponse, er
 		runMonkeysLong(monkeys)
 	}
 	vals := getMonkeyTimes(monkeys)
+
+	s.CtxLog(ctx, fmt.Sprintf("VALUES: %v", vals))
 
 	return &pb.SolveResponse{Answer: int32(vals[0] * vals[1])}, nil
 }
