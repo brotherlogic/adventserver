@@ -110,6 +110,8 @@ func (s *Server) Solve2022day12part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
+	bmap, _, _, _, _ := buildMap(data)
+	s.CtxLog(ctx, fmt.Sprintf("%v, %v", len(bmap), len(bmap[0])))
 	res, _ := runMap(data)
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
