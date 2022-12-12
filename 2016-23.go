@@ -39,8 +39,8 @@ func (m *toggler) set(reg string, value int) {
 	}
 }
 
-func runToggleProgram(data string) *toggler {
-	toggler := &toggler{program: make([]string, 0), a: 7}
+func runToggleProgram(data string, init int) *toggler {
+	toggler := &toggler{program: make([]string, 0), a: init}
 
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
@@ -49,7 +49,6 @@ func runToggleProgram(data string) *toggler {
 	}
 
 	for toggler.pointer < len(toggler.program) {
-		log.Printf("EXEC %v -> %v", toggler.program[toggler.pointer], toggler.c)
 		nline.Set(float64(toggler.pointer))
 		fields := strings.Fields(toggler.program[toggler.pointer])
 		switch fields[0] {
@@ -179,6 +178,16 @@ func (s *Server) Solve2016day23part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res := runToggleProgram(data)
+	res := runToggleProgram(data, 7)
+	return &pb.SolveResponse{Answer: int32(res.a)}, nil
+}
+
+func (s *Server) Solve2016day23part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-23.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	res := runToggleProgram(data, 13)
 	return &pb.SolveResponse{Answer: int32(res.a)}, nil
 }

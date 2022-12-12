@@ -11,7 +11,7 @@ func Test2016_23_1_Main(t *testing.T) {
 	dec a
 	dec a`
 
-	res := runToggleProgram(data)
+	res := runToggleProgram(data, 7)
 	if res.a != 3 {
 		t.Errorf("Bad register: %+v", res)
 	}
