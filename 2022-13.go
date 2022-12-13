@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -99,7 +98,6 @@ func computeIndexSum(data string) int {
 	for i := 0; i < len(elems); i += 3 {
 		l1, _ := buildLelem(0, strings.TrimSpace(elems[i]))
 		l2, _ := buildLelem(0, strings.TrimSpace(elems[i+1]))
-		log.Printf("%v vs %v => %v", printLelem(l1), printLelem(l2), rightOrder(l1, l2))
 
 		if rightOrder(l1, l2) == 1 {
 			sumv += i/3 + 1
