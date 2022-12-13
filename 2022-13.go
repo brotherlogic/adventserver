@@ -100,7 +100,7 @@ func computeIndexSum(ctx context.Context, data string, log func(context.Context,
 		l2, _ := buildLelem(0, strings.TrimSpace(elems[i+1]))
 
 		if rightOrder(l1, l2) == 1 {
-			log(fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
+			log(ctx, fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
 			sumv += i/3 + 1
 		}
 	}
