@@ -48,6 +48,7 @@ func buildLelem(pointer int, line string) (*lelem, int) {
 			val, _ := strconv.ParseInt(string(line[pointer]), 10, 32)
 			if line[pointer] == '1' && line[pointer+1] == '0' {
 				val = int64(10)
+				pointer++
 			}
 
 			ret.elems = append(ret.elems, &lelem{value: int(val)})

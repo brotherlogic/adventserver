@@ -28,7 +28,10 @@ func Test2022_13_1_Main(t *testing.T) {
 	[[]]
 	
 	[1,[2,[3,[4,[5,6,7]]]],8,9]
-	[1,[2,[3,[4,[5,6,0]]]],8,9]`
+	[1,[2,[3,[4,[5,6,0]]]],8,9]
+	
+	[10,2]
+	[10,1]`
 
 	sum := computeIndexSum(context.Background(), data, tlog)
 	if sum != 13 {
