@@ -91,7 +91,7 @@ func rightOrder(l1, l2 *lelem) int {
 	return 1
 }
 
-func computeIndexSum(data string) int {
+func computeIndexSum(ctx context.Context, data string, log func(context.Context, string)) int {
 	elems := strings.Split(data, "\n")
 
 	sumv := 0
@@ -100,6 +100,7 @@ func computeIndexSum(data string) int {
 		l2, _ := buildLelem(0, strings.TrimSpace(elems[i+1]))
 
 		if rightOrder(l1, l2) == 1 {
+			log(fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
 			sumv += i/3 + 1
 		}
 	}
@@ -113,5 +114,5 @@ func (s *Server) Solve2022day13part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(computeIndexSum(data))}, nil
+	return &pb.SolveResponse{Answer: int32(computeIndexSum(ctx, data, s.CtxLog))}, nil
 }
