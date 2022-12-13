@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
@@ -91,16 +92,22 @@ func rightOrder(l1, l2 *lelem) int {
 	return 1
 }
 
-func computeIndexSum(ctx context.Context, data string, log func(context.Context, string)) int {
+func computeIndexSum(ctx context.Context, data string, dlog func(context.Context, string)) int {
 	elems := strings.Split(data, "\n")
 
 	sumv := 0
 	for i := 0; i < len(elems); i += 3 {
 		l1, _ := buildLelem(0, strings.TrimSpace(elems[i]))
+		if printLelem(l1) != strings.TrimSpace(elems[i]) {
+			log.Fatalf("Miss: %v -> %v", elems[i], printLelem(l1))
+		}
 		l2, _ := buildLelem(0, strings.TrimSpace(elems[i+1]))
+		if printLelem(l2) != strings.TrimSpace(elems[i+1]) {
+			log.Fatalf("Miss: %v -> %v", elems[i+1], printLelem(l2))
+		}
 
 		if rightOrder(l1, l2) == 1 {
-			log(ctx, fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
+			dlog(ctx, fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
 			sumv += i/3 + 1
 		}
 	}
