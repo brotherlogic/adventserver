@@ -50,7 +50,6 @@ func runToggleProgram(data string, init int) *toggler {
 	}
 
 	for toggler.pointer < len(toggler.program) {
-		log.Printf("EXEC: %v -> %v %v %v %v", toggler.program[toggler.pointer], toggler.a, toggler.b, toggler.c, toggler.d)
 		nline.Set(float64(toggler.pointer))
 		fields := strings.Fields(toggler.program[toggler.pointer])
 		switch fields[0] {
