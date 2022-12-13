@@ -99,10 +99,12 @@ func computeIndexSum(ctx context.Context, data string, dlog func(context.Context
 	for i := 0; i < len(elems); i += 3 {
 		l1, _ := buildLelem(0, strings.TrimSpace(elems[i]))
 		if printLelem(l1) != strings.TrimSpace(elems[i]) {
+			fmt.Printf("Miss: %v -> %v", elems[i], printLelem(l1))
 			log.Fatalf("Miss: %v -> %v", elems[i], printLelem(l1))
 		}
 		l2, _ := buildLelem(0, strings.TrimSpace(elems[i+1]))
 		if printLelem(l2) != strings.TrimSpace(elems[i+1]) {
+			fmt.Printf("Miss: %v -> %v", elems[i+1], printLelem(l2))
 			log.Fatalf("Miss: %v -> %v", elems[i+1], printLelem(l2))
 		}
 
