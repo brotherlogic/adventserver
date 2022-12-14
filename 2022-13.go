@@ -120,10 +120,10 @@ func resolvePackets(data string) int {
 
 	for i, lelem := range packets {
 		if printLelem(lelem) == "[[2]]" {
-			i2 = i
+			i2 = i + 1
 		}
 		if printLelem(lelem) == "[[6]]" {
-			i6 = i
+			i6 = i + 1
 		}
 	}
 
