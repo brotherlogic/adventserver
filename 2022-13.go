@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -97,6 +98,38 @@ func rightOrder(l1, l2 *lelem) int {
 	return 1
 }
 
+func resolvePackets(data string) int {
+	b1, _ := buildLelem(0, "[[2]]")
+	b2, _ := buildLelem(0, "[[6]]")
+	packets := []*lelem{b1, b2}
+
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			b, _ := buildLelem(0, strings.TrimSpace(line))
+			packets = append(packets, b)
+		}
+	}
+
+	sort.Slice(packets, func(i, j int) bool {
+		val := rightOrder(packets[i], packets[j])
+		return val == 1
+	})
+
+	i2 := 0
+	i6 := 0
+
+	for i, lelem := range packets {
+		if printLelem(lelem) == "[[2]]" {
+			i2 = i
+		}
+		if printLelem(lelem) == "[[6]]" {
+			i6 = i
+		}
+	}
+
+	return i2 * i6
+}
+
 func computeIndexSum(ctx context.Context, data string, dlog func(context.Context, string)) int {
 	elems := strings.Split(data, "\n")
 
@@ -129,4 +162,13 @@ func (s *Server) Solve2022day13part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(computeIndexSum(ctx, data, s.CtxLog))}, nil
+}
+
+func (s *Server) Solve2022day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-13.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(resolvePackets(data))}, nil
 }
