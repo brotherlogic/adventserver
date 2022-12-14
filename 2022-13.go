@@ -90,6 +90,10 @@ func rightOrder(l1, l2 *lelem) int {
 		}
 	}
 
+	if len(l1.elems) == len(l2.elems) {
+		return 0
+	}
+
 	return 1
 }
 
@@ -110,7 +114,7 @@ func computeIndexSum(ctx context.Context, data string, dlog func(context.Context
 		}
 
 		if rightOrder(l1, l2) == 1 {
-			dlog(ctx, fmt.Sprintf("%v %v", printLelem(l1), printLelem(l2)))
+			//dlog(ctx, fmt.Sprintf("%v <=> %v", printLelem(l1), printLelem(l2)))
 			sumv += i/3 + 1
 		}
 	}
