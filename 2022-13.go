@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -98,7 +99,35 @@ func rightOrder(l1, l2 *lelem) int {
 }
 
 func resolvePackets(data string) int {
-	return 0
+	b1, _ := buildLelem(0, "[[2]]")
+	b2, _ := buildLelem(0, "[[6]]")
+	packets := []*lelem{b1, b2}
+
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			b, _ := buildLelem(0, strings.TrimSpace(line))
+			packets = append(packets, b)
+		}
+	}
+
+	sort.Slice(packets, func(i, j int) bool {
+		val := rightOrder(packets[i], packets[j])
+		return val == 1
+	})
+
+	i2 := 0
+	i6 := 0
+
+	for i, lelem := range packets {
+		if printLelem(lelem) == "[[2]]" {
+			i2 = i
+		}
+		if printLelem(lelem) == "[[6]]" {
+			i6 = i
+		}
+	}
+
+	return i2 * i6
 }
 
 func computeIndexSum(ctx context.Context, data string, dlog func(context.Context, string)) int {
