@@ -149,6 +149,27 @@ func countSand(data string) int {
 	}
 }
 
+func countSandBased(data string) int {
+	left, right, bottom := findEdge(data)
+	adjust := 10000
+	sands := buildSand(data, left-adjust, right+adjust, bottom+2)
+
+	for x := 0; x < len(sands); x++ {
+		sands[x][bottom+2] = 1
+	}
+
+	count := 0
+	for {
+		nsandx, nsandy := runSand(sands, left-adjust)
+		if sands[500-left+adjust][0] == 2 {
+			return count
+		}
+		sands[nsandx][nsandy] = 2
+		count++
+
+	}
+}
+
 func (s *Server) Solve2022day14part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-14.txt")
 	if err != nil {
@@ -156,4 +177,13 @@ func (s *Server) Solve2022day14part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(countSand(data))}, nil
+}
+
+func (s *Server) Solve2022day14part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-14.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(countSandBased(data))}, nil
 }
