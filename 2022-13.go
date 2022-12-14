@@ -60,10 +60,8 @@ func buildLelem(pointer int, line string) (*lelem, int) {
 }
 
 func rightOrder(l1, l2 *lelem) int {
-	//log.Printf("COMP %v and %v", printLelem(l1), printLelem(l2))
 	if l1.value >= 0 && l2.value >= 0 {
 		if l1.value < l2.value {
-			//log.Printf("FOUND %v vs %v", printLelem(l1), printLelem(l2))
 			return 1
 		}
 		if l1.value > l2.value {
@@ -92,7 +90,10 @@ func rightOrder(l1, l2 *lelem) int {
 		}
 	}
 
-	//log.Printf("FOUND %v vs %v", printLelem(l1), printLelem(l2))
+	if len(l1.elems) == len(l2.elems) {
+		return 0
+	}
+
 	return 1
 }
 
@@ -113,7 +114,6 @@ func computeIndexSum(ctx context.Context, data string, dlog func(context.Context
 		}
 
 		if rightOrder(l1, l2) == 1 {
-			fmt.Printf("%v\n", strings.TrimSpace(elems[i]))
 			//dlog(ctx, fmt.Sprintf("%v <=> %v", printLelem(l1), printLelem(l2)))
 			sumv += i/3 + 1
 		}
