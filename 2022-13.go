@@ -97,6 +97,10 @@ func rightOrder(l1, l2 *lelem) int {
 	return 1
 }
 
+func resolvePackets(data string) int {
+	return 0
+}
+
 func computeIndexSum(ctx context.Context, data string, dlog func(context.Context, string)) int {
 	elems := strings.Split(data, "\n")
 
@@ -129,4 +133,13 @@ func (s *Server) Solve2022day13part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(computeIndexSum(ctx, data, s.CtxLog))}, nil
+}
+
+func (s *Server) Solve2022day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-13.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(resolvePackets(data))}, nil
 }
