@@ -149,6 +149,21 @@ func countSand(data string) int {
 	}
 }
 
+func countSandBased(data string) int {
+	left, right, bottom := findEdge(data)
+	sands := buildSand(data, left, right, bottom)
+
+	count := 0
+	for {
+		nsandx, nsandy := runSand(sands, left)
+		if nsandx == -1 {
+			return count
+		}
+		sands[nsandx][nsandy] = 2
+		count++
+	}
+}
+
 func (s *Server) Solve2022day14part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-14.txt")
 	if err != nil {
