@@ -113,6 +113,36 @@ func countKnown(data string, y int) int {
 	return count
 }
 
+func findKnown(data string, y int) int {
+	minX, minY, maxX, maxY := math.MaxInt, math.MaxInt, 0, 0
+	var sensors []sensor
+	for _, line := range strings.Split(data, "\n") {
+		if len(strings.TrimSpace(line)) > 0 {
+			sx, sy, bx, by := parseLine(line)
+			dist := abs(bx-sx) + abs(by-sy)
+
+			maxX = maxInt(maxX, sx+dist)
+			minX = minInt(minX, sx-dist)
+			maxY = maxInt(maxY, sy+dist)
+			minY = minInt(minY, sy-dist)
+
+			sensors = append(sensors, sensor{sx: sx, sy: sy, bx: bx, by: by})
+		}
+	}
+
+	count := 0
+	for x := minX; x <= maxX; x++ {
+		for _, sensor := range sensors {
+			if sensor.found(x, y) == 1 {
+				count++
+				break
+			}
+		}
+	}
+
+	return count
+}
+
 func (s *Server) Solve2022day15part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-15.txt")
 	if err != nil {
