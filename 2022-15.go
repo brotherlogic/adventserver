@@ -15,6 +15,10 @@ var (
 		Name: "adventserver_2022_15_line",
 		Help: "The number of server requests",
 	})
+	dline = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_15_down",
+		Help: "The number of server requests",
+	})
 )
 
 func parsePiece(piece string) int {
@@ -101,6 +105,7 @@ func countKnown(data string, y int) int {
 			manDist := abs(sx-bx) + abs(sy-by)
 
 			for postx := sx - manDist; postx <= sx+manDist; postx++ {
+				dline.Set(float64(sx + manDist - postx))
 				for posty := sy - manDist; posty <= sy+manDist; posty++ {
 					coordx, coordy := postx-minX, posty-minY
 					if abs(sx-postx)+abs(sy-posty) <= manDist {
