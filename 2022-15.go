@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	sline = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_15_line",
+		Help: "The number of server requests",
+	})
 )
 
 func parsePiece(piece string) int {
@@ -83,7 +92,8 @@ func countKnown(data string, y int) int {
 		arr = append(arr, make([]int, maxY-minY+1))
 	}
 
-	for _, line := range strings.Split(data, "\n") {
+	for i, line := range strings.Split(data, "\n") {
+		sline.Set(float64(i))
 		if len(strings.TrimSpace(line)) > 0 {
 			sx, sy, bx, by := parseLine(line)
 			arr[sx-minX][sy-minY] = 2
