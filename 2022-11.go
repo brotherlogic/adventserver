@@ -39,7 +39,7 @@ func buildMonkeys(data string) []*monkey {
 			fields := strings.Fields(nline)
 			switch fields[0] {
 			case "Monkey":
-				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-1], 10, 64)
+				num, _ := strconv.ParseInt(fields[1][:len(fields[1])-1], 10, 32)
 				if num > 0 {
 					monkeys = append(monkeys, cmonkey)
 				}
