@@ -53,7 +53,6 @@ func runToggleProgram(data string, init int) *toggler {
 	toggler.cprogram = collapseProgram(toggler.program)
 
 	for toggler.pointer < len(toggler.program) {
-		log.Printf("EXEC %v %v %v %v %v", toggler.cprogram[toggler.pointer], toggler.a, toggler.b, toggler.c, toggler.d)
 		nline.Set(float64(toggler.pointer))
 		fields := strings.Fields(toggler.cprogram[toggler.pointer])
 		switch fields[0] {
@@ -181,7 +180,6 @@ func runToggleProgram(data string, init int) *toggler {
 			val := toggler.get(fields[1])
 			mult := toggler.get(fields[9])
 			if fields[6] == "inc" {
-				log.Printf("f %v  %v", incrementer, fields)
 				toggler.update(incrementer, val*mult)
 			} else {
 				toggler.update(incrementer, -val*mult)
