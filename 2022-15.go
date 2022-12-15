@@ -165,5 +165,5 @@ func (s *Server) Solve2022day15part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(countKnown(data, 4000000))}, nil
+	return &pb.SolveResponse{Answer: int32(findKnown(data, 4000000))}, nil
 }
