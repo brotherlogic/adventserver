@@ -5,21 +5,27 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
 )
 
-var (
-	sline = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "adventserver_2022_15_line",
-		Help: "The number of server requests",
-	})
-	dline = promauto.NewGauge(prometheus.GaugeOpts{
-		Name: "adventserver_2022_15_down",
-		Help: "The number of server requests",
-	})
-)
+type sensor struct {
+	sx, sy int
+	bx, by int
+}
+
+func (s sensor) found(x, y int) int {
+	manDist := abs(s.bx-s.sx) + abs(s.by-s.sy)
+	sDist := abs(s.sx-x) + abs(s.sy-y)
+
+	if s.bx == x && s.by == y {
+		return 2
+	}
+
+	if sDist <= manDist {
+		return 1
+	}
+	return 0
+}
 
 func parsePiece(piece string) int {
 	fields := strings.Split(piece, "=")
@@ -79,6 +85,7 @@ func printSensor(arr [][]int) string {
 
 func countKnown(data string, y int) int {
 	minX, minY, maxX, maxY := math.MaxInt, math.MaxInt, 0, 0
+	var sensors []sensor
 	for _, line := range strings.Split(data, "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
 			sx, sy, bx, by := parseLine(line)
@@ -88,40 +95,18 @@ func countKnown(data string, y int) int {
 			minX = minInt(minX, sx-dist)
 			maxY = maxInt(maxY, sy+dist)
 			minY = minInt(minY, sy-dist)
-		}
-	}
 
-	var arr [][]int
-	for i := minX; i <= maxX-minX; i++ {
-		arr = append(arr, make([]int, maxY-minY+1))
-	}
-
-	for i, line := range strings.Split(data, "\n") {
-		sline.Set(float64(i))
-		if len(strings.TrimSpace(line)) > 0 {
-			sx, sy, bx, by := parseLine(line)
-			arr[sx-minX][sy-minY] = 2
-			arr[bx-minX][by-minY] = 3
-			manDist := abs(sx-bx) + abs(sy-by)
-
-			for postx := sx - manDist; postx <= sx+manDist; postx++ {
-				dline.Set(float64(sx + manDist - postx))
-				for posty := sy - manDist; posty <= sy+manDist; posty++ {
-					coordx, coordy := postx-minX, posty-minY
-					if abs(sx-postx)+abs(sy-posty) <= manDist {
-						if arr[coordx][coordy] == 0 {
-							arr[coordx][coordy] = 1
-						}
-					}
-				}
-			}
+			sensors = append(sensors, sensor{sx: sx, sy: sy, bx: bx, by: by})
 		}
 	}
 
 	count := 0
-	for x := 0; x < len(arr); x++ {
-		if arr[x][y-minY] == 1 {
-			count++
+	for x := minX; x <= maxX; x++ {
+		for _, sensor := range sensors {
+			if sensor.found(x, y) == 1 {
+				count++
+				break
+			}
 		}
 	}
 
