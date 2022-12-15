@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -49,9 +50,12 @@ func runToggleProgram(data string, init int) *toggler {
 		}
 	}
 
+	toggler.cprogram = collapseProgram(toggler.program)
+
 	for toggler.pointer < len(toggler.program) {
+		log.Printf("EXEC %v %v %v %v %v", toggler.cprogram[toggler.pointer], toggler.a, toggler.b, toggler.c, toggler.d)
 		nline.Set(float64(toggler.pointer))
-		fields := strings.Fields(toggler.program[toggler.pointer])
+		fields := strings.Fields(toggler.cprogram[toggler.pointer])
 		switch fields[0] {
 		case "jnz":
 			val, _ := strconv.ParseInt(fields[2], 10, 32)
@@ -167,10 +171,103 @@ func runToggleProgram(data string, init int) *toggler {
 				toggler.program[toggler.pointer+jump] = newline
 			}
 			toggler.pointer++
+			toggler.cprogram = collapseProgram(toggler.program)
+
+		case "jnzcc":
+			incrementer := fields[7]
+			if fields[2] == incrementer {
+				log.Fatalf("HUH")
+			}
+			val := toggler.get(fields[1])
+			mult := toggler.get(fields[9])
+			if fields[6] == "inc" {
+				log.Printf("f %v  %v", incrementer, fields)
+				toggler.update(incrementer, val*mult)
+			} else {
+				toggler.update(incrementer, -val*mult)
+			}
+			toggler.pointer++
+		case "jnzc":
+			factor := fields[1]
+			if fields[3] == factor {
+				change := toggler.get(factor)
+				if fields[4] == "inc" {
+					toggler.update(fields[5], change)
+				} else {
+					toggler.update(fields[5], -change)
+				}
+			} else if fields[5] == factor {
+				change := toggler.get(factor)
+				if fields[2] == "inc" {
+					toggler.update(fields[3], change)
+				} else {
+					toggler.update(fields[3], -change)
+				}
+			}
+			toggler.pointer++
+
+		default:
+			log.Fatalf("Bad instruction: %v", fields[0])
 		}
 	}
 
 	return toggler
+}
+
+func (t *toggler) get(register string) int {
+	switch register {
+	case "a":
+		return t.a
+	case "b":
+		return t.b
+	case "c":
+		return t.c
+	case "d":
+		return t.d
+	default:
+		return getInt32(register)
+	}
+}
+
+func (t *toggler) update(register string, val int) {
+	switch register {
+	case "a":
+		t.a += val
+	case "b":
+		t.b += val
+	case "c":
+		t.c += val
+	case "d":
+		t.d += val
+	default:
+		log.Fatalf("Bad register on update: %v", register)
+	}
+
+}
+
+func collapseProgram(program []string) []string {
+	var nprog []string
+
+	for i := range program {
+		fields := strings.Fields(program[i])
+		if strings.HasPrefix(program[i], "jnz") && strings.HasSuffix(program[i], "-2") {
+			nprog = append(nprog, fmt.Sprintf("jnzc %v %v %v", fields[1], program[i-1], program[i-2]))
+		} else {
+			nprog = append(nprog, program[i])
+		}
+	}
+
+	var nnprog []string
+	for i := range nprog {
+		if strings.HasPrefix(nprog[i], "jnz") && strings.HasSuffix(nprog[i], "-5") {
+			fields := strings.Fields(program[i-1])
+			nnprog = append(nnprog, fmt.Sprintf("jnzcc %v %v %v", fields[1], nprog[i-2], nprog[i-5]))
+		} else {
+			nnprog = append(nnprog, program[i])
+		}
+	}
+
+	return nnprog
 }
 
 func (s *Server) Solve2016day23part1(ctx context.Context) (*pb.SolveResponse, error) {
