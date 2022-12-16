@@ -110,7 +110,7 @@ func generateNext(head *ductMazeNode, maze [][]int) []*ductMazeNode {
 	return resp
 }
 
-func runDuctMaze(data string) int {
+func runDuctMaze(data string, ret bool) int {
 	maze, sx, sy, maxv := buildMaze(data)
 
 	seen := make(map[string]bool)
@@ -121,7 +121,11 @@ func runDuctMaze(data string) int {
 		queue = queue[1:]
 
 		if len(head.seen) == maxv {
-			return head.count - 1
+			if ret && head.x == sx && head.y == sy {
+				return head.count - 1
+			} else {
+				return head.count - 1
+			}
 		}
 
 		if maze[head.x][head.y] > 0 {
@@ -146,5 +150,14 @@ func (s *Server) Solve2016day24part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runDuctMaze(data))}, nil
+	return &pb.SolveResponse{Answer: int32(runDuctMaze(data, false))}, nil
+}
+
+func (s *Server) Solve2016day24part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2016-24.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runDuctMaze(data, true))}, nil
 }
