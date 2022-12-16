@@ -25,7 +25,7 @@ func buildMaze(data string) ([][]int, int, int, int) {
 				default:
 					val := getInt32(string(char))
 					if val == 0 {
-						sx, sy = len(cMaze), y
+						sy, sx = len(cMaze), y
 					}
 					cMaze = append(cMaze, val)
 					if val > maxv {
@@ -52,17 +52,21 @@ func (d ductMazeNode) rep() string {
 	return fmt.Sprintf("%v-%v-%v", d.x, d.y, d.seen)
 }
 
-func printDuctMaze(maze [][]int) string {
+func printDuctMaze(maze [][]int, xs, ys int) string {
 	ret := ""
 	for x := 0; x < len(maze); x++ {
 		for y := 0; y < len(maze[0]); y++ {
-			switch maze[x][y] {
-			case -1:
-				ret += "#"
-			case 0:
-				ret += "."
-			default:
-				ret += fmt.Sprintf("%v", maze[x][y])
+			if x == xs && y == ys {
+				ret += "S"
+			} else {
+				switch maze[x][y] {
+				case -1:
+					ret += "#"
+				case 0:
+					ret += "."
+				default:
+					ret += fmt.Sprintf("%v", maze[x][y])
+				}
 			}
 		}
 		ret += "\n"
