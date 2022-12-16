@@ -133,7 +133,7 @@ func runDuctMaze(data string) int {
 		}
 	}
 
-	return 0
+	return -1
 }
 
 func (s *Server) Solve2016day24part1(ctx context.Context) (*pb.SolveResponse, error) {
