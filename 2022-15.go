@@ -13,6 +13,13 @@ type sensor struct {
 	bx, by int
 }
 
+func (s sensor) findBottom(x int) int {
+	manDist :=abs(s.bx-s.sx) + abs(s.by-s.sy)
+	ydist := s.sy + (manDist - abs(s.sx-x))
+
+	return ydist
+}
+
 func (s sensor) found(x, y int) int {
 	manDist := abs(s.bx-s.sx) + abs(s.by-s.sy)
 	sDist := abs(s.sx-x) + abs(s.sy-y)
@@ -131,12 +138,15 @@ func findKnown(data string, mm int) int {
 	}
 
 	count := 0
-	for x := 0; x <= mm; x++ {
-		for y := 0; y <= mm; y++ {
+	x := 0
+	for  x <= mm {
+		y := 0
+		for  y <= mm {
 			found := false
 			for _, sensor := range sensors {
 				if sensor.found(x, y) != 0 {
 					found = true
+					y = sensor.findBottom(x)
 					break
 				}
 			}
@@ -144,7 +154,10 @@ func findKnown(data string, mm int) int {
 			if !found {
 				return 4000000*x + y
 			}
+
+			y++
 		}
+		x++
 	}
 
 	return count
