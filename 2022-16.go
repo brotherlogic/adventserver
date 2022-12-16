@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"sort"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -37,6 +39,11 @@ type gasNode struct {
 	active    map[string]bool
 	remaining int
 	sofar     int
+	path      string
+}
+
+func (g gasNode) rep() string {
+	return g.cvalve + fmt.Sprintf("%v-%v", g.active, g.remaining)
 }
 
 func computeGas(active map[string]bool, vals map[string]int) int {
@@ -63,8 +70,9 @@ func copyActive(active map[string]bool, add string) map[string]bool {
 
 func releaseGas(data string, minutes int) int {
 	mmap, vals := buildMMap(data)
+	seen := make(map[string]bool)
 
-	queue := []gasNode{{cvalve: "AA", active: make(map[string]bool), remaining: minutes, sofar: 0}}
+	queue := []gasNode{{cvalve: "AA", active: make(map[string]bool), remaining: minutes, sofar: 0, path: "AA"}}
 
 	for len(queue) > 0 {
 		head := queue[0]
@@ -75,21 +83,38 @@ func releaseGas(data string, minutes int) int {
 		}
 
 		if vals[head.cvalve] > 0 && !head.active[head.cvalve] {
-			queue = append(queue, gasNode{
+			nnode := gasNode{
 				cvalve:    head.cvalve,
 				active:    copyActive(head.active, head.cvalve),
 				remaining: head.remaining - 1,
-				sofar:     head.sofar + computeGas(head.active, vals)})
+				path:      head.path + "-" + head.cvalve,
+				sofar:     head.sofar + computeGas(head.active, vals)}
+			if !seen[nnode.rep()] {
+				queue = append(queue, nnode)
+				seen[nnode.rep()] = true
+			}
 		}
 
 		for _, next := range mmap[head.cvalve] {
-			queue = append(queue, gasNode{
+			nnode := gasNode{
 				cvalve:    next,
 				active:    copyActive(head.active, ""),
 				remaining: head.remaining - 1,
+				path:      head.path + "-" + next,
 				sofar:     head.sofar + computeGas(head.active, vals),
-			})
+			}
+			if !seen[nnode.rep()] {
+				queue = append(queue, nnode)
+				seen[nnode.rep()] = true
+			}
 		}
+
+		sort.SliceStable(queue, func(i, j int) bool {
+			if queue[i].remaining < queue[j].remaining {
+				return false
+			}
+			return queue[i].sofar > queue[j].sofar
+		})
 	}
 
 	return -1

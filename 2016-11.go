@@ -246,8 +246,7 @@ func (s *Server) Solve2016day11part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res, path, start := findFloors(data, false)
-	s.CtxLog(ctx, fmt.Sprintf("PATH %v -> %v", path, start))
+	res, _, _ := findFloors(data, false)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
@@ -258,8 +257,7 @@ func (s *Server) Solve2016day11part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res, path, start := findFloors(data, true)
-	s.CtxLog(ctx, fmt.Sprintf("PATH %v -> %v", path, start))
+	res, _, _ := findFloors(data, true)
 
 	return &pb.SolveResponse{Answer: int32(res)}, nil
 }
