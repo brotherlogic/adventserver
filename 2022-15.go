@@ -14,7 +14,7 @@ type sensor struct {
 }
 
 func (s sensor) findBottom(x int) int {
-	manDist :=abs(s.bx-s.sx) + abs(s.by-s.sy)
+	manDist := abs(s.bx-s.sx) + abs(s.by-s.sy)
 	ydist := s.sy + (manDist - abs(s.sx-x))
 
 	return ydist
@@ -120,7 +120,7 @@ func countKnown(data string, y int) int {
 	return count
 }
 
-func findKnown(data string, mm int) int {
+func findKnown(data string, mm int) int64 {
 	minX, minY, maxX, maxY := math.MaxInt, math.MaxInt, 0, 0
 	var sensors []sensor
 	for _, line := range strings.Split(data, "\n") {
@@ -139,9 +139,9 @@ func findKnown(data string, mm int) int {
 
 	count := 0
 	x := 0
-	for  x <= mm {
+	for x <= mm {
 		y := 0
-		for  y <= mm {
+		for y <= mm {
 			found := false
 			for _, sensor := range sensors {
 				if sensor.found(x, y) != 0 {
@@ -152,7 +152,7 @@ func findKnown(data string, mm int) int {
 			}
 
 			if !found {
-				return 4000000*x + y
+				return 4000000*int64(x) + int64(y)
 			}
 
 			y++
@@ -160,7 +160,7 @@ func findKnown(data string, mm int) int {
 		x++
 	}
 
-	return count
+	return int64(count)
 }
 
 func (s *Server) Solve2022day15part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -178,5 +178,5 @@ func (s *Server) Solve2022day15part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(findKnown(data, 4000000))}, nil
+	return &pb.SolveResponse{BigAnswer: findKnown(data, 4000000)}, nil
 }
