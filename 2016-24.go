@@ -122,8 +122,8 @@ func runDuctMaze(data string, ret bool) int {
 
 		if len(head.seen) == maxv {
 			if ret && head.x == sx && head.y == sy {
-				return head.count - 1
-			} else {
+				return head.count
+			} else if head.x == sx && head.y == sy {
 				return head.count - 1
 			}
 		}
