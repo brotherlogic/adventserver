@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strings"
 	"testing"
 )
@@ -114,7 +113,6 @@ func Test2016SupKeyLast_14_1(t *testing.T) {
 
 	key := makeKey("abc", 22728, false)
 	threes, f := buildKey("abc", 22728, fives, false)
-	log.Printf("F %v", f)
 	fives = f
 
 	found := false
