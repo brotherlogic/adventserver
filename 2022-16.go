@@ -132,6 +132,43 @@ func releaseGas(data string, minutes int) int {
 	return bestValue
 }
 
+func releaseGasPair(data string, minutes int) int {
+	mmap, vals := buildMMap(data)
+
+	currValve := "AA"
+	bestValue := 0
+
+	queue := []*gasNode{{cvalve: currValve, active: make(map[string]bool), remaining: 30, sofar: 0, path: "AA"}}
+
+	for len(queue) > 0 {
+		head := queue[0]
+		queue = queue[1:]
+
+		dists := findDists(mmap, head.cvalve)
+		for node, dist := range dists {
+			if _, ok := head.active[node]; !ok && (dist+1) < head.remaining {
+				addition := vals[node] * ((head.remaining - dist) - 1)
+				if addition > 0 {
+					if head.sofar+addition > bestValue {
+						bestValue = head.sofar + addition
+					}
+					queue = append(queue,
+						&gasNode{
+							cvalve:    node,
+							active:    copyActive(head.active, node),
+							remaining: head.remaining - (dist + 1),
+							sofar:     head.sofar + addition,
+							path:      head.path + fmt.Sprintf("-%v", node),
+						})
+				}
+			}
+		}
+
+	}
+
+	return bestValue
+}
+
 func (s *Server) Solve2022day16part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-16.txt")
 	if err != nil {
