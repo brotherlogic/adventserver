@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -68,56 +67,69 @@ func copyActive(active map[string]bool, add string) map[string]bool {
 	return nmap
 }
 
+func findDists(mmap map[string][]string, cv string) map[string]int {
+	eMap := make(map[string]int)
+	eMap[cv] = 0
+
+	queue := []string{cv}
+
+	count := 0
+	for len(queue) > 0 {
+		count++
+
+		var nqueue []string
+
+		for _, entry := range queue {
+			nexts := mmap[entry]
+			for _, n := range nexts {
+				if _, ok := eMap[n]; !ok {
+					nqueue = append(nqueue, n)
+					eMap[n] = count
+				}
+			}
+		}
+
+		queue = nqueue
+	}
+
+	return eMap
+}
+
 func releaseGas(data string, minutes int) int {
 	mmap, vals := buildMMap(data)
-	seen := make(map[string]bool)
 
-	queue := []gasNode{{cvalve: "AA", active: make(map[string]bool), remaining: minutes, sofar: 0, path: "AA"}}
+	currValve := "AA"
+	bestValue := 0
+
+	queue := []*gasNode{{cvalve: currValve, active: make(map[string]bool), remaining: 30, sofar: 0, path: "AA"}}
 
 	for len(queue) > 0 {
 		head := queue[0]
 		queue = queue[1:]
 
-		if head.remaining == 0 {
-			return head.sofar
-		}
-
-		if vals[head.cvalve] > 0 && !head.active[head.cvalve] {
-			nnode := gasNode{
-				cvalve:    head.cvalve,
-				active:    copyActive(head.active, head.cvalve),
-				remaining: head.remaining - 1,
-				path:      head.path + "-" + head.cvalve,
-				sofar:     head.sofar + computeGas(head.active, vals)}
-			if !seen[nnode.rep()] {
-				queue = append(queue, nnode)
-				seen[nnode.rep()] = true
+		dists := findDists(mmap, head.cvalve)
+		for node, dist := range dists {
+			if _, ok := head.active[node]; !ok && (dist+1) < head.remaining {
+				addition := vals[node] * ((head.remaining - dist) - 1)
+				if addition > 0 {
+					if head.sofar+addition > bestValue {
+						bestValue = head.sofar + addition
+					}
+					queue = append(queue,
+						&gasNode{
+							cvalve:    node,
+							active:    copyActive(head.active, node),
+							remaining: head.remaining - (dist + 1),
+							sofar:     head.sofar + addition,
+							path:      head.path + fmt.Sprintf("-%v", node),
+						})
+				}
 			}
 		}
 
-		for _, next := range mmap[head.cvalve] {
-			nnode := gasNode{
-				cvalve:    next,
-				active:    copyActive(head.active, ""),
-				remaining: head.remaining - 1,
-				path:      head.path + "-" + next,
-				sofar:     head.sofar + computeGas(head.active, vals),
-			}
-			if !seen[nnode.rep()] {
-				queue = append(queue, nnode)
-				seen[nnode.rep()] = true
-			}
-		}
-
-		sort.SliceStable(queue, func(i, j int) bool {
-			if queue[i].remaining < queue[j].remaining {
-				return false
-			}
-			return queue[i].sofar > queue[j].sofar
-		})
 	}
 
-	return -1
+	return bestValue
 }
 
 func (s *Server) Solve2022day16part1(ctx context.Context) (*pb.SolveResponse, error) {
