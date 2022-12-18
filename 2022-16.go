@@ -196,3 +196,12 @@ func (s *Server) Solve2022day16part1(ctx context.Context) (*pb.SolveResponse, er
 
 	return &pb.SolveResponse{Answer: int32(releaseGas(data, 30))}, nil
 }
+
+func (s *Server) Solve2022day16part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-16.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(releaseGasPair(data, 26))}, nil
+}
