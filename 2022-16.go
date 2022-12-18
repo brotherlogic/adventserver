@@ -103,13 +103,14 @@ func findDists(mmap map[string][]string, cv string) map[string]int {
 	return eMap
 }
 
-func releaseGas(data string, minutes int) int {
+func releaseGas(data string, minutes int) (int, map[string]int) {
 	mmap, vals := buildMMap(data)
+	fmap := make(map[string]int)
 
 	currValve := "AA"
 	bestValue := 0
 
-	queue := []*gasNode{{cvalve: currValve, active: make(map[string]bool), remaining: 30, sofar: 0, path: "AA"}}
+	queue := []*gasNode{{cvalve: currValve, active: make(map[string]bool), remaining: minutes, sofar: 0, path: "AA"}}
 
 	for len(queue) > 0 {
 		head := queue[0]
@@ -120,6 +121,7 @@ func releaseGas(data string, minutes int) int {
 			if _, ok := head.active[node]; !ok && (dist+1) < head.remaining {
 				addition := vals[node] * ((head.remaining - dist) - 1)
 				if addition > 0 {
+					fmap[fmt.Sprintf("%v-%v", head.path, node)] = head.sofar + addition
 					if head.sofar+addition > bestValue {
 						bestValue = head.sofar + addition
 					}
@@ -137,7 +139,39 @@ func releaseGas(data string, minutes int) int {
 
 	}
 
-	return bestValue
+	return bestValue, fmap
+}
+
+func gasOverlap(ar, br string) bool {
+	for _, a := range strings.Split(ar, "-") {
+		for _, b := range strings.Split(br, "-") {
+			if a == b && a != "AA" {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func releaseGasSimple(data string, minutes int) int {
+	_, fmap := releaseGas(data, minutes)
+	var keys []string
+
+	for key := range fmap {
+		keys = append(keys, key)
+	}
+
+	best := 0
+	for i := 0; i < len(keys); i++ {
+		for j := i + 1; j < len(keys); j++ {
+			if !gasOverlap(keys[i], keys[j]) && fmap[keys[i]]+fmap[keys[j]] > best {
+				best = fmap[keys[i]] + fmap[keys[j]]
+			}
+		}
+	}
+
+	return best
 }
 
 func releaseGasPair(data string, minutes int) int {
@@ -147,8 +181,9 @@ func releaseGasPair(data string, minutes int) int {
 	currValveBear := "AA"
 	bestValue := 0
 
-	queue := []*gasNode{{cvalve: currValveMe, bvalve: currValveBear, active: make(map[string]bool), remaining: 26, bremaining: 26, sofar: 0, path: "AA", bpath: "AA"}}
+	queue := []*gasNode{{cvalve: currValveMe, bvalve: currValveBear, active: make(map[string]bool), remaining: minutes, bremaining: minutes, sofar: 0, path: "AA", bpath: "AA"}}
 
+	seen := 0
 	for len(queue) > 0 {
 		gqlen.Set(float64(len(queue)))
 		head := queue[0]
@@ -161,10 +196,13 @@ func releaseGasPair(data string, minutes int) int {
 				addition := vals[node] * ((head.remaining - dist) - 1)
 				baddition := vals[node] * ((head.bremaining - bdists[node]) - 1)
 				if addition > 0 {
-					if head.sofar+addition > bestValue {
-						bestValue = head.sofar + addition
-					}
+
+					seen++
 					if head.remaining >= head.bremaining {
+						if head.sofar+addition > bestValue {
+							bestValue = head.sofar + addition
+						}
+
 						queue = append(queue,
 							&gasNode{
 								cvalve:     node,
@@ -177,7 +215,10 @@ func releaseGasPair(data string, minutes int) int {
 								bpath:      head.bpath,
 							})
 					}
-					if head.bremaining >= head.remaining {
+					if head.bremaining >= head.remaining && len(head.bpath) < len(head.path) {
+						if head.sofar+baddition > bestValue {
+							bestValue = head.sofar + baddition
+						}
 						queue = append(queue,
 							&gasNode{
 								bvalve:     node,
@@ -204,7 +245,8 @@ func (s *Server) Solve2022day16part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(releaseGas(data, 30))}, nil
+	ans, _ := releaseGas(data, 30)
+	return &pb.SolveResponse{Answer: int32(ans)}, nil
 }
 
 func (s *Server) Solve2022day16part2(ctx context.Context) (*pb.SolveResponse, error) {
