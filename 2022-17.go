@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
@@ -121,5 +122,5 @@ func (s *Server) Solve2022day17part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getHeight(runTetris(data, 2022)))}, nil
+	return &pb.SolveResponse{Answer: int32(getHeight(runTetris(strings.TrimSpace(data), 2022)))}, nil
 }
