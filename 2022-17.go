@@ -91,7 +91,7 @@ func printChamber(chamber [][]int) string {
 
 func runTetris(data string, maxv int) []int {
 	var chamber [][]int
-	rows := 1000
+	rows := 10000
 	for i := 0; i < 7; i++ {
 		chamber = append(chamber, make([]int, rows))
 	}
