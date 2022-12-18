@@ -33,7 +33,7 @@ func Test2022_16_2_Main(t *testing.T) {
 	Valve II has flow rate=0; tunnels lead to valves AA, JJ
 	Valve JJ has flow rate=21; tunnel leads to valve II`
 
-	val := releaseGasPair(data, 30)
+	val := releaseGasPair(data, 26)
 
 	if val != 1707 {
 		t.Errorf("Bad gas release: %v (1707)", val)

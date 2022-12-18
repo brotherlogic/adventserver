@@ -34,15 +34,14 @@ func buildMMap(data string) (map[string][]string, map[string]int) {
 }
 
 type gasNode struct {
-	cvalve    string
-	active    map[string]bool
-	remaining int
-	sofar     int
-	path      string
-}
-
-func (g gasNode) rep() string {
-	return g.cvalve + fmt.Sprintf("%v-%v", g.active, g.remaining)
+	cvalve     string
+	bvalve     string
+	active     map[string]bool
+	remaining  int
+	bremaining int
+	sofar      int
+	path       string
+	bpath      string
 }
 
 func computeGas(active map[string]bool, vals map[string]int) int {
@@ -135,35 +134,55 @@ func releaseGas(data string, minutes int) int {
 func releaseGasPair(data string, minutes int) int {
 	mmap, vals := buildMMap(data)
 
-	currValve := "AA"
+	currValveMe := "AA"
+	currValveBear := "AA"
 	bestValue := 0
 
-	queue := []*gasNode{{cvalve: currValve, active: make(map[string]bool), remaining: 30, sofar: 0, path: "AA"}}
+	queue := []*gasNode{{cvalve: currValveMe, bvalve: currValveBear, active: make(map[string]bool), remaining: 26, bremaining: 26, sofar: 0, path: "AA", bpath: "AA"}}
 
 	for len(queue) > 0 {
 		head := queue[0]
 		queue = queue[1:]
 
 		dists := findDists(mmap, head.cvalve)
+		bdists := findDists(mmap, head.bvalve)
 		for node, dist := range dists {
 			if _, ok := head.active[node]; !ok && (dist+1) < head.remaining {
 				addition := vals[node] * ((head.remaining - dist) - 1)
+				baddition := vals[node] * ((head.bremaining - bdists[node]) - 1)
 				if addition > 0 {
 					if head.sofar+addition > bestValue {
 						bestValue = head.sofar + addition
 					}
-					queue = append(queue,
-						&gasNode{
-							cvalve:    node,
-							active:    copyActive(head.active, node),
-							remaining: head.remaining - (dist + 1),
-							sofar:     head.sofar + addition,
-							path:      head.path + fmt.Sprintf("-%v", node),
-						})
+					if head.remaining >= head.bremaining {
+						queue = append(queue,
+							&gasNode{
+								cvalve:     node,
+								bvalve:     head.bvalve,
+								active:     copyActive(head.active, node),
+								remaining:  head.remaining - (dist + 1),
+								bremaining: head.bremaining,
+								sofar:      head.sofar + addition,
+								path:       head.path + fmt.Sprintf("-%v", node),
+								bpath:      head.bpath,
+							})
+					}
+					if head.bremaining >= head.remaining {
+						queue = append(queue,
+							&gasNode{
+								bvalve:     node,
+								cvalve:     head.cvalve,
+								active:     copyActive(head.active, node),
+								bremaining: head.bremaining - (bdists[node] + 1),
+								remaining:  head.remaining,
+								sofar:      head.sofar + baddition,
+								bpath:      head.bpath + fmt.Sprintf("-%v", node),
+								path:       head.path,
+							})
+					}
 				}
 			}
 		}
-
 	}
 
 	return bestValue
