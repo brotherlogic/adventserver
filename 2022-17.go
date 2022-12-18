@@ -19,7 +19,7 @@ func getRock(count int, height int) *pixel {
 	case 1:
 		return &pixel{x: []int{2, 3, 3, 3, 4}, y: []int{height + 4, height + 3, height + 4, height + 5, height + 4}}
 	case 2:
-		return &pixel{x: []int{2, 3, 4, 4}, y: []int{height + 3, height + 3, height + 3, height + 5}}
+		return &pixel{x: []int{2, 3, 4, 4, 4}, y: []int{height + 3, height + 3, height + 3, height + 4, height + 5}}
 	case 3:
 		return &pixel{x: []int{2, 2, 2, 2}, y: []int{height + 3, height + 4, height + 5, height + 6}}
 	case 4:
@@ -72,9 +72,26 @@ func (p *pixel) move(char rune, chamber [][]int) bool {
 	return true
 }
 
+func printChamber(chamber [][]int) string {
+	ret := ""
+	for y := len(chamber) - 1; y >= 0; y-- {
+		for x := 0; x < len(chamber); x++ {
+			switch chamber[x][y] {
+			case 0:
+				ret += "."
+			case 1:
+				ret += "#"
+			}
+		}
+		ret += "\n"
+	}
+
+	return ret
+}
+
 func runTetris(data string, maxv int) []int {
 	var chamber [][]int
-	rows := 10000
+	rows := 1000
 	for i := 0; i < 7; i++ {
 		chamber = append(chamber, make([]int, rows))
 	}
