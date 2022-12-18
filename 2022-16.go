@@ -136,18 +136,16 @@ func releaseGas(data string, minutes int) (int, map[string]int) {
 				}
 			}
 		}
-
 	}
 
 	return bestValue, fmap
 }
 
-func gasOverlap(ar, br string) bool {
-	for _, a := range strings.Split(ar, "-") {
-		for _, b := range strings.Split(br, "-") {
-			if a == b && a != "AA" {
-				return true
-			}
+func gasOverlap(ar, br map[string]bool) bool {
+
+	for a := range ar {
+		if br[a] {
+			return true
 		}
 	}
 
@@ -157,15 +155,24 @@ func gasOverlap(ar, br string) bool {
 func releaseGasSimple(data string, minutes int) int {
 	_, fmap := releaseGas(data, minutes)
 	var keys []string
+	kmap := make(map[string]map[string]bool)
 
 	for key := range fmap {
 		keys = append(keys, key)
+
+		nmap := make(map[string]bool)
+		for _, val := range strings.Split(key, "-") {
+			if val != "AA" {
+				nmap[val] = true
+			}
+		}
+		kmap[key] = nmap
 	}
 
 	best := 0
 	for i := 0; i < len(keys); i++ {
 		for j := i + 1; j < len(keys); j++ {
-			if !gasOverlap(keys[i], keys[j]) && fmap[keys[i]]+fmap[keys[j]] > best {
+			if !gasOverlap(kmap[keys[i]], kmap[keys[j]]) && fmap[keys[i]]+fmap[keys[j]] > best {
 				best = fmap[keys[i]] + fmap[keys[j]]
 			}
 		}
@@ -255,5 +262,5 @@ func (s *Server) Solve2022day16part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(releaseGasPair(data, 26))}, nil
+	return &pb.SolveResponse{Answer: int32(releaseGasSimple(data, 26))}, nil
 }
