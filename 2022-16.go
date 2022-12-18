@@ -142,10 +142,17 @@ func releaseGas(data string, minutes int) (int, map[string]int) {
 }
 
 func gasOverlap(ar, br map[string]bool) bool {
-
-	for a := range ar {
-		if br[a] {
-			return true
+	if len(ar) > len(br) {
+		for a := range ar {
+			if br[a] {
+				return true
+			}
+		}
+	} else {
+		for b := range br {
+			if ar[b] {
+				return true
+			}
 		}
 	}
 
