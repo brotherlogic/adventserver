@@ -5,7 +5,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	gqlen = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_16_qlen",
+		Help: "The number of server requests",
+	})
 )
 
 func buildMMap(data string) (map[string][]string, map[string]int) {
@@ -141,6 +150,7 @@ func releaseGasPair(data string, minutes int) int {
 	queue := []*gasNode{{cvalve: currValveMe, bvalve: currValveBear, active: make(map[string]bool), remaining: 26, bremaining: 26, sofar: 0, path: "AA", bpath: "AA"}}
 
 	for len(queue) > 0 {
+		gqlen.Set(float64(len(queue)))
 		head := queue[0]
 		queue = queue[1:]
 
