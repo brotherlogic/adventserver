@@ -173,29 +173,29 @@ func matchTetris(chamber [][]int, row1, row2 int) bool {
 	return true
 }
 
-func applyAdditionMultiplier(chamber [][]int, addition, bounce, goal int) ([][]int, int) {
+func applyAdditionMultiplier(chamber [][]int, addition, bounce int, goal int64) ([][]int64, int64) {
 
-	adder := bounce * (goal / bounce)
+	adder := int64(bounce) * (int64(goal) / int64(bounce))
 
-	var nchamber [][]int
+	var nchamber [][]int64
 
 	for x := 0; x < len(chamber); x++ {
-		nchamber = append(nchamber, make([]int, len(chamber[0])))
+		nchamber = append(nchamber, make([]int64, len(chamber[0])))
 		for y := 0; y < len(chamber[0]); y++ {
 			if chamber[x][y] > 0 {
-				nchamber[x][y] = chamber[x][y] + adder
+				nchamber[x][y] = int64(chamber[x][y]) + adder
 			}
 		}
 	}
-	return nchamber, addition * (goal / bounce)
+	return nchamber, int64(addition) * (int64(goal) / int64(bounce))
 }
 
-func findRepeat(chamber [][]int, top int, goal int) int {
+func findRepeat(chamber [][]int, top int, goal int64) int64 {
 
 	fmt.Printf("%v\n", printRow(chamber, top))
 
-	var nchamber [][]int
-	height := 0
+	var nchamber [][]int64
+	height := int64(0)
 
 	for y := top - 1; y >= 2; y-- {
 		if matchTetris(chamber, top, y) {
@@ -222,7 +222,7 @@ func findRepeat(chamber [][]int, top int, goal int) int {
 	for y := len(nchamber[0]) - 1; y >= 0; y-- {
 		for x := 0; x < 7; x++ {
 			if nchamber[x][y] == goal {
-				return y + height
+				return int64(y) + height
 			}
 		}
 	}
@@ -251,5 +251,5 @@ func (s *Server) Solve2022day17part2(ctx context.Context) (*pb.SolveResponse, er
 	r, chamber := runTetris(data, tetis)
 	res := getHeight(r)
 	rep := findRepeat(chamber, res-20, 1000000000000)
-	return &pb.SolveResponse{Answer: int32(rep)}, nil
+	return &pb.SolveResponse{BigAnswer: int64(rep)}, nil
 }
