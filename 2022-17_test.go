@@ -20,7 +20,7 @@ func Test2022_17_1_Main(t *testing.T) {
 func Test2022_17_2_Basic(t *testing.T) {
 	data := ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
 
-	tetis := 200
+	tetis := 10000
 	r, chamber := runTetris(data, tetis)
 	res := getHeight(r)
 
