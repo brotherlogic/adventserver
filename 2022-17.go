@@ -14,7 +14,7 @@ type pixel struct {
 }
 
 func getRock(count int, height int) *pixel {
-	switch count % 5 {
+	switch (count - 1) % 5 {
 	case 0:
 		return &pixel{x: []int{2, 3, 4, 5}, y: []int{height + 3, height + 3, height + 3, height + 3}}
 	case 1:
@@ -81,8 +81,26 @@ func printChamber(chamber [][]int) string {
 			switch chamber[x][y] {
 			case 0:
 				ret += "."
-			case 1:
-				ret += "#"
+			default:
+				ret += fmt.Sprintf("%v|", chamber[x][y])
+			}
+		}
+		ret += "\n"
+	}
+
+	return ret
+}
+
+func printChamber64(chamber [][]int64) string {
+	ret := ""
+	for y := len(chamber[0]) - 1; y >= 0; y-- {
+		ret += fmt.Sprintf("%v:", y)
+		for x := 0; x < len(chamber); x++ {
+			switch chamber[x][y] {
+			case 0:
+				ret += "."
+			default:
+				ret += fmt.Sprintf("%v|", chamber[x][y])
 			}
 		}
 		ret += "\n"
@@ -93,16 +111,16 @@ func printChamber(chamber [][]int) string {
 
 func runTetris(data string, maxv int) ([]int, [][]int) {
 	var chamber [][]int
-	rows := 100000
+	rows := 10000
 	for i := 0; i < 7; i++ {
 		chamber = append(chamber, make([]int, rows))
 	}
 
-	count := 0
+	count := 1
 	mpointer := 0
 	heights := make([]int, 7)
 
-	for count < maxv {
+	for count <= maxv {
 		rock := getRock(count, getHeight(heights))
 		for {
 			rock.move(rune(data[mpointer%len(data)]), chamber)
@@ -161,6 +179,19 @@ func printRow(chamber [][]int, row int) string {
 	return ret
 }
 
+func printRow64(chamber [][]int64, row int) string {
+	ret := ""
+	for x := 0; x < 7; x++ {
+		switch chamber[x][row] {
+		case 0:
+			ret += "."
+		default:
+			ret += fmt.Sprintf("%v|", chamber[x][row])
+		}
+	}
+	return ret
+}
+
 func matchTetris(chamber [][]int, row1, row2 int) bool {
 	for x := 0; x < 7; x++ {
 		if chamber[x][row1] == 0 && chamber[x][row2] > 0 {
@@ -174,7 +205,6 @@ func matchTetris(chamber [][]int, row1, row2 int) bool {
 }
 
 func applyAdditionMultiplier(chamber [][]int, addition, bounce int, goal int64) ([][]int64, int64) {
-
 	adder := int64(bounce) * (int64(goal) / int64(bounce))
 
 	var nchamber [][]int64
@@ -222,7 +252,7 @@ func findRepeat(chamber [][]int, top int, goal int64) int64 {
 	for y := len(nchamber[0]) - 1; y >= 0; y-- {
 		for x := 0; x < 7; x++ {
 			if nchamber[x][y] == goal {
-				return int64(y) + height
+				return int64(y) + height + 1
 			}
 		}
 	}
