@@ -240,3 +240,16 @@ func (s *Server) Solve2022day17part1(ctx context.Context) (*pb.SolveResponse, er
 	res, _ := runTetris(strings.TrimSpace(data), 2022)
 	return &pb.SolveResponse{Answer: int32(getHeight(res))}, nil
 }
+
+func (s *Server) Solve2022day17part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-17.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	tetis := 3000
+	r, chamber := runTetris(data, tetis)
+	res := getHeight(r)
+	rep := findRepeat(chamber, res-20, 1000000000000)
+	return &pb.SolveResponse{Answer: int32(rep)}, nil
+}
