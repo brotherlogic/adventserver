@@ -32,3 +32,24 @@ func Test2022_18_1_Main(t *testing.T) {
 		t.Errorf("Bad edges: %v (64)", edges)
 	}
 }
+
+func Test2022_18_2_Main(t *testing.T) {
+	data := `2,2,2
+	1,2,2
+	3,2,2
+	2,1,2
+	2,3,2
+	2,2,1
+	2,2,3
+	2,2,4
+	2,2,6
+	1,2,5
+	3,2,5
+	2,1,5
+	2,3,5`
+
+	edges := countEdgesExt(data)
+	if edges != 58 {
+		t.Errorf("Bad edges: %v (58)", edges)
+	}
+}
