@@ -210,7 +210,7 @@ func printLava(lava [][][]int) string {
 func countEdgesExt(data string) int {
 	var grid [][][]int
 
-	maxEdge := 8
+	maxEdge := 20
 	for x := 0; x < maxEdge; x++ {
 		var iGrid [][]int
 		for y := 0; y < maxEdge; y++ {
