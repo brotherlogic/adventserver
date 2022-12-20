@@ -8,23 +8,11 @@ import (
 	"golang.org/x/net/context"
 )
 
+var (
+	gridh = 30
+)
+
 func getGrid(grid [][][]int, x, y, z int) (int, bool) {
-	if x >= len(grid) || x < 0 {
-		return -1, false
-	}
-
-	if y >= len(grid[x]) || y < 0 {
-		return -1, false
-	}
-
-	if z >= len(grid[x][y]) || z < 0 {
-		return -1, false
-	}
-
-	return grid[x][y][z], true
-}
-
-func getGridExt(grid [][][]int, x, y, z int) (int, bool) {
 	if x >= len(grid) || x < 0 {
 		return -1, false
 	}
@@ -114,80 +102,78 @@ func colourGrid(grid [][][]int) [][][]int {
 	return grid
 }
 
+type gn struct {
+	x, y, z int
+}
+
+func getNextLava(grid [][][]int, x, y, z int, seen []gn) []gn {
+	var next []gn
+
+	if x > 0 && grid[x-1][y][z] != 2 {
+		next = append(next, gn{x - 1, y, z})
+	}
+	if y > 0 && grid[x][y-1][z] != 2 {
+		next = append(next, gn{x, y - 1, z})
+	}
+	if z > 0 && grid[x][y][z-1] != 2 {
+		next = append(next, gn{x, y, z - 1})
+	}
+	if x < gridh-1 && grid[x+1][y][z] != 2 {
+		next = append(next, gn{x + 1, y, z})
+	}
+	if y < gridh-1 && grid[x][y+1][z] != 2 {
+		next = append(next, gn{x, y + 1, z})
+	}
+	if z < gridh-1 && grid[x][y][z+1] != 2 {
+		next = append(next, gn{x, y, z + 1})
+	}
+
+	var nnext []gn
+	for _, n := range next {
+		found := false
+		for _, n2 := range seen {
+			if n2.x == n.x && n2.y == n.y && n2.z == n.z {
+				found = true
+				break
+			}
+		}
+		if !found {
+			nnext = append(nnext, n)
+		}
+	}
+
+	return nnext
+}
+
+func canEscape(grid [][][]int, x, y, z int) bool {
+	queue := []gn{{x, y, z}}
+	seen := []gn{{x, y, z}}
+
+	for len(queue) > 0 {
+		head := queue[0]
+		queue = queue[1:]
+
+		if head.x == 0 || head.x == gridh-1 || head.y == 0 || head.y == gridh-1 || head.z == 0 || head.z == gridh-1 {
+			return true
+		}
+
+		nodes := getNextLava(grid, head.x, head.y, head.z, seen)
+		seen = append(seen, nodes...)
+		queue = append(queue, nodes...)
+	}
+
+	return false
+}
+
 func colourGridInt(grid [][][]int, x, y, z int) [][][]int {
-	// Base case - do nothings
-	if grid[x][y][z] == 2 || grid[x][y][z] == 1 {
+	if grid[x][y][z] == 2 {
 		return grid
 	}
-
-	if x == 0 || x == len(grid)-1 {
+	if canEscape(grid, x, y, z) {
 		grid[x][y][z] = 3
-		return grid
+	} else {
+		grid[x][y][z] = 1
 	}
-
-	if y == 0 || y == len(grid[x])-1 {
-		grid[x][y][z] = 3
-		return grid
-	}
-
-	if z == 0 || z == len(grid[x][y])-1 {
-		grid[x][y][z] = 3
-		return grid
-	}
-
-	// We've seen this element
-	grid[x][y][z] = 1
-
-	// x axis
-	if x > 0 {
-		if grid[x-1][y][z] == 0 {
-			grid = colourGridInt(grid, x-1, y, z)
-		}
-		if grid[x-1][y][z] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-	if x < len(grid)-1 {
-		if grid[x+1][y][z] == 0 {
-			grid = colourGridInt(grid, x+1, y, z)
-		}
-		if grid[x+1][y][z] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-	if y > 0 {
-		if grid[x][y-1][z] == 0 {
-			grid = colourGridInt(grid, x, y-1, z)
-		}
-		if grid[x][y-1][z] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-	if y < len(grid[x])-1 {
-		if grid[x][y+1][z] == 0 {
-			grid = colourGridInt(grid, x, y+1, z)
-		}
-		if grid[x][y+1][z] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-	if z > 0 {
-		if grid[x][y][z-1] == 0 {
-			grid = colourGridInt(grid, x, y, z-1)
-		}
-		if grid[x][y][z-1] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-	if z < len(grid[x][y])-1 {
-		if grid[x][y][z+1] == 0 {
-			grid = colourGridInt(grid, x, y, z+1)
-		}
-		if grid[x][y][z+1] == 3 {
-			grid[x][y][z] = 3
-		}
-	}
-
 	return grid
 }
 
@@ -195,6 +181,7 @@ func printLava(lava [][][]int) string {
 	ret := ""
 
 	for z := 0; z < len(lava[0][0]); z++ {
+		ret += fmt.Sprintf("LAYER %v\n", z)
 		for y := 0; y < len(lava[0]); y++ {
 			for x := 0; x < len(lava); x++ {
 				ret += fmt.Sprintf("%v", lava[x][y][z])
@@ -210,7 +197,7 @@ func printLava(lava [][][]int) string {
 func countEdgesExt(data string) int {
 	var grid [][][]int
 
-	maxEdge := 30
+	maxEdge := gridh
 	for x := 0; x < maxEdge; x++ {
 		var iGrid [][]int
 		for y := 0; y < maxEdge; y++ {
