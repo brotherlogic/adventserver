@@ -8,15 +8,15 @@ import (
 )
 
 func getGrid(grid [][][]int, x, y, z int) (int, bool) {
-	if x >= len(grid) {
+	if x >= len(grid) || x < 0 {
 		return -1, false
 	}
 
-	if y >= len(grid[x]) {
+	if y >= len(grid[x]) || y < 0 {
 		return -1, false
 	}
 
-	if z >= len(grid[x][y]) {
+	if z >= len(grid[x][y]) || z < 0 {
 		return -1, false
 	}
 
