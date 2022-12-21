@@ -9,38 +9,99 @@ import (
 	"golang.org/x/net/context"
 )
 
+type chain struct {
+	value int
+	next  *chain
+	prev  *chain
+}
+
+func printChain(head *chain) string {
+	ret := fmt.Sprintf("%v", head.value)
+	curr := head.next
+	for curr != head {
+		ret += fmt.Sprintf("|%v", curr.value)
+		curr = curr.next
+	}
+	return ret
+}
+
 func unencrpyt(data string) int {
-	var arr []int
+	var runArr []int
+	cHead := &chain{}
+	curr := cHead
+	var prev *chain
 
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
-			arr = append(arr, getInt32(line))
+			curr.value = getInt32(line)
+			runArr = append(runArr, curr.value)
+			if prev != nil {
+				curr.prev = prev
+				prev.next = curr
+			}
+			prev = curr
+			curr = &chain{}
 		}
 	}
+	cHead.prev = prev
+	cHead.prev.next = cHead
 
-	numMap := make(map[int]int)
-	for i := 0; i < len(arr); i++ {
-		numMap[arr[i]] = i
+	curr = cHead
+	for _, val := range runArr {
+		start := printChain(curr)
+		log.Printf("Running: %v: %v", val, start)
+		if val != 0 {
+			for curr.value != val {
+				curr = curr.next
+			}
+			curr.prev.next = curr.next
+			curr.next.prev = curr.prev
+			if val > 0 {
+				for i := 0; i < val; i++ {
+					log.Printf("%v", i)
+					curr = curr.next
+				}
+				nval := &chain{value: val, prev: curr, next: curr.next}
+				curr.next.prev = nval
+				curr.next = nval
+			} else if val < 0 {
+				for i := 0; i < -val; i++ {
+					curr = curr.prev
+				}
+				nval := &chain{value: val, prev: curr.prev, next: curr}
+				curr.prev.next = nval
+				curr.prev = nval
+			}
+		}
+
+		log.Printf("%v: %v -> %v", val, start, printChain(curr))
 	}
 
-	for _, val := range arr {
-		log.Printf("MOVE %v", printNumMap(numMap))
-		numMap = moveMap(numMap, val)
+	log.Printf("RAN CHAIN: %v", printChain(curr))
+
+	var zero *chain
+	for {
+		if curr.value == 0 {
+			zero = curr
+			break
+		}
+		curr = curr.next
 	}
-	log.Printf("DONE %v", printNumMap(numMap))
 
-	narr := make([]int, len(arr))
-	for key, val := range numMap {
-		narr[val] = key
+	value := 0
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 1000; j++ {
+			zero = zero.next
+		}
+		value += zero.value
 	}
 
-	log.Printf("FOUND %v", narr)
-
-	return narr[(numMap[0]+1000)%len(narr)] + narr[(numMap[0]+2000)%len(narr)] + narr[(numMap[0]+3000)%len(narr)]
+	return value
 }
 
 func printNumMap(numMap map[int]int) string {
 	narr := make([]int, len(numMap))
+	log.Printf("LEN %v", len(numMap))
 	for key, val := range numMap {
 		narr[val] = key
 	}
