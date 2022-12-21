@@ -39,7 +39,7 @@ func Test2022_19_2_Sup1(t *testing.T) {
 	bestBlue := getBestBlue(data, 31)
 
 	if bestBlue != 56 {
-		t.Errorf("Bad blueprints: %v (33)", bestBlue)
+		t.Errorf("Bad blueprints: %v (56)", bestBlue)
 	}
 }
 
@@ -49,6 +49,6 @@ func Test2022_19_2_Sup2(t *testing.T) {
 	bestBlue := getBestBlue(data, 31)
 
 	if bestBlue != 62 {
-		t.Errorf("Bad blueprints: %v (12)", bestBlue)
+		t.Errorf("Bad blueprints: %v (62)", bestBlue)
 	}
 }

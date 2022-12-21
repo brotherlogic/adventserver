@@ -66,7 +66,7 @@ func buildNexts(bp blueprint, rn robotNode) []robotNode {
 
 	// Build an Ore robot
 	if rn.minutes-bp.ore/rn.oreRobot > 0 && rn.oreRobot < bp.maxOre() {
-		timeTaken := low(ceil(bp.ore-rn.ore, rn.oreRobot)) + 1
+		timeTaken := ceil(low(bp.ore-rn.ore), rn.oreRobot) + 1
 		next = append(next, robotNode{
 			ore:        rn.ore + rn.oreRobot*timeTaken - bp.ore,
 			clay:       rn.clay + rn.clayRobot*timeTaken,
@@ -85,7 +85,7 @@ func buildNexts(bp blueprint, rn robotNode) []robotNode {
 
 	// Build a clay robot
 	if rn.minutes-bp.clay/rn.oreRobot > 0 && rn.clayRobot < bp.obsClay {
-		timeTaken := low(ceil(bp.clay-rn.ore, rn.oreRobot)) + 1
+		timeTaken := ceil(low(bp.clay-rn.ore), rn.oreRobot) + 1
 		next = append(next, robotNode{
 			ore:        rn.ore + rn.oreRobot*timeTaken - bp.clay,
 			clay:       rn.clay + rn.clayRobot*timeTaken,
@@ -99,6 +99,7 @@ func buildNexts(bp blueprint, rn robotNode) []robotNode {
 			built:      rn.built + "CLAY-",
 			builtTimes: rn.builtTimes + fmt.Sprintf("%v:%v-", "CLAY", rn.minutes-timeTaken),
 		})
+
 	}
 
 	// Build an obsidian robot
@@ -264,13 +265,22 @@ func runNode(bp blueprint, rn robotNode) int {
 	bests := make(map[string]int)
 
 	for len(queue) > 0 {
-		head := queue[0]
-		queue = queue[1:]
+		head := queue[len(queue)-1]
+		queue = queue[:len(queue)-1]
+
+		// Should we abandon this run ?
+		potential := head.geo
+		for i := 0; i < head.minutes; i++ {
+			potential += head.geoRobot + i
+		}
+		if potential < bestRes {
+			continue
+		}
 
 		if head.minutes == 0 {
 			if head.geo > bestRes {
+				//log.Printf("%v BEST: %+v", head.geo, head)
 				bestRes = head.geo
-
 			}
 			continue
 		}
