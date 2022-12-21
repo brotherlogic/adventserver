@@ -314,7 +314,7 @@ func getBestBlue(data string, maxv int) int {
 func getTopBlue(data string, maxv int) int {
 	bestVal := 1
 
-	for _, line := range strings.Split(strings.TrimSpace(data), "\n")[:2] {
+	for _, line := range strings.Split(strings.TrimSpace(data), "\n")[:3] {
 		bp := buildBluePrint(strings.TrimSpace(line))
 		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: maxv})
 		bestVal *= best
