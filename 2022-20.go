@@ -79,15 +79,12 @@ func moveMap(numMap map[int]int, num int) map[int]int {
 		newIndex = llen + newIndex
 	}
 
-	log.Printf("NEW %v (%v) -> %v", num, nIndex, newIndex)
 	following := 0
 	for key, val := range numMap {
 		if val == newIndex {
 			following = key
 		}
 	}
-
-	log.Printf("INSERT %v-> %v", num, following)
 
 	// Remove the number
 	delete(numMap, num)

@@ -70,7 +70,6 @@ func Test2022_20_1_Steps(t *testing.T) {
 	}
 
 	for i, cs := range cases {
-		log.Printf("RUN %v", cs.in)
 		moved := moveNumber(cs.in, cs.move)
 
 		match := rotateMatch(moved, cs.out)
