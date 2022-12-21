@@ -279,7 +279,6 @@ func runNode(bp blueprint, rn robotNode) int {
 
 		if head.minutes == 0 {
 			if head.geo > bestRes {
-				//log.Printf("%v BEST: %+v", head.geo, head)
 				bestRes = head.geo
 			}
 			continue
