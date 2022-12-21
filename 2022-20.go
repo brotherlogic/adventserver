@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -48,8 +47,6 @@ func unencrpyt(data string) int {
 
 	curr = cHead
 	for _, val := range runArr {
-		start := printChain(curr)
-		log.Printf("Running: %v: %v", val, start)
 		if val != 0 {
 			for curr.value != val {
 				curr = curr.next
@@ -58,7 +55,6 @@ func unencrpyt(data string) int {
 			curr.next.prev = curr.prev
 			if val > 0 {
 				for i := 0; i < val; i++ {
-					log.Printf("%v", i)
 					curr = curr.next
 				}
 				nval := &chain{value: val, prev: curr, next: curr.next}
@@ -73,11 +69,7 @@ func unencrpyt(data string) int {
 				curr.prev = nval
 			}
 		}
-
-		log.Printf("%v: %v -> %v", val, start, printChain(curr))
 	}
-
-	log.Printf("RAN CHAIN: %v", printChain(curr))
 
 	var zero *chain
 	for {
@@ -101,7 +93,6 @@ func unencrpyt(data string) int {
 
 func printNumMap(numMap map[int]int) string {
 	narr := make([]int, len(numMap))
-	log.Printf("LEN %v", len(numMap))
 	for key, val := range numMap {
 		narr[val] = key
 	}
