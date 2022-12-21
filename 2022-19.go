@@ -306,21 +306,24 @@ func getBestBlue(data string, maxv int) int {
 		bp := buildBluePrint(strings.TrimSpace(line))
 		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: maxv})
 		bestVal += (i + 1) * best
+
 	}
 
 	return bestVal
 }
 
-func getTopBlue(data string, maxv int) int {
+func getTopBlue(data string, maxv int) (int, string) {
 	bestVal := 1
 
+	bb := ""
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n")[:3] {
 		bp := buildBluePrint(strings.TrimSpace(line))
 		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: maxv})
 		bestVal *= best
+		bb += fmt.Sprintf("%v*", best)
 	}
 
-	return bestVal
+	return bestVal, bb
 }
 
 func (s *Server) Solve2022day19part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -338,5 +341,7 @@ func (s *Server) Solve2022day19part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getTopBlue(data, 31))}, nil
+	a, b := getTopBlue(data, 31)
+
+	return &pb.SolveResponse{Answer: int32(a), StringAnswer: b}, nil
 }
