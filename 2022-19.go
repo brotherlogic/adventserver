@@ -47,7 +47,7 @@ func buildBluePrint(data string) blueprint {
 
 func low(n int) int {
 	if n < 0 {
-		return 1
+		return 0
 	}
 	return n
 }
@@ -65,55 +65,59 @@ func buildNexts(bp blueprint, rn robotNode) []robotNode {
 	var next []robotNode
 
 	// Build an Ore robot
-	if rn.minutes-bp.ore/rn.oreRobot > 0 {
-		timeTaken := (low(bp.ore-rn.ore) / rn.oreRobot) + 1
+	if rn.minutes-bp.ore/rn.oreRobot > 0 && rn.oreRobot < bp.maxOre() {
+		timeTaken := ceil(low(bp.ore-rn.ore), rn.oreRobot) + 1
 		next = append(next, robotNode{
-			ore:       rn.ore + rn.oreRobot*timeTaken - bp.ore,
-			clay:      rn.clay + rn.clayRobot*timeTaken,
-			obs:       rn.obs + rn.obsRobot*timeTaken,
-			geo:       rn.geo + rn.geoRobot*timeTaken,
-			oreRobot:  rn.oreRobot + 1,
-			clayRobot: rn.clayRobot,
-			obsRobot:  rn.obsRobot,
-			geoRobot:  rn.geoRobot,
-			minutes:   rn.minutes - timeTaken,
-			built:     rn.built + "ORE-",
+			ore:        rn.ore + rn.oreRobot*timeTaken - bp.ore,
+			clay:       rn.clay + rn.clayRobot*timeTaken,
+			obs:        rn.obs + rn.obsRobot*timeTaken,
+			geo:        rn.geo + rn.geoRobot*timeTaken,
+			oreRobot:   rn.oreRobot + 1,
+			clayRobot:  rn.clayRobot,
+			obsRobot:   rn.obsRobot,
+			geoRobot:   rn.geoRobot,
+			minutes:    rn.minutes - timeTaken,
+			built:      rn.built + "ORE-",
+			builtTimes: rn.builtTimes + fmt.Sprintf("%v:%v-", "ORE", rn.minutes-timeTaken),
 		})
 
 	}
 
 	// Build a clay robot
-	if rn.minutes-bp.clay/rn.oreRobot > 0 {
-		timeTaken := (low(bp.clay-rn.ore) / rn.oreRobot) + 1
+	if rn.minutes-bp.clay/rn.oreRobot > 0 && rn.clayRobot < bp.obsClay {
+		timeTaken := ceil(low(bp.clay-rn.ore), rn.oreRobot) + 1
 		next = append(next, robotNode{
-			ore:       rn.ore + rn.oreRobot*timeTaken - bp.clay,
-			clay:      rn.clay + rn.clayRobot*timeTaken,
-			obs:       rn.obs + rn.obsRobot*timeTaken,
-			geo:       rn.geo + rn.geoRobot*timeTaken,
-			oreRobot:  rn.oreRobot,
-			clayRobot: rn.clayRobot + 1,
-			obsRobot:  rn.obsRobot,
-			geoRobot:  rn.geoRobot,
-			minutes:   rn.minutes - timeTaken,
-			built:     rn.built + "CLAY-",
+			ore:        rn.ore + rn.oreRobot*timeTaken - bp.clay,
+			clay:       rn.clay + rn.clayRobot*timeTaken,
+			obs:        rn.obs + rn.obsRobot*timeTaken,
+			geo:        rn.geo + rn.geoRobot*timeTaken,
+			oreRobot:   rn.oreRobot,
+			clayRobot:  rn.clayRobot + 1,
+			obsRobot:   rn.obsRobot,
+			geoRobot:   rn.geoRobot,
+			minutes:    rn.minutes - timeTaken,
+			built:      rn.built + "CLAY-",
+			builtTimes: rn.builtTimes + fmt.Sprintf("%v:%v-", "CLAY", rn.minutes-timeTaken),
 		})
+
 	}
 
 	// Build an obsidian robot
-	if rn.oreRobot > 0 && rn.clayRobot > 0 {
+	if rn.oreRobot > 0 && rn.clayRobot > 0 && rn.obsRobot < bp.geoObs {
 		timeTakenObs := max(ceil(low(bp.obsOre-rn.ore), rn.oreRobot), ceil(low(bp.obsClay-rn.clay), rn.clayRobot)) + 1
 		if timeTakenObs < rn.minutes {
 			next = append(next, robotNode{
-				ore:       rn.ore + rn.oreRobot*timeTakenObs - bp.obsOre,
-				clay:      rn.clay + rn.clayRobot*timeTakenObs - bp.obsClay,
-				obs:       rn.obs + rn.obsRobot*timeTakenObs,
-				geo:       rn.geo + rn.geoRobot*timeTakenObs,
-				oreRobot:  rn.oreRobot,
-				clayRobot: rn.clayRobot,
-				obsRobot:  rn.obsRobot + 1,
-				geoRobot:  rn.geoRobot,
-				minutes:   rn.minutes - timeTakenObs,
-				built:     rn.built + "OBS-",
+				ore:        rn.ore + rn.oreRobot*timeTakenObs - bp.obsOre,
+				clay:       rn.clay + rn.clayRobot*timeTakenObs - bp.obsClay,
+				obs:        rn.obs + rn.obsRobot*timeTakenObs,
+				geo:        rn.geo + rn.geoRobot*timeTakenObs,
+				oreRobot:   rn.oreRobot,
+				clayRobot:  rn.clayRobot,
+				obsRobot:   rn.obsRobot + 1,
+				geoRobot:   rn.geoRobot,
+				minutes:    rn.minutes - timeTakenObs,
+				built:      rn.built + "OBS-",
+				builtTimes: rn.builtTimes + fmt.Sprintf("%v:%v-", "OBS", rn.minutes-timeTakenObs),
 			})
 		}
 
@@ -124,16 +128,17 @@ func buildNexts(bp blueprint, rn robotNode) []robotNode {
 		timeTakenGeo := max(ceil(low(bp.geoOre-rn.ore), rn.oreRobot), ceil(low(bp.geoObs-rn.obs), rn.obsRobot)) + 1
 		if timeTakenGeo < rn.minutes {
 			next = append(next, robotNode{
-				ore:       rn.ore + rn.oreRobot*timeTakenGeo - bp.geoOre,
-				clay:      rn.clay + rn.clayRobot*timeTakenGeo,
-				obs:       rn.obs + rn.obsRobot*timeTakenGeo - bp.geoObs,
-				geo:       rn.geo + rn.geoRobot*timeTakenGeo,
-				oreRobot:  rn.oreRobot,
-				clayRobot: rn.clayRobot,
-				obsRobot:  rn.obsRobot,
-				geoRobot:  rn.geoRobot + 1,
-				minutes:   rn.minutes - timeTakenGeo,
-				built:     rn.built + "GEO-",
+				ore:        rn.ore + rn.oreRobot*timeTakenGeo - bp.geoOre,
+				clay:       rn.clay + rn.clayRobot*timeTakenGeo,
+				obs:        rn.obs + rn.obsRobot*timeTakenGeo - bp.geoObs,
+				geo:        rn.geo + rn.geoRobot*timeTakenGeo,
+				oreRobot:   rn.oreRobot,
+				clayRobot:  rn.clayRobot,
+				obsRobot:   rn.obsRobot,
+				geoRobot:   rn.geoRobot + 1,
+				minutes:    rn.minutes - timeTakenGeo,
+				built:      rn.built + "GEO-",
+				builtTimes: rn.builtTimes + fmt.Sprintf("%v:%v-", "GEO", rn.minutes-timeTakenGeo),
 			})
 		}
 
@@ -175,7 +180,7 @@ func buildNextsLong(bp blueprint, rn robotNode, bests map[string]int) []robotNod
 	}
 
 	// Build an obsidian robot
-	if rn.ore >= bp.obsOre && rn.clay >= bp.obsClay {
+	if rn.ore >= bp.obsOre && rn.clay >= bp.obsClay && rn.obsRobot < bp.geoObs {
 		node := robotNode{
 			ore:        rn.ore + rn.oreRobot - bp.obsOre,
 			clay:       rn.clay + rn.clayRobot - bp.obsClay,
@@ -260,8 +265,17 @@ func runNode(bp blueprint, rn robotNode) int {
 	bests := make(map[string]int)
 
 	for len(queue) > 0 {
-		head := queue[0]
-		queue = queue[1:]
+		head := queue[len(queue)-1]
+		queue = queue[:len(queue)-1]
+
+		// Should we abandon this run ?
+		potential := head.geo
+		for i := 0; i < head.minutes; i++ {
+			potential += head.geoRobot + i
+		}
+		if potential < bestRes {
+			continue
+		}
 
 		if head.minutes == 0 {
 			if head.geo > bestRes {
@@ -270,7 +284,7 @@ func runNode(bp blueprint, rn robotNode) int {
 			continue
 		}
 
-		nexts := buildNextsLong(bp, head, bests)
+		nexts := buildNexts(bp, head) //, bests)
 		for _, n := range nexts {
 			if _, ok := seen[n.getRep()]; !ok {
 				seen[n.getRep()] = true
@@ -285,13 +299,25 @@ func runNode(bp blueprint, rn robotNode) int {
 	return bestRes
 }
 
-func getBestBlue(data string) int {
+func getBestBlue(data string, maxv int) int {
 	bestVal := 0
 
 	for i, line := range strings.Split(strings.TrimSpace(data), "\n") {
 		bp := buildBluePrint(strings.TrimSpace(line))
-		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: 23})
+		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: maxv})
 		bestVal += (i + 1) * best
+	}
+
+	return bestVal
+}
+
+func getTopBlue(data string, maxv int) int {
+	bestVal := 1
+
+	for _, line := range strings.Split(strings.TrimSpace(data), "\n")[:2] {
+		bp := buildBluePrint(strings.TrimSpace(line))
+		best := runNode(bp, robotNode{ore: 1, oreRobot: 1, minutes: maxv})
+		bestVal *= best
 	}
 
 	return bestVal
@@ -303,5 +329,14 @@ func (s *Server) Solve2022day19part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(getBestBlue(data))}, nil
+	return &pb.SolveResponse{Answer: int32(getBestBlue(data, 23))}, nil
+}
+
+func (s *Server) Solve2022day19part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-19.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(getTopBlue(data, 31))}, nil
 }
