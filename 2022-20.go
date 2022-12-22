@@ -24,7 +24,7 @@ func printChain(head *chain) string {
 	return ret
 }
 
-func unencrpyt(data string) int {
+func unencrpyt(data string, mult, rep int) int {
 	var runArr []*chain
 	cHead := &chain{}
 	curr := cHead
@@ -165,5 +165,14 @@ func (s *Server) Solve2022day20part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(unencrpyt(data))}, nil
+	return &pb.SolveResponse{Answer: int32(unencrpyt(data, 1, 1))}, nil
+}
+
+func (s *Server) Solve2022day20part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-20.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(unencrpyt(data, 811589153, 10))}, nil
 }
