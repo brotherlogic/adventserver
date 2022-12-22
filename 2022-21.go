@@ -12,17 +12,17 @@ type program struct {
 }
 
 type entry struct {
-	val         int
+	val         int64
 	operator    string
 	left, right string
-	result      int
+	result      int64
 }
 
 func buildLine(line string) (string, *entry) {
 	fields := strings.Fields(strings.ReplaceAll(line, ":", ""))
 	if len(fields) == 2 {
 		value := getInt32(fields[1])
-		return fields[0], &entry{val: value}
+		return fields[0], &entry{val: int64(value)}
 	}
 
 	return fields[0], &entry{left: fields[1], operator: fields[2], right: fields[3]}
@@ -37,7 +37,7 @@ func buildProgram(data string) *program {
 	return prog
 }
 
-func evalProg(prog *program, ident string) int {
+func evalProg(prog *program, ident string) int64 {
 	node := prog.progs[ident]
 	if node.result > 0 {
 		return node.result
@@ -74,5 +74,5 @@ func (s *Server) Solve2022day21part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(evalProg(buildProgram(data), "root"))}, nil
+	return &pb.SolveResponse{BigAnswer: (evalProg(buildProgram(data), "root"))}, nil
 }
