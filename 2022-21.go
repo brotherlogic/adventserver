@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -63,6 +64,8 @@ func evalProg(prog *program, ident string) int64 {
 		res := evalProg(prog, node.left) / evalProg(prog, node.right)
 		node.result = res
 		return res
+	default:
+		log.Fatalf("NOPE: %+v", node)
 	}
 
 	return -1
