@@ -152,6 +152,52 @@ func runFunnyMaze(data string) int {
 	return curr.y*1000 + 4*curr.x + facing
 }
 
+func runFunnyCube(data string) int {
+	startNode, path := buildFunnyMaze(data)
+
+	facing := 0 // Right
+	curr := startNode
+
+	for _, node := range path {
+		switch node {
+		case "R":
+			facing++
+		case "L":
+			facing--
+		default:
+			steps := getInt32(node)
+			for i := 0; i < steps; i++ {
+				switch facing {
+				case 0:
+					if curr.east != nil && !curr.east.wall {
+						curr = curr.east
+					}
+				case 1:
+					if curr.south != nil && !curr.south.wall {
+						curr = curr.south
+					}
+				case 2:
+					if curr.west != nil && !curr.west.wall {
+						curr = curr.west
+					}
+				case 3:
+					if curr.north != nil && !curr.north.wall {
+						curr = curr.north
+					}
+				}
+			}
+		}
+
+		if facing == -1 {
+			facing = 3
+		} else if facing == 4 {
+			facing = 0
+		}
+	}
+
+	return curr.y*1000 + 4*curr.x + facing
+}
+
 func (s *Server) Solve2022day22part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-22.txt")
 	if err != nil {
