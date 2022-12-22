@@ -20,7 +20,7 @@ drzm: hmdt - zczc
 hmdt: 32`
 
 	program := buildProgram(data)
-	res, _ := evalProg(program, "root")
+	res, _ := evalProg(program, "root", "")
 	if res != 152 {
 		t.Errorf("Bad prog run: %v (152)", res)
 	}
@@ -46,7 +46,7 @@ hmdt: 32`
 	program := buildProgram(data)
 	program.progs["humn"].unknown = true
 
-	val, _ := evalProg(program, program.progs["root"].right)
+	val, _ := evalProg(program, program.progs["root"].right, "")
 
 	result := findUnknown(program, program.progs["root"].left, val)
 
