@@ -12,11 +12,18 @@ type program struct {
 	progs map[string]*entry
 }
 
+func (p *program) resetCache() {
+	for _, entry := range p.progs {
+		entry.result = 0
+	}
+}
+
 type entry struct {
 	val         int64
 	operator    string
 	left, right string
 	result      int64
+	unknown     bool
 }
 
 func buildLine(line string) (string, *entry) {
@@ -38,37 +45,94 @@ func buildProgram(data string) *program {
 	return prog
 }
 
-func evalProg(prog *program, ident string) int64 {
+func reverseResult(e *entry, value, result int64, isRight bool) int64 {
+	switch e.operator {
+	case "*":
+		return result / value
+	case "+":
+		return result - value
+	case "-":
+		if isRight {
+			return result + value
+		} else {
+			return value - result
+		}
+	default:
+		if isRight {
+			return result * value
+		} else {
+			return value / result
+		}
+	}
+}
+
+func findUnknown(prog *program, base string, result int64) int64 {
+	log.Printf("FINDING UNKNOWN: %v -> %v", base, result)
+
+	if prog.progs[base].left == "" {
+		return result
+	}
+
+	leftv, lun := evalProg(prog, prog.progs[base].left)
+	rightv, run := evalProg(prog, prog.progs[base].right)
+
+	if lun && run {
+		log.Fatalf("UNSOLVABLE!")
+	}
+
+	if lun {
+		ideal := reverseResult(prog.progs[base], rightv, result, true)
+		return findUnknown(prog, prog.progs[base].left, ideal)
+	} else {
+		ideal := reverseResult(prog.progs[base], leftv, result, false)
+		return findUnknown(prog, prog.progs[base].right, ideal)
+	}
+}
+
+func evalProg(prog *program, ident string) (int64, bool) {
 	node := prog.progs[ident]
+
+	if node.unknown {
+		return -1, true
+	}
+
 	if node.result > 0 {
-		return node.result
+		return node.result, false
 	}
 	if node.val > 0 {
-		return node.val
+		return node.val, false
 	}
 
 	switch node.operator {
 	case "*":
-		res := evalProg(prog, node.left) * evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left)
+		r, vr := evalProg(prog, node.right)
+		res := l * r
 		node.result = res
-		return res
+		return res, vl || vr
 	case "+":
-		res := evalProg(prog, node.left) + evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left)
+		r, vr := evalProg(prog, node.right)
+		res := l + r
 		node.result = res
-		return res
+		return res, vl || vr
 	case "-":
-		res := evalProg(prog, node.left) - evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left)
+		r, vr := evalProg(prog, node.right)
+		res := l - r
 		node.result = res
-		return res
+		return res, vl || vr
 	case "/":
-		res := evalProg(prog, node.left) / evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left)
+		r, vr := evalProg(prog, node.right)
+		res := l / r
 		node.result = res
-		return res
+		return res, vl || vr
 	default:
 		log.Fatalf("NOPE: %+v", node)
 	}
 
-	return -1
+	return -1, false
 }
 
 func (s *Server) Solve2022day21part1(ctx context.Context) (*pb.SolveResponse, error) {
@@ -77,5 +141,18 @@ func (s *Server) Solve2022day21part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{BigAnswer: (evalProg(buildProgram(data), "root"))}, nil
+	res, _ := evalProg(buildProgram(data), "root")
+	return &pb.SolveResponse{BigAnswer: res}, nil
+}
+
+func (s *Server) Solve2022day21part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-21.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	program := buildProgram(data)
+	val, _ := evalProg(program, program.progs["root"].right)
+	result := findUnknown(program, program.progs["root"].left, val)
+	return &pb.SolveResponse{BigAnswer: result}, nil
 }
