@@ -134,6 +134,7 @@ func evalProg(prog *program, ident, path string) (int64, bool) {
 		if !vl && !vr {
 			node.result = res
 		}
+
 		return res, vl || vr
 	default:
 		log.Fatalf("NOPE: %+v", node)
