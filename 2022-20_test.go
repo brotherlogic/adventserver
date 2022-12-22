@@ -87,7 +87,8 @@ func Test2022_20_1_Main(t *testing.T) {
 	3
 	-2
 	0
-	4`
+	4
+	`
 
 	num := unencrpyt(data)
 	if num != 3 {

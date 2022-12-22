@@ -25,7 +25,7 @@ func printChain(head *chain) string {
 }
 
 func unencrpyt(data string) int {
-	var runArr []int
+	var runArr []*chain
 	cHead := &chain{}
 	curr := cHead
 	var prev *chain
@@ -33,7 +33,7 @@ func unencrpyt(data string) int {
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
 			curr.value = getInt32(line)
-			runArr = append(runArr, curr.value)
+			runArr = append(runArr, curr)
 			if prev != nil {
 				curr.prev = prev
 				prev.next = curr
@@ -46,14 +46,14 @@ func unencrpyt(data string) int {
 	cHead.prev.next = cHead
 
 	curr = cHead
-	for _, val := range runArr {
-		if val != 0 {
-			for curr.value != val {
-				curr = curr.next
-			}
+	for _, v := range runArr {
+
+		if v.value != 0 {
+			curr = v
+			val := curr.value
 			curr.prev.next = curr.next
 			curr.next.prev = curr.prev
-			if val > 0 {
+			if curr.value > 0 {
 				for i := 0; i < val; i++ {
 					curr = curr.next
 				}
@@ -85,6 +85,7 @@ func unencrpyt(data string) int {
 		for j := 0; j < 1000; j++ {
 			zero = zero.next
 		}
+
 		value += zero.value
 	}
 
