@@ -24,6 +24,30 @@ func printChain(head *chain) string {
 	return ret
 }
 
+func seenChain(head *chain) map[int64]int {
+	mmap := make(map[int64]int)
+	curr := head.next
+	mmap[head.value]++
+	for curr != head {
+		mmap[curr.value]++
+		curr = curr.next
+	}
+	return mmap
+}
+
+func lenChain(head *chain) int {
+	count := 1
+
+	next := head.next
+	for next != head {
+		count++
+		next = next.next
+
+	}
+
+	return count
+}
+
 func unencrpyt(data string, mult int64, rep int) int64 {
 	var runArr []*chain
 	cHead := &chain{}
@@ -48,7 +72,7 @@ func unencrpyt(data string, mult int64, rep int) int64 {
 	curr = cHead
 	for vv := 0; vv < rep; vv++ {
 		for _, v := range runArr {
-			if v.value != 0 {
+			if v.value != 0 && v.value%int64(len(runArr)-1) != 0 {
 				curr = v
 				val := curr.value
 				curr.prev.next = curr.next
@@ -73,10 +97,12 @@ func unencrpyt(data string, mult int64, rep int) int64 {
 					curr.next = add
 				}
 			}
+
 		}
 	}
 
 	var zero *chain
+	curr = runArr[0]
 	for {
 		if curr.value == 0 {
 			zero = curr
