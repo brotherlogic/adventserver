@@ -23,7 +23,7 @@ func wrap(val, limit int) int {
 }
 
 func buildFunnyMaze(data string) (*elfMazeNode, []string) {
-	mazeSize := 100
+	mazeSize := 1000
 	var maze [][]*elfMazeNode
 	for i := 0; i < mazeSize; i++ {
 		maze = append(maze, make([]*elfMazeNode, mazeSize))
