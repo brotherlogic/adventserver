@@ -9,7 +9,7 @@ import (
 )
 
 type chain struct {
-	value int
+	value int64
 	next  *chain
 	prev  *chain
 }
@@ -24,7 +24,7 @@ func printChain(head *chain) string {
 	return ret
 }
 
-func unencrpyt(data string, mult, rep int) int {
+func unencrpyt(data string, mult int64, rep int) int64 {
 	var runArr []*chain
 	cHead := &chain{}
 	curr := cHead
@@ -32,7 +32,7 @@ func unencrpyt(data string, mult, rep int) int {
 
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n") {
 		if len(strings.TrimSpace(line)) > 0 {
-			curr.value = getInt32(line)
+			curr.value = int64(getInt32(line)) * mult
 			runArr = append(runArr, curr)
 			if prev != nil {
 				curr.prev = prev
@@ -46,27 +46,32 @@ func unencrpyt(data string, mult, rep int) int {
 	cHead.prev.next = cHead
 
 	curr = cHead
-	for _, v := range runArr {
+	for vv := 0; vv < rep; vv++ {
+		for _, v := range runArr {
+			if v.value != 0 {
+				curr = v
+				val := curr.value
+				curr.prev.next = curr.next
+				curr.next.prev = curr.prev
+				add := curr
+				if curr.value > 0 {
+					for i := int64(0); i < val%int64(len(runArr)-1); i++ {
+						add = add.next
+					}
+					curr.next = add.next
+					curr.next.prev = curr
+					add.next = curr
+					curr.prev = add
 
-		if v.value != 0 {
-			curr = v
-			val := curr.value
-			curr.prev.next = curr.next
-			curr.next.prev = curr.prev
-			if curr.value > 0 {
-				for i := 0; i < val; i++ {
-					curr = curr.next
+				} else if val < 0 {
+					for i := int64(0); i < -val%int64(len(runArr)-1); i++ {
+						add = add.prev
+					}
+					curr.prev = add.prev
+					curr.prev.next = curr
+					add.prev = curr
+					curr.next = add
 				}
-				nval := &chain{value: val, prev: curr, next: curr.next}
-				curr.next.prev = nval
-				curr.next = nval
-			} else if val < 0 {
-				for i := 0; i < -val; i++ {
-					curr = curr.prev
-				}
-				nval := &chain{value: val, prev: curr.prev, next: curr}
-				curr.prev.next = nval
-				curr.prev = nval
 			}
 		}
 	}
@@ -80,7 +85,7 @@ func unencrpyt(data string, mult, rep int) int {
 		curr = curr.next
 	}
 
-	value := 0
+	value := int64(0)
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 1000; j++ {
 			zero = zero.next
