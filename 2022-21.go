@@ -72,8 +72,8 @@ func findUnknown(prog *program, base string, result int64) int64 {
 		return result
 	}
 
-	leftv, lun := evalProg(prog, prog.progs[base].left)
-	rightv, run := evalProg(prog, prog.progs[base].right)
+	leftv, lun := evalProg(prog, prog.progs[base].left, "")
+	rightv, run := evalProg(prog, prog.progs[base].right, "")
 
 	if lun && run {
 		log.Fatalf("UNSOLVABLE!")
@@ -88,7 +88,7 @@ func findUnknown(prog *program, base string, result int64) int64 {
 	}
 }
 
-func evalProg(prog *program, ident string) (int64, bool) {
+func evalProg(prog *program, ident, path string) (int64, bool) {
 	node := prog.progs[ident]
 
 	if node.unknown {
@@ -104,28 +104,37 @@ func evalProg(prog *program, ident string) (int64, bool) {
 
 	switch node.operator {
 	case "*":
-		l, vl := evalProg(prog, node.left)
-		r, vr := evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left, path+"-"+node.left)
+		r, vr := evalProg(prog, node.right, path+"-"+node.right)
 		res := l * r
-		node.result = res
+		if !vl && !vr {
+			node.result = res
+		}
 		return res, vl || vr
 	case "+":
-		l, vl := evalProg(prog, node.left)
-		r, vr := evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left, path+"-"+node.left)
+		r, vr := evalProg(prog, node.right, path+"-"+node.right)
 		res := l + r
-		node.result = res
+		if !vl && !vr {
+			node.result = res
+		}
 		return res, vl || vr
 	case "-":
-		l, vl := evalProg(prog, node.left)
-		r, vr := evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left, path+"-"+node.left)
+		r, vr := evalProg(prog, node.right, path+"-"+node.right)
 		res := l - r
-		node.result = res
+		if !vl && !vr {
+			node.result = res
+		}
 		return res, vl || vr
 	case "/":
-		l, vl := evalProg(prog, node.left)
-		r, vr := evalProg(prog, node.right)
+		l, vl := evalProg(prog, node.left, path+"-"+node.left)
+		r, vr := evalProg(prog, node.right, path+"-"+node.right)
 		res := l / r
-		node.result = res
+		if !vl && !vr {
+			node.result = res
+		}
+
 		return res, vl || vr
 	default:
 		log.Fatalf("NOPE: %+v", node)
@@ -140,7 +149,7 @@ func (s *Server) Solve2022day21part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	res, _ := evalProg(buildProgram(data), "root")
+	res, _ := evalProg(buildProgram(data), "root", "")
 	return &pb.SolveResponse{BigAnswer: res}, nil
 }
 
@@ -151,7 +160,7 @@ func (s *Server) Solve2022day21part2(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	program := buildProgram(data)
-	val, _ := evalProg(program, program.progs["root"].right)
+	val, _ := evalProg(program, program.progs["root"].right, "")
 	result := findUnknown(program, program.progs["root"].left, val)
 	return &pb.SolveResponse{BigAnswer: result}, nil
 }
