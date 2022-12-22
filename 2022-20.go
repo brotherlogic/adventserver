@@ -179,5 +179,5 @@ func (s *Server) Solve2022day20part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(unencrpyt(data, 811589153, 10))}, nil
+	return &pb.SolveResponse{BigAnswer: (unencrpyt(data, 811589153, 10))}, nil
 }
