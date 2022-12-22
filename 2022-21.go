@@ -67,7 +67,6 @@ func reverseResult(e *entry, value, result int64, isRight bool) int64 {
 }
 
 func findUnknown(prog *program, base string, result int64) int64 {
-	log.Printf("FINDING UNKNOWN: %v -> %v", base, result)
 
 	if prog.progs[base].left == "" {
 		return result
