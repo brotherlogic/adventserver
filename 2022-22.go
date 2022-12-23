@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -182,7 +183,7 @@ func runElfMaze(startNode *elfMazeNode, path []string) int {
 	return curr.y*1000 + 4*curr.x + facing
 }
 
-func runFunnyCube(data string) int {
+func runFunnyCube(data string, projection int) int {
 	startNode, path, mnodes := buildFunnyMaze(data)
 
 	// Deal with the edges
@@ -193,116 +194,257 @@ func runFunnyCube(data string) int {
 		curr = curr.east
 	}
 
-	// 1-4 / 4-1 edge ** stays the same **
-	// 1-3 / 3-1 edge
-	for y := 0; y < edgeWidth; y++ {
-		cx := edgeWidth * 2
-		cy := y
-		nx := edgeWidth + y
-		ny := edgeWidth
-
-		mnodes[cx][cy].west = mnodes[nx][ny]
-		mnodes[cx][cy].wadj = 1
-
-		mnodes[nx][ny].north = mnodes[cx][cy]
-		mnodes[nx][ny].nadj = 0
-	}
-	// 1-6 / 6-1 edge
-	for x := 0; x < edgeWidth; x++ {
-		cx := edgeWidth*3 - 1
-		cy := x
-		nx := edgeWidth*3 + x
-		ny := 3*edgeWidth - 1
-
-		mnodes[cx][cy].east = mnodes[nx][ny]
-		mnodes[cx][cy].eadj = 2
-
-		mnodes[nx][ny].west = mnodes[cx][cy]
-		mnodes[nx][ny].wadj = 0
-	}
-	// 1-2 / 2-1 edge
-	for x := edgeWidth * 2; x < edgeWidth*3; x++ {
-		cx := x
-		cy := 0
-		nx := edgeWidth*3 - 1 - x
-		ny := edgeWidth
-
-		mnodes[cx][cy].north = mnodes[nx][ny]
-		mnodes[cx][cy].nadj = 1
-
-		mnodes[nx][ny].north = mnodes[cx][cy]
-		mnodes[nx][ny].nadj = 1
+	if projection == 2 {
+		edgeWidth = edgeWidth / 2
 	}
 
-	// 2-3 / 3-2 edge ** Nothing changes **
-	// 2-6 / 6-2 edge
-	for y := edgeWidth; y < edgeWidth*2; y++ {
-		cx := 0
-		cy := y
-		nx := edgeWidth*5 - 1 - y
-		ny := edgeWidth*3 - 1
-		mnodes[cx][cy].south = mnodes[nx][ny]
-		mnodes[cx][cy].sadj = 3
+	log.Printf("EDGE: %v", edgeWidth)
 
-		mnodes[nx][ny].north = mnodes[cx][cy]
-		mnodes[nx][ny].nadj = 1
+	if projection == 1 {
+		// 1-4 / 4-1 edge ** stays the same **
+		// 1-3 / 3-1 edge
+		for y := 0; y < edgeWidth; y++ {
+			cx := edgeWidth * 2
+			cy := y
+			nx := edgeWidth + y
+			ny := edgeWidth
+
+			log.Printf("1-3; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].west = mnodes[nx][ny]
+			mnodes[cx][cy].wadj = 1
+
+			mnodes[nx][ny].north = mnodes[cx][cy]
+			mnodes[nx][ny].nadj = 0
+		}
+		// 1-6 / 6-1 edge
+		for x := 0; x < edgeWidth; x++ {
+			cx := edgeWidth*3 - 1
+			cy := x
+			nx := edgeWidth*3 + x
+			ny := 3*edgeWidth - 1
+
+			mnodes[cx][cy].east = mnodes[nx][ny]
+			mnodes[cx][cy].eadj = 2
+
+			mnodes[nx][ny].west = mnodes[cx][cy]
+			mnodes[nx][ny].wadj = 0
+		}
+		// 1-2 / 2-1 edge
+		for x := edgeWidth * 2; x < edgeWidth*3; x++ {
+			cx := x
+			cy := 0
+			nx := edgeWidth*3 - 1 - x
+			ny := edgeWidth
+
+			mnodes[cx][cy].north = mnodes[nx][ny]
+			mnodes[cx][cy].nadj = 1
+
+			mnodes[nx][ny].north = mnodes[cx][cy]
+			mnodes[nx][ny].nadj = 1
+		}
+
+		// 2-3 / 3-2 edge ** Nothing changes **
+		// 2-6 / 6-2 edge
+		for y := edgeWidth; y < edgeWidth*2; y++ {
+			cx := 0
+			cy := y
+			nx := edgeWidth*5 - 1 - y
+			ny := edgeWidth*3 - 1
+			mnodes[cx][cy].south = mnodes[nx][ny]
+			mnodes[cx][cy].sadj = 3
+
+			mnodes[nx][ny].north = mnodes[cx][cy]
+			mnodes[nx][ny].nadj = 1
+		}
+		// 2-1 / 1-2 edge ** Already done **
+		// 2-5 / 5-2 edge
+		for x := 0; x < edgeWidth; x++ {
+			cx := x
+			cy := edgeWidth*2 - 1
+			nx := edgeWidth*3 - 1 - x
+			ny := 2*edgeWidth + 3
+			mnodes[cx][cy].south = mnodes[nx][ny]
+			mnodes[cx][cy].sadj = 3
+
+			mnodes[nx][ny].south = mnodes[cx][cy]
+			mnodes[nx][ny].sadj = 3
+		}
+
+		// 3-4 / 4-3 edge ** Not Needed **
+		// 3-2 / 2-3 edge ** Already done **
+		// 1-3 / 3-1 edge ** Already done **
+		// 3-5 / 5-3 edge
+		for x := edgeWidth; x < edgeWidth*2; x++ {
+			cx := x
+			cy := edgeWidth*2 - 1
+			nx := 2 * edgeWidth
+			ny := edgeWidth*4 - 1 - x
+			mnodes[cx][cy].south = mnodes[nx][ny]
+			mnodes[cx][cy].sadj = 0
+
+			mnodes[nx][ny].east = mnodes[cx][cy]
+			mnodes[nx][ny].eadj = 3
+		}
+
+		// 4-1 / 1-4 edge ** Already done **
+		// 4-5 / 5-4 edge ** Taken care of
+		// 4-3 / 3-4 edge ** Already done **
+		// 4-6 / 6-4 edge
+		for y := edgeWidth; y < edgeWidth*2; y++ {
+			cx := edgeWidth*3 - 1
+			cy := y
+			nx := 5*edgeWidth - y - 1
+			ny := 2 * edgeWidth
+
+			mnodes[cx][cy].east = mnodes[nx][ny]
+			mnodes[cx][cy].eadj = 1
+
+			mnodes[nx][ny].north = mnodes[cx][cy]
+			mnodes[nx][ny].nadj = 2
+		}
+
+		// 5-4 / 4-5 edge ** Already done **
+		// 5-6 / 6-5 edge ** Not required **
+		// 5-4 / 3-5 edge ** Already done **
+		// 5-2 / 2-5 edge ** Already done **
+
+		// 6-5 / 5-6 edge ** Already done **
+		// 6-4 / 4-6 edge ** Already done **
+		// 6-2 / 2-6 edge ** Already done **
+		// 6-1 / 1-6 edge ** Already done **
 	}
-	// 2-1 / 1-2 edge ** Already done **
-	// 2-5 / 5-2 edge
-	for x := 0; x < edgeWidth; x++ {
-		cx := x
-		cy := edgeWidth*2 - 1
-		nx := edgeWidth*3 - 1 - x
-		ny := 2*edgeWidth + 3
-		mnodes[cx][cy].south = mnodes[nx][ny]
-		mnodes[cx][cy].sadj = 3
 
-		mnodes[nx][ny].south = mnodes[cx][cy]
-		mnodes[nx][ny].sadj = 3
+	if projection == 2 {
+		// 1-4 / 4-1 edge
+		for y := 0; y < edgeWidth; y++ {
+			cx := edgeWidth
+			cy := y
+			nx := 0
+			ny := edgeWidth*3 - 1 - y
+
+			log.Printf("1-4; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].west = mnodes[nx][ny]
+			mnodes[cx][cy].wadj = 0
+
+			mnodes[nx][ny].west = mnodes[cx][cy]
+			mnodes[nx][ny].wadj = 0
+		}
+		// 1-3 / 3-1 edge
+
+		// 1-6 / 6-1 edge
+		for x := edgeWidth; x < edgeWidth*2; x++ {
+			cx := x
+			cy := 0
+			nx := 0
+			ny := 2*edgeWidth + x
+
+			log.Printf("1-6; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].north = mnodes[nx][ny]
+			mnodes[cx][cy].nadj = 0
+
+			mnodes[nx][ny].west = mnodes[cx][cy]
+			mnodes[nx][ny].wadj = 1
+		}
+		// 1-2 / 2-1 edge
+
+		// 2-3 / 3-2 edge
+		for x := edgeWidth * 2; x < edgeWidth*3; x++ {
+			cx := x
+			cy := edgeWidth - 1
+			nx := edgeWidth*2 - 1
+			ny := x - edgeWidth
+
+			log.Printf("2-3; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].south = mnodes[nx][ny]
+			mnodes[cx][cy].sadj = 2
+
+			mnodes[nx][ny].east = mnodes[cx][cy]
+			mnodes[nx][ny].eadj = 3
+		}
+		// 2-6 / 6-2 edge
+		for x := edgeWidth * 2; x < edgeWidth*3; x++ {
+			cx := x
+			cy := 0
+			nx := x - edgeWidth*2
+			ny := edgeWidth*4 - 1
+
+			log.Printf("2-6; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].north = mnodes[nx][ny]
+			mnodes[cx][cy].nadj = 3
+
+			mnodes[nx][ny].south = mnodes[cx][cy]
+			mnodes[nx][ny].sadj = 1
+		}
+		// 2-1 / 1-2 edge ** Already done **
+		// 2-5 / 5-2 edge
+		for y := 0; y < edgeWidth; y++ {
+			cx := edgeWidth*3 - 1
+			cy := y
+			nx := edgeWidth*2 - 1
+			ny := edgeWidth*3 - 1 - y
+
+			log.Printf("2-5; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].east = mnodes[nx][ny]
+			mnodes[cx][cy].eadj = 2
+
+			mnodes[nx][ny].east = mnodes[cx][cy]
+			mnodes[nx][ny].eadj = 2
+		}
+
+		// 3-4 / 4-3 edge ** Not Needed **
+		for y := edgeWidth; y < edgeWidth*2; y++ {
+			cx := edgeWidth
+			cy := y
+			nx := y - edgeWidth
+			ny := 2 * edgeWidth
+
+			log.Printf("3-4; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].west = mnodes[nx][ny]
+			mnodes[cx][cy].wadj = 1
+
+			mnodes[nx][ny].north = mnodes[cx][cy]
+			mnodes[nx][ny].nadj = 0
+		}
+		// 3-2 / 2-3 edge ** Already done **
+		// 1-3 / 3-1 edge ** Already done **
+		// 3-5 / 5-3 edge
+
+		// 4-1 / 1-4 edge ** Already done **
+		// 4-5 / 5-4 edge ** Taken care of
+		// 4-3 / 3-4 edge ** Already done **
+		// 4-6 / 6-4 edge
+
+		// 5-4 / 4-5 edge ** Already done **
+		// 5-6 / 6-5 edge ** Not required **
+		for x := edgeWidth; x < edgeWidth*2; x++ {
+			cx := x
+			cy := 3*edgeWidth - 1
+			nx := edgeWidth - 1
+			ny := 2*edgeWidth + x
+
+			log.Printf("5-6; %v,%v -> %v,%v", cx, cy, nx, ny)
+
+			mnodes[cx][cy].south = mnodes[nx][ny]
+			mnodes[cx][cy].sadj = 2
+
+			mnodes[nx][ny].east = mnodes[cx][cy]
+			mnodes[nx][ny].eadj = 3
+		}
+		// 5-4 / 3-5 edge ** Already done **
+		// 5-2 / 2-5 edge ** Already done **
+
+		// 6-5 / 5-6 edge ** Already done **
+		// 6-4 / 4-6 edge ** Already done **
+		// 6-2 / 2-6 edge ** Already done **
+		// 6-1 / 1-6 edge ** Already done **
 	}
-
-	// 3-4 / 4-3 edge ** Not Needed **
-	// 3-2 / 2-3 edge ** Already done **
-	// 1-3 / 3-1 edge ** Already done **
-	// 3-5 / 5-3 edge
-	for x := edgeWidth; x < edgeWidth*2; x++ {
-		cx := x
-		cy := edgeWidth*2 - 1
-		nx := 2 * edgeWidth
-		ny := edgeWidth*4 - 1 - x
-		mnodes[cx][cy].south = mnodes[nx][ny]
-		mnodes[cx][cy].sadj = 0
-
-		mnodes[nx][ny].east = mnodes[cx][cy]
-		mnodes[nx][ny].eadj = 3
-	}
-
-	// 4-1 / 1-4 edge ** Already done **
-	// 4-5 / 5-4 edge ** Taken care of
-	// 4-3 / 3-4 edge ** Already done **
-	// 4-6 / 6-4 edge
-	for y := edgeWidth; y < edgeWidth*2; y++ {
-		cx := edgeWidth*3 - 1
-		cy := y
-		nx := 5*edgeWidth - y - 1
-		ny := 2 * edgeWidth
-
-		mnodes[cx][cy].east = mnodes[nx][ny]
-		mnodes[cx][cy].eadj = 1
-
-		mnodes[nx][ny].north = mnodes[cx][cy]
-		mnodes[nx][ny].nadj = 2
-	}
-
-	// 5-4 / 4-5 edge ** Already done **
-	// 5-6 / 6-5 edge ** Not required **
-	// 5-4 / 3-5 edge ** Already done **
-	// 5-2 / 2-5 edge ** Already done **
-
-	// 6-5 / 5-6 edge ** Already done **
-	// 6-4 / 4-6 edge ** Already done **
-	// 6-2 / 2-6 edge ** Already done **
-	// 6-1 / 1-6 edge ** Already done **
 
 	return runElfMaze(startNode, path)
 
@@ -323,5 +465,5 @@ func (s *Server) Solve2022day22part2(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runFunnyCube(data))}, nil
+	return &pb.SolveResponse{Answer: int32(runFunnyCube(data, 2))}, nil
 }

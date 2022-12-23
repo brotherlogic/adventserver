@@ -1,6 +1,8 @@
 package main
 
 import (
+	"io/ioutil"
+	"log"
 	"testing"
 )
 
@@ -42,8 +44,45 @@ func Test2022_22_2_Main(t *testing.T) {
 
 10R5L5R10L4R5L5`
 
-	res := runFunnyCube(data)
+	res := runFunnyCube(data, 1)
 	if res != 5031 {
 		t.Errorf("Bad result: %v (5031)", res)
+	}
+}
+
+func Test2022_22_2_Sup(t *testing.T) {
+	data = `    ........
+    ........
+    ........
+    ........
+    ....
+    ....
+    ....
+    ....
+........
+........
+........
+........
+....
+....
+....
+....    
+
+10R5L5R10L4R5L5`
+
+	res := runFunnyCube(data, 2)
+	if res != 5031 {
+		t.Errorf("Bad result: %v (5031)", res)
+	}
+}
+
+func Test2022_22_2_Full(t *testing.T) {
+	data, _ := ioutil.ReadFile("2022-22.txt")
+
+	res := runFunnyCube(string(data), 2)
+	if res == 103373 || res == 147370 {
+		t.Errorf("Bad result: %v (5031)", res)
+	} else {
+		log.Printf("RESULT: %v", res)
 	}
 }
