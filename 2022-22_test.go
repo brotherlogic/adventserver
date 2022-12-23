@@ -43,7 +43,7 @@ func Test2022_22_2_Main(t *testing.T) {
 10R5L5R10L4R5L5`
 
 	res := runFunnyCube(data)
-	if res != 6032 {
-		t.Errorf("Bad result: %v (6032)", res)
+	if res != 5031 {
+		t.Errorf("Bad result: %v (5031)", res)
 	}
 }

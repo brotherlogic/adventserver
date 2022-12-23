@@ -13,6 +13,7 @@ type elfMazeNode struct {
 	x, y                     int
 	wall                     bool
 	name                     string
+	nadj, sadj, eadj, wadj   int
 }
 
 func wrap(val, limit int) int {
@@ -22,7 +23,7 @@ func wrap(val, limit int) int {
 	return limit + val%limit
 }
 
-func buildFunnyMaze(data string) (*elfMazeNode, []string) {
+func buildFunnyMaze(data string) (*elfMazeNode, []string, [][]*elfMazeNode) {
 	mazeSize := 1000
 	var maze [][]*elfMazeNode
 	for i := 0; i < mazeSize; i++ {
@@ -103,12 +104,25 @@ func buildFunnyMaze(data string) (*elfMazeNode, []string) {
 		sofar = ""
 	}
 
-	return node, bits
+	return node, bits, maze
 }
 
 func runFunnyMaze(data string) int {
-	startNode, path := buildFunnyMaze(data)
+	startNode, path, _ := buildFunnyMaze(data)
 
+	return runElfMaze(startNode, path)
+}
+
+func printElf(node *elfMazeNode) string {
+	return fmt.Sprintf("%v,%v E:%v,%v;%v S:%v,%v;%v W:%v,%v;%v N:%v,%v;%v",
+		node.x-1, node.y-1,
+		node.east.x-1, node.east.y-1, node.east.nadj,
+		node.south.x-1, node.south.y-1, node.south.nadj,
+		node.west.x-1, node.west.y-1, node.west.nadj,
+		node.north.x-1, node.north.y-1, node.north.nadj)
+}
+
+func runElfMaze(startNode *elfMazeNode, path []string) int {
 	facing := 0 // Right
 	curr := startNode
 
@@ -124,18 +138,34 @@ func runFunnyMaze(data string) int {
 				switch facing {
 				case 0:
 					if curr.east != nil && !curr.east.wall {
+
+						if curr.eadj > 0 {
+							facing = curr.eadj
+						}
 						curr = curr.east
 					}
 				case 1:
 					if curr.south != nil && !curr.south.wall {
+
+						if curr.sadj > 0 {
+							facing = curr.sadj
+						}
 						curr = curr.south
 					}
 				case 2:
 					if curr.west != nil && !curr.west.wall {
+
+						if curr.wadj > 0 {
+							facing = curr.wadj
+						}
 						curr = curr.west
 					}
 				case 3:
 					if curr.north != nil && !curr.north.wall {
+
+						if curr.nadj > 0 {
+							facing = curr.nadj
+						}
 						curr = curr.north
 					}
 				}
@@ -153,49 +183,128 @@ func runFunnyMaze(data string) int {
 }
 
 func runFunnyCube(data string) int {
-	startNode, path := buildFunnyMaze(data)
+	startNode, path, mnodes := buildFunnyMaze(data)
 
-	facing := 0 // Right
-	curr := startNode
-
-	for _, node := range path {
-		switch node {
-		case "R":
-			facing++
-		case "L":
-			facing--
-		default:
-			steps := getInt32(node)
-			for i := 0; i < steps; i++ {
-				switch facing {
-				case 0:
-					if curr.east != nil && !curr.east.wall {
-						curr = curr.east
-					}
-				case 1:
-					if curr.south != nil && !curr.south.wall {
-						curr = curr.south
-					}
-				case 2:
-					if curr.west != nil && !curr.west.wall {
-						curr = curr.west
-					}
-				case 3:
-					if curr.north != nil && !curr.north.wall {
-						curr = curr.north
-					}
-				}
-			}
-		}
-
-		if facing == -1 {
-			facing = 3
-		} else if facing == 4 {
-			facing = 0
-		}
+	// Deal with the edges
+	edgeWidth := 1
+	curr := startNode.east
+	for curr != startNode {
+		edgeWidth++
+		curr = curr.east
 	}
 
-	return curr.y*1000 + 4*curr.x + facing
+	// 1-4 / 4-1 edge ** stays the same **
+	// 1-3 / 3-1 edge
+	for y := 0; y < edgeWidth; y++ {
+		cx := edgeWidth * 2
+		cy := y
+		nx := edgeWidth + y
+		ny := edgeWidth
+
+		mnodes[cx][cy].west = mnodes[nx][ny]
+		mnodes[cx][cy].wadj = 1
+
+		mnodes[nx][ny].north = mnodes[cx][cy]
+		mnodes[nx][ny].nadj = 0
+	}
+	// 1-6 / 6-1 edge
+	for x := 0; x < edgeWidth; x++ {
+		cx := edgeWidth*3 - 1
+		cy := x
+		nx := edgeWidth*3 + x
+		ny := 3*edgeWidth - 1
+
+		mnodes[cx][cy].east = mnodes[nx][ny]
+		mnodes[cx][cy].eadj = 2
+
+		mnodes[nx][ny].west = mnodes[cx][cy]
+		mnodes[nx][ny].wadj = 0
+	}
+	// 1-2 / 2-1 edge
+	for x := edgeWidth * 2; x < edgeWidth*3; x++ {
+		cx := x
+		cy := 0
+		nx := edgeWidth*3 - 1 - x
+		ny := edgeWidth
+
+		mnodes[cx][cy].north = mnodes[nx][ny]
+		mnodes[cx][cy].nadj = 1
+
+		mnodes[nx][ny].north = mnodes[cx][cy]
+		mnodes[nx][ny].nadj = 1
+	}
+
+	// 2-3 / 3-2 edge ** Nothing changes **
+	// 2-6 / 6-2 edge
+	for y := edgeWidth; y < edgeWidth*2; y++ {
+		cx := 0
+		cy := y
+		nx := edgeWidth*5 - 1 - y
+		ny := edgeWidth*3 - 1
+		mnodes[cx][cy].south = mnodes[nx][ny]
+		mnodes[cx][cy].sadj = 3
+
+		mnodes[nx][ny].north = mnodes[cx][cy]
+		mnodes[nx][ny].nadj = 1
+	}
+	// 2-1 / 1-2 edge ** Already done **
+	// 2-5 / 5-2 edge
+	for x := 0; x < edgeWidth; x++ {
+		cx := x
+		cy := edgeWidth*2 - 1
+		nx := edgeWidth*3 - 1 - x
+		ny := 2*edgeWidth + 3
+		mnodes[cx][cy].south = mnodes[nx][ny]
+		mnodes[cx][cy].sadj = 3
+
+		mnodes[nx][ny].south = mnodes[cx][cy]
+		mnodes[nx][ny].sadj = 3
+	}
+
+	// 3-4 / 4-3 edge ** Not Needed **
+	// 3-2 / 2-3 edge ** Already done **
+	// 1-3 / 3-1 edge ** Already done **
+	// 3-5 / 5-3 edge
+	for x := edgeWidth; x < edgeWidth*2; x++ {
+		cx := x
+		cy := edgeWidth*2 - 1
+		nx := 2 * edgeWidth
+		ny := edgeWidth*4 - 1 - x
+		mnodes[cx][cy].south = mnodes[nx][ny]
+		mnodes[cx][cy].sadj = 0
+
+		mnodes[nx][ny].east = mnodes[cx][cy]
+		mnodes[nx][ny].eadj = 3
+	}
+
+	// 4-1 / 1-4 edge ** Already done **
+	// 4-5 / 5-4 edge ** Taken care of
+	// 4-3 / 3-4 edge ** Already done **
+	// 4-6 / 6-4 edge
+	for y := edgeWidth; y < edgeWidth*2; y++ {
+		cx := edgeWidth*3 - 1
+		cy := y
+		nx := 5*edgeWidth - y - 1
+		ny := 2 * edgeWidth
+
+		mnodes[cx][cy].east = mnodes[nx][ny]
+		mnodes[cx][cy].eadj = 1
+
+		mnodes[nx][ny].north = mnodes[cx][cy]
+		mnodes[nx][ny].nadj = 2
+	}
+
+	// 5-4 / 4-5 edge ** Already done **
+	// 5-6 / 6-5 edge ** Not required **
+	// 5-4 / 3-5 edge ** Already done **
+	// 5-2 / 2-5 edge ** Already done **
+
+	// 6-5 / 5-6 edge ** Already done **
+	// 6-4 / 4-6 edge ** Already done **
+	// 6-2 / 2-6 edge ** Already done **
+	// 6-1 / 1-6 edge ** Already done **
+
+	return runElfMaze(startNode, path)
 }
 
 func (s *Server) Solve2022day22part1(ctx context.Context) (*pb.SolveResponse, error) {
