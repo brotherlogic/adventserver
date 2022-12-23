@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -136,12 +135,16 @@ func runElfMaze(startNode *elfMazeNode, path []string) int {
 		default:
 			steps := getInt32(node)
 			for i := 0; i < steps; i++ {
+
 				switch facing {
 				case 0:
 					if curr.east != nil && !curr.east.wall {
 
 						if curr.eadj > 0 {
 							facing = curr.eadj
+						}
+						if curr.eadj == -1 {
+							facing = 0
 						}
 						curr = curr.east
 					}
@@ -151,6 +154,9 @@ func runElfMaze(startNode *elfMazeNode, path []string) int {
 						if curr.sadj > 0 {
 							facing = curr.sadj
 						}
+						if curr.sadj == -1 {
+							facing = 0
+						}
 						curr = curr.south
 					}
 				case 2:
@@ -159,6 +165,9 @@ func runElfMaze(startNode *elfMazeNode, path []string) int {
 						if curr.wadj > 0 {
 							facing = curr.wadj
 						}
+						if curr.wadj == -1 {
+							facing = 0
+						}
 						curr = curr.west
 					}
 				case 3:
@@ -166,6 +175,9 @@ func runElfMaze(startNode *elfMazeNode, path []string) int {
 
 						if curr.nadj > 0 {
 							facing = curr.nadj
+						}
+						if curr.nadj == -1 {
+							facing = 0
 						}
 						curr = curr.north
 					}
@@ -198,8 +210,6 @@ func runFunnyCube(data string, projection int) int {
 		edgeWidth = edgeWidth / 2
 	}
 
-	log.Printf("EDGE: %v", edgeWidth)
-
 	if projection == 1 {
 		// 1-4 / 4-1 edge ** stays the same **
 		// 1-3 / 3-1 edge
@@ -208,8 +218,6 @@ func runFunnyCube(data string, projection int) int {
 			cy := y
 			nx := edgeWidth + y
 			ny := edgeWidth
-
-			log.Printf("1-3; %v,%v -> %v,%v", cx, cy, nx, ny)
 
 			mnodes[cx][cy].west = mnodes[nx][ny]
 			mnodes[cx][cy].wadj = 1
@@ -323,13 +331,11 @@ func runFunnyCube(data string, projection int) int {
 			nx := 0
 			ny := edgeWidth*3 - 1 - y
 
-			log.Printf("1-4; %v,%v -> %v,%v", cx, cy, nx, ny)
-
 			mnodes[cx][cy].west = mnodes[nx][ny]
-			mnodes[cx][cy].wadj = 0
+			mnodes[cx][cy].wadj = -1
 
 			mnodes[nx][ny].west = mnodes[cx][cy]
-			mnodes[nx][ny].wadj = 0
+			mnodes[nx][ny].wadj = -1
 		}
 		// 1-3 / 3-1 edge
 
@@ -340,10 +346,8 @@ func runFunnyCube(data string, projection int) int {
 			nx := 0
 			ny := 2*edgeWidth + x
 
-			log.Printf("1-6; %v,%v -> %v,%v", cx, cy, nx, ny)
-
 			mnodes[cx][cy].north = mnodes[nx][ny]
-			mnodes[cx][cy].nadj = 0
+			mnodes[cx][cy].nadj = -1
 
 			mnodes[nx][ny].west = mnodes[cx][cy]
 			mnodes[nx][ny].wadj = 1
@@ -357,8 +361,6 @@ func runFunnyCube(data string, projection int) int {
 			nx := edgeWidth*2 - 1
 			ny := x - edgeWidth
 
-			log.Printf("2-3; %v,%v -> %v,%v", cx, cy, nx, ny)
-
 			mnodes[cx][cy].south = mnodes[nx][ny]
 			mnodes[cx][cy].sadj = 2
 
@@ -371,8 +373,6 @@ func runFunnyCube(data string, projection int) int {
 			cy := 0
 			nx := x - edgeWidth*2
 			ny := edgeWidth*4 - 1
-
-			log.Printf("2-6; %v,%v -> %v,%v", cx, cy, nx, ny)
 
 			mnodes[cx][cy].north = mnodes[nx][ny]
 			mnodes[cx][cy].nadj = 3
@@ -388,8 +388,6 @@ func runFunnyCube(data string, projection int) int {
 			nx := edgeWidth*2 - 1
 			ny := edgeWidth*3 - 1 - y
 
-			log.Printf("2-5; %v,%v -> %v,%v", cx, cy, nx, ny)
-
 			mnodes[cx][cy].east = mnodes[nx][ny]
 			mnodes[cx][cy].eadj = 2
 
@@ -404,13 +402,11 @@ func runFunnyCube(data string, projection int) int {
 			nx := y - edgeWidth
 			ny := 2 * edgeWidth
 
-			log.Printf("3-4; %v,%v -> %v,%v", cx, cy, nx, ny)
-
 			mnodes[cx][cy].west = mnodes[nx][ny]
 			mnodes[cx][cy].wadj = 1
 
 			mnodes[nx][ny].north = mnodes[cx][cy]
-			mnodes[nx][ny].nadj = 0
+			mnodes[nx][ny].nadj = -1
 		}
 		// 3-2 / 2-3 edge ** Already done **
 		// 1-3 / 3-1 edge ** Already done **
@@ -428,8 +424,6 @@ func runFunnyCube(data string, projection int) int {
 			cy := 3*edgeWidth - 1
 			nx := edgeWidth - 1
 			ny := 2*edgeWidth + x
-
-			log.Printf("5-6; %v,%v -> %v,%v", cx, cy, nx, ny)
 
 			mnodes[cx][cy].south = mnodes[nx][ny]
 			mnodes[cx][cy].sadj = 2
