@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	blen = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_24_qlen",
+		Help: "The number of server requests",
+	})
 )
 
 type blizzNode struct {
@@ -228,6 +237,7 @@ func runBlizzardMaze(data string) int {
 	queue := []*blizzNode{{cycle: 0, px: 1, py: 0}}
 
 	for len(queue) > 0 {
+		blen.Set(float64(len(queue)))
 		head := queue[0]
 
 		queue = queue[1:]
