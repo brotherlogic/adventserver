@@ -10,7 +10,7 @@ func Test2022_24_1_Main(t *testing.T) {
 #<^v^^>#
 ######.#`
 
-	res := runBlizzardMaze(data)
+	res, _ := runBlizzardMaze(buildBlizzard(data), 1)
 
 	if res != 18 {
 		t.Errorf("Bad blizzard run: %v (18)", res)

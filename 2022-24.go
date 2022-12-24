@@ -271,7 +271,7 @@ func runBlizzardMaze(blizz *blizzard, end int) (int, *blizzard) {
 		}
 	}
 
-	return 0
+	return 0, nil
 }
 
 func (s *Server) Solve2022day24part1(ctx context.Context) (*pb.SolveResponse, error) {
