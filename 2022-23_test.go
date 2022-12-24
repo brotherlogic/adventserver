@@ -1,6 +1,24 @@
 package main
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
+
+func Test2022_23_2_Main(t *testing.T) {
+	data := `....#..
+..###.#
+#...#.#
+.#...##
+#.###..
+##.#.##
+.#..#..`
+
+	result := runElves(data, math.MaxInt)
+	if result != 20 {
+		t.Errorf("Bad times: %v (20)", result)
+	}
+}
 
 func Test2022_23_1_Main(t *testing.T) {
 	data := `....#..

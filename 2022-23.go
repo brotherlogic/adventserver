@@ -190,6 +190,9 @@ func runElves(data string, rounds int) int {
 
 	for i := 0; i < rounds; i++ {
 		proposals := cleanProps(buildPropos(elves, i%4))
+		if len(proposals) == 0 {
+			return i + 1
+		}
 		for _, prop := range proposals {
 			elves[prop.elfIndex].x = prop.newx
 			elves[prop.elfIndex].y = prop.newy
@@ -206,4 +209,13 @@ func (s *Server) Solve2022day23part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(runElves(data, 10))}, nil
+}
+
+func (s *Server) Solve2022day23part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-23.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(runElves(data, math.MaxInt))}, nil
 }
