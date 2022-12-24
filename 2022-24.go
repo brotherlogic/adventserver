@@ -230,14 +230,17 @@ func (b *blizzNode) rep() string {
 	return fmt.Sprintf("%v-%v-%v", b.cycle, b.px, b.py)
 }
 
-func runBlizzardMaze(data string) int {
+func runBlizzardMaze(blizz *blizzard, end int) (int, *blizzard) {
 	bMaze := make(map[int]*blizzard)
 
-	bx, by := getBlizzSize(data)
-	bMaze[0] = buildBlizzard(data)
+	bx, by := blizz.bmx, blizz.bmy
+	bMaze[0] = blizz
 	seen := make(map[string]bool)
 
 	queue := []*blizzNode{{cycle: 0, px: 1, py: 0}}
+	if end == 0 {
+		queue[0].px, queue[0].py = bx-2, by-1
+	}
 
 	for len(queue) > 0 {
 		blen.Set(float64(len(queue)))
@@ -245,8 +248,14 @@ func runBlizzardMaze(data string) int {
 
 		queue = queue[1:]
 
-		if head.px == bx-2 && head.py == by-1 {
-			return head.cycle
+		if end == 1 {
+			if head.px == bx-2 && head.py == by-1 {
+				return head.cycle, bMaze[head.cycle]
+			}
+		} else {
+			if head.px == 1 && head.py == 0 {
+				return head.cycle, bMaze[head.cycle]
+			}
 		}
 
 		if _, ok := bMaze[head.cycle+1]; !ok {
@@ -271,5 +280,19 @@ func (s *Server) Solve2022day24part1(ctx context.Context) (*pb.SolveResponse, er
 		return nil, err
 	}
 
-	return &pb.SolveResponse{Answer: int32(runBlizzardMaze(data))}, nil
+	res, _ := runBlizzardMaze(buildBlizzard(data), 1)
+	return &pb.SolveResponse{Answer: int32(res)}, nil
+}
+
+func (s *Server) Solve2022day24part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2022-24.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	blizz := buildBlizzard(data)
+	res1, blizz1 := runBlizzardMaze(blizz, 1)
+	res2, blizz2 := runBlizzardMaze(blizz1, 0)
+	res3, _ := runBlizzardMaze(blizz2, 1)
+	return &pb.SolveResponse{Answer: int32(res1 + res2 + res3)}, nil
 }
