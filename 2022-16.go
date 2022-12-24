@@ -179,9 +179,11 @@ func releaseGasSimple(data string, minutes int) int {
 	best := 0
 	for i := 0; i < len(keys); i++ {
 		for j := i + 1; j < len(keys); j++ {
-			if !gasOverlap(kmap[keys[i]], kmap[keys[j]]) && fmap[keys[i]]+fmap[keys[j]] > best {
-				best = fmap[keys[i]] + fmap[keys[j]]
-			}
+			go func(i, j int) {
+				if !gasOverlap(kmap[keys[i]], kmap[keys[j]]) && fmap[keys[i]]+fmap[keys[j]] > best {
+					best = fmap[keys[i]] + fmap[keys[j]]
+				}
+			}(i, j)
 		}
 	}
 
