@@ -6,7 +6,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	cval = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2022_23_moves",
+		Help: "The number of server requests",
+	})
 )
 
 type elfLocation struct {
@@ -189,6 +198,7 @@ func runElves(data string, rounds int) int {
 	elves := findElves(data)
 
 	for i := 0; i < rounds; i++ {
+		cval.Set(float64(i))
 		proposals := cleanProps(buildPropos(elves, i%4))
 		if len(proposals) == 0 {
 			return i + 1
