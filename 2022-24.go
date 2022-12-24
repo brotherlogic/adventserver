@@ -116,6 +116,9 @@ func (b *blizzard) occupied(x, y int) bool {
 	if x == b.bmx-2 && y == b.bmy-1 {
 		return false
 	}
+	if x == 1 && y == 0 {
+		return false
+	}
 
 	if x == 0 || y <= 0 || x == b.bmx-1 || y == b.bmy-1 {
 		return true
