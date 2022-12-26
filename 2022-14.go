@@ -14,8 +14,8 @@ import (
 func getInt32(s string) int {
 	val, err := strconv.ParseInt(strings.TrimSpace(s), 10, 32)
 	if err != nil {
-		fmt.Printf("Bad int: %v", s)
-		log.Fatalf("Bad int: %v", s)
+		fmt.Printf("Bad int: '%v'", s)
+		log.Fatalf("Bad int: '%v'", s)
 	}
 
 	return int(val)
