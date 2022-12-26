@@ -24,6 +24,7 @@ type toggler struct {
 	program    []string
 	cprogram   []string
 	pointer    int
+	output     string
 }
 
 func (m *toggler) set(reg string, value int) {
