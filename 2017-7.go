@@ -75,6 +75,16 @@ func getBottom(data string) string {
 	return tree.root.name
 }
 
+func findUnbalanced(n *node) int {
+	return 0
+}
+
+func getUnbalanced(data string) int {
+	tree := buildTree(data)
+	unbalanced := findUnbalanced(tree.root)
+	return unbalanced
+}
+
 func (s *Server) Solve2017day7part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-7.txt")
 	if err != nil {

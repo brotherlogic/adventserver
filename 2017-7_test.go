@@ -32,3 +32,24 @@ func Test2017Check(t *testing.T) {
 		t.Errorf("Bah: %v", bot)
 	}
 }
+
+func Test2017_7_2_Main(t *testing.T) {
+	data := `pbga (66)
+	xhth (57)
+	ebii (61)
+	havc (66)
+	ktlj (57)
+	fwft (72) -> ktlj, cntj, xhth
+	qoyq (66)
+	padx (45) -> pbga, havc, qoyq
+	tknk (41) -> ugml, padx, fwft
+	jptl (61)
+	ugml (68) -> gyxo, ebii, jptl
+	gyxo (61)
+	cntj (57)`
+
+	bal := getUnbalanced(data)
+	if bal != 60 {
+		t.Errorf("Bottom is wrong %v vs 60", bal)
+	}
+}
