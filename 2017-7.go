@@ -9,7 +9,7 @@ import (
 
 type node struct {
 	name     string
-	value    string
+	value    int
 	children []*node
 	parent   *node
 }
@@ -26,16 +26,17 @@ func buildTree(data string) *tree {
 
 		nodeName := bits[0]
 		value := bits[1]
+		value = value[1 : len(value)-1]
 
 		var n *node
 		for _, node := range nodes {
 			if node.name == nodeName {
 				n = node
-				n.value = value
+				n.value = getInt32(value)
 			}
 		}
 		if n == nil {
-			n = &node{name: nodeName, value: value}
+			n = &node{name: nodeName, value: getInt32(value)}
 			nodes = append(nodes, n)
 		}
 
@@ -75,8 +76,44 @@ func getBottom(data string) string {
 	return tree.root.name
 }
 
+func (n *node) getValue() int {
+	value := n.value
+	for _, child := range n.children {
+		value += child.getValue()
+	}
+	return value
+}
+
 func findUnbalanced(n *node) int {
-	return 0
+
+	var values []int
+	for _, child := range n.children {
+		values = append(values, child.getValue())
+	}
+
+	if values[0] != values[1] && values[1] == values[2] {
+		val := findUnbalanced(n.children[0])
+		if val == -1 {
+			return n.children[0].value - (values[0] - values[1])
+		}
+		return val
+	}
+	if values[0] != values[1] && values[0] == values[2] {
+		val := findUnbalanced(n.children[1])
+		if val == -1 {
+			return n.children[1].value - (values[1] - values[0])
+		}
+		return val
+	}
+	if values[2] != values[1] && values[0] == values[1] {
+		val := findUnbalanced(n.children[2])
+		if val == -1 {
+			return n.children[2].value - (values[2] - values[0])
+		}
+		return val
+	}
+
+	return -1
 }
 
 func getUnbalanced(data string) int {
