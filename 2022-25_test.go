@@ -1,11 +1,19 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
+func Test2022_25_1_Single(t *testing.T) {
+	val := rsnafu(1257)
+	if snafu(val) != 1257 {
+		t.Errorf("Bad convert: %v -> %v", 1257, val)
+	}
+}
 func Test2022_25_1_Sup(t *testing.T) {
 	cases := []struct {
 		in  string
-		out int
+		out int64
 	}{
 		{"1=-0-2", 1747},
 		{"12111", 906},
