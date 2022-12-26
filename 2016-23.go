@@ -204,7 +204,14 @@ func runToggleProgram(data string, init int) *toggler {
 				}
 			}
 			toggler.pointer++
+		case "out":
+			toggler.output += fmt.Sprintf("%v", toggler.b)
+			toggler.pointer++
 
+			// Fast exit after sufficient output
+			if len(toggler.output) == 100 {
+				return toggler
+			}
 		default:
 			log.Fatalf("Bad instruction: %v", fields[0])
 		}

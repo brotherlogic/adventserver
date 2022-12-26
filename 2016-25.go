@@ -1,18 +1,22 @@
 package main
 
 import (
+	"math"
+	"strings"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
 func findProgram(data string) int {
-	a := 1
-	res := runToggleProgram(data, a)
+	for a := 0; a < math.MaxInt; a++ {
+		res := runToggleProgram(data, a)
 
-	if res.output == "01010101" {
-		return a
+		if strings.HasPrefix("010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101", res.output) {
+			return a
+		}
+
 	}
-
 	return 0
 }
 

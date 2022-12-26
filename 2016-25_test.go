@@ -36,7 +36,7 @@ func Test2016_25_1_Full(t *testing.T) {
 
 	res := findProgram(data)
 
-	if res != 12 {
+	if res != 196 {
 		t.Errorf("Bad program: %v", res)
 	}
 }
