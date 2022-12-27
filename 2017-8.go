@@ -57,7 +57,7 @@ func runJumpProgram(data string) *registers {
 }
 
 func (s *Server) Solve2017day8part1(ctx context.Context) (*pb.SolveResponse, error) {
-	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-7.txt")
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-8.txt")
 	if err != nil {
 		return nil, err
 	}
