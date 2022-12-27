@@ -35,7 +35,7 @@ func convertStream(line string) int {
 		pointer++
 	}
 
-	return 0
+	return groups
 }
 
 func (s *Server) Solve2017day9part1(ctx context.Context) (*pb.SolveResponse, error) {
