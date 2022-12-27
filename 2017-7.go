@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
@@ -86,7 +85,6 @@ func (n *node) getValue() int {
 }
 
 func findUnbalanced(n *node) int {
-	log.Printf("SEARCHING: %v", n.name)
 
 	var values []int
 	for _, child := range n.children {
