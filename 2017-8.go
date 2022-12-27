@@ -71,6 +71,23 @@ func (s *Server) Solve2017day8part1(ctx context.Context) (*pb.SolveResponse, err
 	res := runJumpProgram(data)
 
 	highest := 0
+	for _, value := range res.register {
+		if value > highest {
+			highest = value
+		}
+	}
+
+	return &pb.SolveResponse{Answer: int32(highest)}, nil
+}
+
+func (s *Server) Solve2017day8part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-8.txt")
+	if err != nil {
+		return nil, err
+	}
+	res := runJumpProgram(data)
+
+	highest := 0
 	for _, value := range res.hregister {
 		if value > highest {
 			highest = value
