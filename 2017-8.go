@@ -8,7 +8,8 @@ import (
 )
 
 type registers struct {
-	register map[string]int
+	register  map[string]int
+	hregister map[string]int
 }
 
 func (r *registers) runLine(line string) {
@@ -45,10 +46,16 @@ func (r *registers) runLine(line string) {
 		}
 	}
 
+	for key, value := range r.register {
+		if value > r.hregister[key] {
+			r.hregister[key] = value
+		}
+	}
+
 }
 
 func runJumpProgram(data string) *registers {
-	registers := &registers{register: make(map[string]int)}
+	registers := &registers{register: make(map[string]int), hregister: make(map[string]int)}
 
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n") {
 		registers.runLine(strings.TrimSpace(line))
@@ -64,7 +71,7 @@ func (s *Server) Solve2017day8part1(ctx context.Context) (*pb.SolveResponse, err
 	res := runJumpProgram(data)
 
 	highest := 0
-	for _, value := range res.register {
+	for _, value := range res.hregister {
 		if value > highest {
 			highest = value
 		}
