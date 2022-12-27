@@ -8,6 +8,33 @@ import (
 )
 
 func convertStream(line string) int {
+	inGarbage := false
+
+	groups := 0
+	depth := 0
+	pointer := 0
+	for pointer < len(line) {
+		switch line[pointer] {
+		case '!':
+			pointer++
+		case '{':
+			if !inGarbage {
+				depth++
+			}
+		case '}':
+			if !inGarbage {
+				groups += depth
+				depth--
+			}
+		case '<':
+			inGarbage = true
+		case '>':
+			inGarbage = false
+		}
+
+		pointer++
+	}
+
 	return 0
 }
 
