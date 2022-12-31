@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 )
 
@@ -47,9 +48,35 @@ func Test2017_10_2_Sup(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		rev := runHash(test.in)
+		rev := runHash(test.in, []int{17, 31, 73, 47, 23})
 		if rev != test.out {
-			t.Errorf("Bad run: %v -> %v (%v)", test.in, rev, test.out)
+			t.Errorf("Bad run: %v -> [%v] (%v)", test.in, rev, test.out)
 		}
+	}
+}
+func Test2017_10_2_Sparse(t *testing.T) {
+	arr := []int{65, 27, 9, 1, 4, 3, 40, 50, 91, 7, 6, 0, 2, 5, 68, 22}
+	val := arr[0]
+	for i := 1; i < len(arr); i++ {
+		val ^= arr[i]
+	}
+
+	if val != 64 {
+		t.Errorf("Bad XOR: %v (64)", val)
+	}
+
+	narr := []int{64, 7, 255}
+	ret := ""
+	for _, val := range narr {
+		v := strconv.FormatInt(int64(val), 16)
+		if len(v) == 1 {
+			ret += "0" + v
+		} else {
+			ret += v
+		}
+	}
+
+	if ret != "4007ff" {
+		t.Errorf("Bad hex: %v (4007ff)", ret)
 	}
 }
