@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
@@ -28,7 +30,10 @@ func runArray(list, steps []int) int32 {
 	cpointer := 0
 
 	for i, val := range steps {
-		list = reverseArr(list, cpointer, (cpointer+val)%len(list))
+		log.Printf("%v -> %v-%v", val, cpointer, (cpointer+val)%len(list)-1)
+		if val != 0 {
+			list = reverseArr(list, cpointer, (cpointer+val)%len(list)-1)
+		}
 		cpointer += val + i
 		cpointer = cpointer % (len(list))
 	}
