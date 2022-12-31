@@ -38,6 +38,10 @@ func runArray(list, steps []int) int32 {
 	return int32(list[0] * list[1])
 }
 
+func runHash(in string) string {
+	return ""
+}
+
 func (s *Server) Solve2017day10part1(ctx context.Context) (*pb.SolveResponse, error) {
 	var list []int
 	for i := 0; i < 256; i++ {
@@ -45,4 +49,8 @@ func (s *Server) Solve2017day10part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: runArray(list, []int{212, 254, 178, 237, 2, 0, 1, 54, 167, 92, 117, 125, 255, 61, 159, 164})}, nil
+}
+func (s *Server) Solve2017day10part2(ctx context.Context) (*pb.SolveResponse, error) {
+
+	return &pb.SolveResponse{StringAnswer: runHash("212,254,178,237,2,0,1,54,167,92,117,125,255,61,159,164")}, nil
 }
