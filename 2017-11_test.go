@@ -15,7 +15,7 @@ func Test2017_11_1_Main(t *testing.T) {
 	}
 
 	for _, test := range cases {
-		steps := computeSteps(test.in)
+		steps, _ := computeSteps(test.in)
 		if steps != test.out {
 			t.Errorf("Bad steps: %v -> %v (%v)", test.in, steps, test.out)
 		}
