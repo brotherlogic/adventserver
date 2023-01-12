@@ -35,8 +35,6 @@ func computeSteps(data string) int {
 		}
 	}
 
-	log.Printf("%v -> Ended up at %v,%v", data, x, y)
-
 	// Move to a diag
 	if x == 0 && y == 0 {
 		return 0
