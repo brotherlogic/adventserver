@@ -4,7 +4,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	zlen = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2017_12_qlen",
+		Help: "The number of server requests",
+	})
 )
 
 func countZeros(data string) int {
@@ -33,6 +42,7 @@ func countZeros(data string) int {
 	queue := []int{0}
 
 	for len(queue) > 0 {
+		zlen.Set(float64(len(queue)))
 		head := queue[0]
 		queue = queue[1:]
 
