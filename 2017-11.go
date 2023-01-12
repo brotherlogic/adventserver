@@ -20,24 +20,35 @@ func computeSteps(data string) int {
 			y -= 2
 		case "ne":
 			x++
-			y--
+			y++
 		case "se":
 			x++
-			y++
+			y--
 		case "nw":
 			x--
-			y--
+			y++
 		case "sw":
 			x--
-			y++
+			y--
 		default:
 			log.Fatalf("Unknown direction: %v", elem)
 		}
 	}
 
+	log.Printf("%v -> Ended up at %v,%v", data, x, y)
+
 	// Move to a diag
 	if x == 0 && y == 0 {
 		return 0
+	}
+
+	// We are below a diagnol
+	if abs(y) > abs(x) {
+		return (abs(y)-abs(x))/2 + abs(x)
+	}
+
+	if abs(y) == abs(x) {
+		return abs(x)
 	}
 
 	return 0
