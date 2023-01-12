@@ -36,11 +36,10 @@ func countZeros(data string) int {
 		head := queue[0]
 		queue = queue[1:]
 
-		seen[head] = true
-
 		for _, next := range connections[head] {
 			if !seen[next] {
 				queue = append(queue, next)
+				seen[next] = true
 			}
 		}
 	}
