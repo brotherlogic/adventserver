@@ -100,7 +100,6 @@ func countGroups(data string) int {
 			}
 			scount++
 		}
-
 	}
 
 	return scount - 1
