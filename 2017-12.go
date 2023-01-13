@@ -16,7 +16,7 @@ var (
 	})
 )
 
-func countGroups(data string) int {
+func countZeros(data string) int {
 
 	connections := make(map[int][]int)
 
@@ -57,7 +57,7 @@ func countGroups(data string) int {
 	return len(seen)
 }
 
-func countZeros(data string) int {
+func countGroups(data string) int {
 
 	connections := make(map[int][]int)
 
@@ -79,23 +79,31 @@ func countZeros(data string) int {
 		}
 	}
 
-	seen := make(map[int]bool)
-	queue := []int{0}
+	scount := 1
+	seen := make(map[int]int)
 
-	for len(queue) > 0 {
-		zlen.Set(float64(len(queue)))
-		head := queue[0]
-		queue = queue[1:]
+	for num := range connections {
+		if seen[num] == 0 {
+			queue := []int{num}
 
-		for _, next := range connections[head] {
-			if !seen[next] {
-				queue = append(queue, next)
-				seen[next] = true
+			for len(queue) > 0 {
+				zlen.Set(float64(len(queue)))
+				head := queue[0]
+				queue = queue[1:]
+
+				for _, next := range connections[head] {
+					if seen[next] == 0 {
+						queue = append(queue, next)
+						seen[next] = scount
+					}
+				}
 			}
+			scount++
 		}
+
 	}
 
-	return len(seen)
+	return scount - 1
 }
 
 func (s *Server) Solve2017day12part1(ctx context.Context) (*pb.SolveResponse, error) {
