@@ -16,6 +16,10 @@ type sboard struct {
 	catches int
 }
 
+func computeSeverityDelay(data string) int {
+	return 0
+}
+
 func computeSeverity(data string) int {
 	board := sboard{lens: make(map[int]int), pos: make(map[int]int), move: make(map[int]bool), me: -1, catches: 0}
 
@@ -69,4 +73,13 @@ func (s *Server) Solve2017day13part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(computeSeverity(data))}, nil
+}
+
+func (s *Server) Solve2017day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-13.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(computeSeverityDelay(data))}, nil
 }
