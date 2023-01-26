@@ -4,7 +4,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	eval13 = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2017_13_eval",
+		Help: "The number of server requests",
+	})
 )
 
 type sboard struct {
@@ -20,6 +29,7 @@ func computeSeverityDelay(data string) int {
 	start := 0
 	sev := computeSeverityWithDelay(data, start)
 	for sev > 0 {
+		eval13.Set(float64(sev))
 		start++
 		sev = computeSeverityWithDelay(data, start)
 	}
