@@ -26,6 +26,7 @@ func (s *Server) Solve(ctx context.Context, req *pb.SolveRequest) (*pb.SolveResp
 		if err != nil {
 			return nil, err
 		}
+		defer conn.Close()
 		client := pbaoc.NewAdventServerServiceClient(conn)
 		resp, err := client.Solve(ctx, &pbaoc.SolveRequest{Year: req.GetYear(), Day: req.GetDay(), Part: req.GetPart()})
 		if err != nil {
