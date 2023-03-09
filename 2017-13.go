@@ -4,7 +4,16 @@ import (
 	"strings"
 
 	pb "github.com/brotherlogic/adventserver/proto"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"golang.org/x/net/context"
+)
+
+var (
+	eval13 = promauto.NewGauge(prometheus.GaugeOpts{
+		Name: "adventserver_2017_13_eval",
+		Help: "The number of server requests",
+	})
 )
 
 type sboard struct {
@@ -16,7 +25,24 @@ type sboard struct {
 	catches int
 }
 
+func computeSeverityDelay(data string) int {
+	start := 0
+	sev := computeSeverityWithDelay(data, start)
+	for sev > 0 {
+		eval13.Set(float64(sev))
+		start++
+		sev = computeSeverityWithDelay(data, start)
+	}
+
+	return start
+}
+
 func computeSeverity(data string) int {
+	return computeSeverityWithDelay(data, 0)
+}
+
+func computeSeverityWithDelay(data string, delay int) int {
+	tripZero := false
 	board := sboard{lens: make(map[int]int), pos: make(map[int]int), move: make(map[int]bool), me: -1, catches: 0}
 
 	for _, line := range strings.Split(strings.TrimSpace(data), "\n") {
@@ -32,17 +58,24 @@ func computeSeverity(data string) int {
 		}
 	}
 
+	timer := 0
+	board.me = -1
 	for board.me <= board.mpos {
 		// Update me
-		board.me++
+		if timer >= delay {
+			board.me++
+		}
 
 		// Check for collision
 		if val, ok := board.pos[board.me]; ok && val == 0 {
 			board.catches += board.me * board.lens[board.me]
+			if board.me == 0 {
+				tripZero = true
+			}
 		}
 
 		// Update pos
-		for key, _ := range board.pos {
+		for key := range board.pos {
 			if board.move[key] {
 				board.pos[key]++
 			} else {
@@ -57,6 +90,13 @@ func computeSeverity(data string) int {
 				board.move[key] = true
 			}
 		}
+
+		timer++
+	}
+
+	// Hack adjustment since one of the catches is a zero
+	if board.catches == 0 && tripZero {
+		board.catches = 1
 	}
 
 	return board.catches
@@ -69,4 +109,13 @@ func (s *Server) Solve2017day13part1(ctx context.Context) (*pb.SolveResponse, er
 	}
 
 	return &pb.SolveResponse{Answer: int32(computeSeverity(data))}, nil
+}
+
+func (s *Server) Solve2017day13part2(ctx context.Context) (*pb.SolveResponse, error) {
+	data, err := s.loadFile(ctx, "/media/scratch/advent/2017-13.txt")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.SolveResponse{Answer: int32(computeSeverityDelay(data))}, nil
 }
