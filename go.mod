@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/brotherlogic/adventofcode v0.66.0
 	github.com/brotherlogic/filecopier v0.0.0-20230303180348-0eaa91be9ba0
-	github.com/brotherlogic/goserver v0.0.0-20230308065104-44cc7e357cc1
+	github.com/brotherlogic/goserver v0.0.0-20230309052710-27200cfe2365
 	github.com/golang/protobuf v1.5.3
 	github.com/prometheus/client_golang v1.14.0
 	go.opentelemetry.io/otel v1.14.0
