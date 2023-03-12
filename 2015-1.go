@@ -3,6 +3,7 @@ package main
 import (
 	"strings"
 
+	pb "github.com/brotherlogic/adventserver/proto"
 	"golang.org/x/net/context"
 )
 
@@ -29,20 +30,20 @@ func ComputeF1(str string) int {
 	return -1
 }
 
-func (s *Server) Solve2015day1part1(ctx context.Context) (int32, error) {
+func (s *Server) Solve2015day1part1(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-1.txt")
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
-	return int32(ComputeFloor(data)), nil
+	return &pb.SolveResponse{Answer: int32(ComputeFloor(data))}, nil
 }
 
-func (s *Server) Solve2015day1part2(ctx context.Context) (int32, error) {
+func (s *Server) Solve2015day1part2(ctx context.Context) (*pb.SolveResponse, error) {
 	data, err := s.loadFile(ctx, "/media/scratch/advent/2015-1.txt")
 	if err != nil {
-		return -1, err
+		return nil, err
 	}
 
-	return int32(ComputeF1(data)), nil
+	return &pb.SolveResponse{Answer: int32(ComputeF1(data))}, nil
 }
